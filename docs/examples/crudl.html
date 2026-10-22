@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="ko" data-root="../">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>CRUD + List 구현하기 | BindModel</title>
+  <meta name="description" content="목록 조회, 등록, 수정, 삭제를 연결하며 하나의 화면을 완성합니다."><meta name="theme-color" content="#f8f8f4">
+  <meta property="og:type" content="website"><meta property="og:title" content="CRUD + List 구현하기 | BindModel"><meta property="og:description" content="목록 조회, 등록, 수정, 삭제를 연결하며 하나의 화면을 완성합니다."><meta property="og:url" content="https://white-base.github.io/white-lab-bind-model/examples/crudl.html"><meta property="og:image" content="https://white-base.github.io/white-lab-bind-model/assets/social.svg">
+  <link rel="canonical" href="https://white-base.github.io/white-lab-bind-model/examples/crudl.html"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('bindmodel-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+  <link rel="stylesheet" href="../assets/site.css"><script src="../assets/site.js" defer></script>
+</head>
+<body class="documentation"><a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html" aria-label="BindModel 홈"><span class="brand-mark" aria-hidden="true">b<span>.</span></span><span class="brand-name">bindmodel<span class="brand-dot">.</span></span></a>
+    <nav class="main-nav" id="main-nav" aria-label="주 메뉴">
+      <a href="../guide/introduction.html">시작하기</a><a href="../guide/features/model.html">기능 가이드</a><a href="../advanced/column-value-flow.html">고급 기능</a><a href="../examples/crudl.html" class="is-active" aria-current="true">예제</a><a href="../api/bind-model.html">API</a>
+    </nav>
+    <div class="header-tools"><button class="search-trigger" data-search aria-label="문서 검색"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span>문서 검색</span><kbd>⌘ K</kbd></button>
+    <button class="icon-button theme-toggle" aria-label="어두운 테마로 전환" title="테마 전환"><svg class="icon theme-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13A8 8 0 0 1 11 4a8 8 0 1 0 9 9Z"/></svg></button>
+    <a class="icon-button github-link" href="https://github.com/white-base/bind-model" aria-label="BindModel GitHub 저장소"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-4a3.5 3.5 0 0 0-1-2.7c3.3-.4 6.7-1.6 6.7-7.3A5.6 5.6 0 0 0 20 4.1 5.2 5.2 0 0 0 19.9.3S18.6-.1 16 1.8a13.5 13.5 0 0 0-7 0C6.4-.1 5.1.3 5.1.3A5.2 5.2 0 0 0 5 4.1 5.6 5.6 0 0 0 3.3 8c0 5.7 3.4 6.9 6.7 7.3A3.5 3.5 0 0 0 9 18v4"/></svg></a>
+    <button class="icon-button menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="주 메뉴 열기"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div>
+  </div></header>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <div class="mobile-docbar"><button class="sidebar-toggle" aria-controls="docs-sidebar" aria-expanded="false"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>문서 메뉴</button><a href="#page-toc">이 페이지의 내용 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div>
+  <div class="docs-layout"><button class="sidebar-backdrop" aria-label="문서 메뉴 닫기" hidden></button><aside class="docs-sidebar" id="docs-sidebar" aria-label="문서 목록"><a class="sidebar-home" href="../index.html"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M12 5C9 3 5 3 2 4v15c3-1 7-1 10 2 3-3 7-3 10-2V4c-3-1-7-1-10 1Z"/></svg>문서 둘러보기</a><section class="sidebar-group"><h2><span>시작하기</span><span>03</span></h2><ul><li><a href="../guide/introduction.html">소개</a></li><li><a href="../guide/quick-start.html">빠른 시작</a></li><li><a href="../guide/core-concepts.html">핵심 개념</a></li></ul></section><section class="sidebar-group"><h2><span>기능 가이드</span><span>07</span></h2><ul><li><a href="../guide/features/model.html">모델 구성</a></li><li><a href="../guide/features/command.html">명령 구성</a></li><li><a href="../guide/features/columns.html">컬럼 관리</a></li><li><a href="../guide/features/shared-column-properties.html">공통 컬럼 속성</a></li><li><a href="../guide/features/flow-control.html">흐름 제어</a></li><li><a href="../guide/features/service-injection.html">서비스 객체 주입</a></li><li><a href="../guide/features/json-schema.html">JSON 스키마 가이드</a></li></ul></section><section class="sidebar-group"><h2><span>고급 기능</span><span>06</span></h2><ul><li><a href="../advanced/column-value-flow.html">컬럼값 호출 구조</a></li><li><a href="../advanced/tables.html">테이블 관리</a></li><li><a href="../advanced/multiple-outputs.html">명령 복수 출력 구성</a></li><li><a href="../advanced/execution.html">실행 및 동기화</a></li><li><a href="../advanced/events.html">이벤트 설정</a></li><li><a href="../advanced/composition.html">객체 구성 방법</a></li></ul></section><section class="sidebar-group"><h2><span>예제</span><span>01</span></h2><ul><li><a href="../examples/crudl.html" class="is-current" aria-current="page">CRUD + List 구현하기</a></li></ul></section><section class="sidebar-group"><h2><span>API 레퍼런스</span><span>06</span></h2><ul><li><a href="../api/bind-model.html">BindModel</a></li><li><a href="../api/bind-command.html">BindCommand</a></li><li><a href="../api/meta-view.html">MetaView</a></li><li><a href="../api/html-column.html">HTMLColumn</a></li><li><a href="../api/property-collection.html">PropertyCollection</a></li><li><a href="../api/meta-object.html">MetaObject</a></li></ul></section><a class="sidebar-bottom" href="https://github.com/white-base/bind-model/issues">문서 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></aside>
+  <main class="doc-main" id="main"><article data-search-content>
+    <div class="doc-breadcrumb"><a href="../index.html">문서</a><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span>예제</span></div>
+    <header class="doc-heading"><div class="eyebrow">예제<span class="eyebrow-rule"></span>04</div><h1>CRUD + List 구현하기</h1><p>목록 조회, 등록, 수정, 삭제를 연결하며 하나의 화면을 완성합니다.</p><div class="doc-meta"><span>한국어 문서</span><span>약 24분</span></div></header>
+    <div class="doc-content"><aside class="notice"><strong>코드로 따라 하는 CRUD 예제</strong><p>이 문서는 화면과 서비스 객체를 구성하는 튜토리얼입니다. 등록·수정·삭제를 저장하려면 별도의 서버 API가 필요합니다.</p></aside><p><img src="../assets/images/examples/crudl.png" alt="CRUD 목록과 편집 폼 전체 화면"></p>
+<hr>
+<h2 id="1단계-화면-구성">1단계 : 화면 구성<a class="heading-anchor" href="#1단계-화면-구성" aria-label="1단계 : 화면 구성 링크">#</a></h2>
+<p>목록과 등록, 수정을 한 화면에 구성하는 구조 + 부트스트립트 +  JQuery 로 구성되어 있습니다.</p>
+<p>화면 영역 은 목록 테이블과 보임과 숨김을 제어하기 위해</p>
+<ul>
+<li>수정 폼 영역(class-form) : ntx_idx, title, content, create_dt, top_yn, active_cd</li>
+<li>수정 폼 버튼 영역(edit-button) : btn_Update, btn_Delete, btn_List</li>
+<li>저장 폼 버튼 영역(create-button) : btn_Reset, btn_Save, btn_Cancel</li>
+<li>등록 폼 버튼 영역(form-button) : btn_Create
+으로 구성되어 있습니다.</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>html</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>BindModel Example<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css&quot;</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://code.jquery.com/jquery-3.7.1.slim.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;main.js&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;container mt-3&quot;</span>&gt;</span>
+	<span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Notice Admin Page<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+	<span class="hljs-tag">&lt;<span class="hljs-name">h5</span>&gt;</span>Key Features: List inquiry/modification/deletion<span class="hljs-tag">&lt;/<span class="hljs-name">h5</span>&gt;</span>
+	<span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Data is transmitted when modified or deleted from the test page, but it is not actually processed.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+	<span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;table&quot;</span>&gt;</span>
+	  <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+		<span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+			<span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Title<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+			<span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Status<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+			<span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Date<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+		<span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+	  <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+	  <span class="hljs-tag">&lt;<span class="hljs-name">tbody</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;area-tbody&quot;</span>&gt;</span>
+		<span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+			<span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">colspan</span>=<span class="hljs-string">&quot;3&quot;</span>&gt;</span>There is no content.<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+		<span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+	  <span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span>
+	<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+	
+	<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;class-form&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;d-none&quot;</span>&gt;</span>
+	  <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;notice-form&quot;</span>&gt;</span>
+	  <span class="hljs-comment">&lt;!-- form element --&gt;</span>
+	
+	    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;edit-button&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;d-none&quot;</span>&gt;</span>
+			<span class="hljs-comment">&lt;!-- edit button --&gt;</span>
+	    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+	    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;create-button&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;d-none&quot;</span>&gt;</span>
+			<span class="hljs-comment">&lt;!-- create button --&gt;</span>
+	    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+	  <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+	<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+	<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;form-button&quot;</span>&gt;</span>
+	  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn btn-primary mt-3&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;btn_From&quot;</span>&gt;</span>Create<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+	<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre></div>
+<hr>
+<h2 id="2-단계-서버-데이터-샘플">2 단계 : 서버 데이터 샘플<a class="heading-anchor" href="#2-단계-서버-데이터-샘플" aria-label="2 단계 : 서버 데이터 샘플 링크">#</a></h2>
+<p>서버 경로 <code>/notice/data/list.json</code> 에 샘플데이터를 제작 합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>json</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-json"><span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;ntc_idx&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;This is the first notice post.&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;top_yn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Y&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;active_cd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;A&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;create_dt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2014-01-01&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;contents&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;This is the content of the first post....&quot;</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+       <span class="hljs-attr">&quot;ntc_idx&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
+       <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;This is the second notice post.&quot;</span><span class="hljs-punctuation">,</span>
+       <span class="hljs-attr">&quot;top_yn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;N&quot;</span><span class="hljs-punctuation">,</span>
+       <span class="hljs-attr">&quot;active_cd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;H&quot;</span><span class="hljs-punctuation">,</span>
+       <span class="hljs-attr">&quot;create_dt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2014-01-02&quot;</span><span class="hljs-punctuation">,</span>
+       <span class="hljs-attr">&quot;contents&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;This is the content of the second post...&quot;</span>
+    <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span>
+
+</code></pre></div>
+<hr>
+<h2 id="3단계-mainjs-구성">3단계 : main.js 구성<a class="heading-anchor" href="#3단계-mainjs-구성" aria-label="3단계 : main.js 구성 링크">#</a></h2>
+<p><code>&lt;script src=&quot;main.js&quot; type=&quot;module&quot;&gt;&lt;/script&gt;</code>  esm 모듈방식으로 파일을 제작합니다.</p>
+<p>BindModel 객체를 생성할때 인자로 서비스 객체를 생성하여 주입합니다.</p>
+<p>모든 서버 경로는 <code>'/notice/data/list.json'</code> 로 지정합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">BindModel</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;https://unpkg.com/logic-bind-model/dist/bind-model.esm.js&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">NoticeAdminService</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./service/notice-admin-svc.js&#x27;</span>
+
+<span class="hljs-keyword">var</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">NoticeAdminService</span>());
+
+bm.<span class="hljs-property">url</span> = <span class="hljs-string">&#x27;/notice/data/list.json&#x27;</span>; <span class="hljs-comment">// base url</span>
+
+</code></pre></div>
+<hr>
+<h2 id="4단계-서비스객체-구성">4단계 :  서비스객체  구성<a class="heading-anchor" href="#4단계-서비스객체-구성" aria-label="4단계 :  서비스객체  구성 링크">#</a></h2>
+<p><code>notice-admin-svc.js</code> 경로에  서비스 객체는 이후 재사용성을 위하여 class 형식으로 지정하면 상속 등 활용하여 재사용 유리합니다.</p>
+<p>인자로 전달되는 <code>_SUFF</code> 는 selector 에  id 등 지정시 중복방지에 활용할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">NoticeAdminService</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">_SUFF = <span class="hljs-string">&#x27;&#x27;</span></span>) {
+	  <span class="hljs-comment">//.....</span>
+  } 
+}
+
+<span class="hljs-keyword">export</span> {
+  <span class="hljs-title class_">NoticeAdminService</span> <span class="hljs-keyword">as</span> <span class="hljs-keyword">default</span>,
+  <span class="hljs-title class_">NoticeAdminService</span>
+}
+</code></pre></div>
+<hr>
+<h2 id="5-1단계-명령list-서비스-객체-구성">5-1단계 : 명령(list) 서비스 객체 구성<a class="heading-anchor" href="#5-1단계-명령list-서비스-객체-구성" aria-label="5-1단계 : 명령(list) 서비스 객체 구성 링크">#</a></h2>
+<p><img src="../assets/images/examples/list.png" alt="목록 조회 화면"></p>
+<p>조회된 데이트를 확인 가능하게 목록 명령에 대한 명칭을 <code>list</code> 로 지정하고 서비스 객체를 구상합니다.</p>
+<h3 id="items-서비스-객체-구성">items 서비스 객체 구성<a class="heading-anchor" href="#items-서비스-객체-구성" aria-label="items 서비스 객체 구성 링크">#</a></h3>
+<p>아이템 대상이 되는 항목을 정의합니다.</p>
+<ul>
+<li>서버로 전송하거나 받을 항목</li>
+<li>제어가 필요한 위치를 아이템으로 구성합니다.</li>
+</ul>
+<p>각 항목은</p>
+<ul>
+<li><code>_area_temp</code> 은 목록을 handlebars 템플릿을 사용할 양식입니다.
+<ul>
+<li><code>&lt;script id=&quot;area-temp&quot; type=&quot;text/x-handlebars-template&quot;&gt;</code></li>
+</ul>
+</li>
+<li><code>_area_tbody</code> 템플릿으로 생성된 코드를 추가할 위치를 가르킵니다.
+<ul>
+<li><code>&lt;tbody id=&quot;area-tbody&quot;&gt;</code></li>
+</ul>
+</li>
+<li><code>_area_form</code> 은 읽기/수정/등록에 사용할 폼 양식들이 있는 영역을 가르킵니다.</li>
+<li><code>_area_btn_edit</code> 은 읽기/수정에 사용할 버튼(update, deate, list) 영역을 가르킵니다.</li>
+<li><code>_area_btn_create</code> 은 신규 등록에 사용할 버튼(reset, save, cacel) 영역을 가르킵니다.</li>
+<li><code>_area_btn_form</code> 은 신규 등록시 폼양식 을 보이게 하는 버튼이 구성된 영역을 가르킵니다.</li>
+</ul>
+<p>selector 속성의 <code>key</code> 는 셀렉터 값을 의미하고 <code>type</code> 셀렉터에 대한 타입을 지정합니다.</p>
+<ul>
+<li><code>type='html'</code>  는 html 태그를 가르킵니다.</li>
+<li><code>type='attr.*'</code>  는 지정한 요소의 정적 속성에 대한 값을 가르킵니다.
+<ul>
+<li><code>type='attr.class'</code> 지정한 요소의 <code>&lt;div class='d-none'&gt;</code> 값</li>
+<li>부트스트립트에  <code>d-none</code> 값은 <code>style=&quot;display:none;&quot;</code> 와 같은 기능입니다.</li>
+</ul>
+</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span> = {
+  <span class="hljs-attr">_area_temp</span>: { <span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">`#area-temp<span class="hljs-subst">${_SUFF}</span>`</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;html&#x27;</span> } },
+  <span class="hljs-attr">_area_tbody</span>: { <span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">`#area-tbody<span class="hljs-subst">${_SUFF}</span>`</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;html&#x27;</span> } },
+  <span class="hljs-attr">_area_form</span>: { <span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">`#class-form<span class="hljs-subst">${_SUFF}</span>`</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;attr.class&#x27;</span> } },
+  <span class="hljs-attr">_area_btn_edit</span>: { <span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">`#edit-button<span class="hljs-subst">${_SUFF}</span>`</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;attr.class&#x27;</span> } },
+  <span class="hljs-attr">_area_btn_create</span>: { <span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">`#create-button<span class="hljs-subst">${_SUFF}</span>`</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;attr.class&#x27;</span> } },
+  <span class="hljs-attr">_area_btn_form</span>: { <span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">`#form-button<span class="hljs-subst">${_SUFF}</span>`</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;attr.class&#x27;</span> } },
+};
+</code></pre></div>
+<h3 id="fn-서비스-객체-구성">fn 서비스 객체 구성<a class="heading-anchor" href="#fn-서비스-객체-구성" aria-label="fn 서비스 객체 구성 링크">#</a></h3>
+<p>목록에서 내용을 선택하면 처리할 기능을 fn 영역에 추가합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">fn</span> = {
+  <span class="hljs-title function_">procRead</span>(<span class="hljs-params">index</span>) {
+	_this.<span class="hljs-property">bindModel</span>.<span class="hljs-property">items</span>.<span class="hljs-property">_index</span> = index;
+	_this.<span class="hljs-property">bindModel</span>.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;read&#x27;</span>].<span class="hljs-title function_">execute</span>();
+  },
+};
+</code></pre></div>
+<h3 id="command-서비스-객체-구성">command 서비스 객체 구성<a class="heading-anchor" href="#command-서비스-객체-구성" aria-label="command 서비스 객체 구성 링크">#</a></h3>
+<p>서버 경로에서 모든 데이터를 가져오기 위해서 outputOption: 'ALL' 로 지정하였습니다.
+(기본값은 'SEND' 서버에 데이터를 전송 후 데이터는 받지 않습니다.)</p>
+<p>처음으로 실행되는 <code>cbBegin</code> 콜백함수에 폼영역은 숨기고, 신규 등록시 폼양식은 보이도록 설정합니다.</p>
+<p><code>cbOutput</code> 콜백함수에 서버에서 전송받은 데이터를 MetaView 에 저장이후에, 화면 출력과 관련된 부분을 정의합니다.</p>
+<ul>
+<li>Handlebars 템플릿에  translateActive 헬퍼를 등록합니다. (코드를 값으로 변환)</li>
+<li><code>_template</code> 템플릿 양식을 컴파일하여 템플릿 객체를 생성합니다.</li>
+<li><code>_template(outs[0].rows)</code> 템플릿 객체에 데이터를 전달하여, 파싱 결과를 <code>_area_tbody</code> 에 붙임
+<ul>
+<li>outs 인자는 출력뷰의 컬렉션을 가르키면 <code>outs[0].rows</code> 는 첫번째 MetaView 을 rows 데이터를 가르킵니다.</li>
+</ul>
+</li>
+<li>목록에 대한  이벤트를 등록합니다.
+<ul>
+<li><code>document.getElementById('area-tbody').addEventListener('click', ...)</code></li>
+</ul>
+</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">command</span> = {
+  <span class="hljs-attr">list</span>: {
+	<span class="hljs-attr">outputOption</span>: <span class="hljs-string">&#x27;ALL&#x27;</span>,
+	
+	<span class="hljs-title function_">cbBegin</span>(<span class="hljs-params">model, cmd</span>) {
+	  model.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;_area_form&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;d-none&#x27;</span>;
+	  model.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;_area_button&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;&#x27;</span>;
+	},
+	
+	<span class="hljs-title function_">cbOutput</span>(<span class="hljs-params">outs, cmd, res</span>) {
+	  <span class="hljs-title class_">Handlebars</span>.<span class="hljs-title function_">registerHelper</span>(<span class="hljs-string">&#x27;translateActive&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">code</span>) {
+		<span class="hljs-keyword">if</span> (code === <span class="hljs-string">&#x27;S&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Standby&#x27;</span>;
+		<span class="hljs-keyword">if</span> (code === <span class="hljs-string">&#x27;A&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Activation&#x27;</span>;
+		<span class="hljs-keyword">if</span> (code === <span class="hljs-string">&#x27;H&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;hidden&#x27;</span>;
+		<span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;&#x27;</span>;
+	  });
+	  <span class="hljs-keyword">if</span> (_template === <span class="hljs-literal">null</span>) {
+		_template = <span class="hljs-title class_">Handlebars</span>.<span class="hljs-title function_">compile</span>( _this.<span class="hljs-property">bindModel</span>.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;_area_temp&#x27;</span>].<span class="hljs-property">value</span> );
+	  }
+	  _this.<span class="hljs-property">bindModel</span>.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;_area_tbody&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-title function_">_template</span>(outs[<span class="hljs-number">0</span>].<span class="hljs-property">rows</span>);
+	
+	  <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;area-tbody&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) {
+		<span class="hljs-keyword">const</span> target = e.<span class="hljs-property">target</span>.<span class="hljs-title function_">closest</span>(<span class="hljs-string">&#x27;.btnNormal&#x27;</span>);
+		<span class="hljs-keyword">if</span> (target &amp;&amp; target.<span class="hljs-property">dataset</span>.<span class="hljs-property">index</span>) {
+		  <span class="hljs-keyword">const</span> index = <span class="hljs-built_in">parseInt</span>(target.<span class="hljs-property">dataset</span>.<span class="hljs-property">index</span>, <span class="hljs-number">10</span>);
+		  <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">isNaN</span>(index)) cmd.<span class="hljs-property">_model</span>.<span class="hljs-property">fn</span>.<span class="hljs-title function_">procRead</span>(index);
+		}
+	  });
+	}
+  }
+};
+</code></pre></div>
+<p>목록 템플릿 양식으로  본문에 추가합니다.</p>
+<p><code>{{#each this}}</code>  블럭은 배열갯수 만큼 반복하여 파싱합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>html</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;area-temp&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/x-handlebars-template&quot;</span>&gt;</span><span class="language-javascript">
+{{#each <span class="hljs-variable language_">this</span>}}
+  &lt;tr&gt;
+	<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btnNormal&quot;</span> <span class="hljs-attr">data-index</span>=<span class="hljs-string">&quot;{{@index}}&quot;</span>&gt;</span>{{title}}<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span>
+	<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>{{translateActive active_cd}}<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span>
+	<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>{{create_dt}}<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span>
+  &lt;/tr&gt;
+{{/each}}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre></div>
+<h3 id="mapping-서비스-객체-구성">mapping 서비스 객체 구성<a class="heading-anchor" href="#mapping-서비스-객체-구성" aria-label="mapping 서비스 객체 구성 링크">#</a></h3>
+<p>items 에서 정의한 아이템을 별도의  뷰(misc) 에 지정합니다.
+<code>misc</code> 는 서버에 전송과 수신과정에 관여하지 않습니다. 단지 매핑을 위해 임시로 지정한 뷰입니다.</p>
+<p>각각 아이템에 대한 'list' 명령의 'misc' 뷰에 매핑입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">mapping</span> = {
+  <span class="hljs-attr">_area_temp</span>: { <span class="hljs-attr">list</span>: <span class="hljs-string">&#x27;misc&#x27;</span> },
+  <span class="hljs-attr">_area_tbody</span>: { <span class="hljs-attr">list</span>: <span class="hljs-string">&#x27;misc&#x27;</span> },
+  <span class="hljs-attr">_area_form</span>: { <span class="hljs-attr">list</span>: <span class="hljs-string">&#x27;misc&#x27;</span> },
+  <span class="hljs-attr">_area_btn_edit</span>: { <span class="hljs-attr">list</span>: <span class="hljs-string">&#x27;misc&#x27;</span> },
+  <span class="hljs-attr">_area_btn_create</span>: { <span class="hljs-attr">list</span>: <span class="hljs-string">&#x27;misc&#x27;</span> },
+  <span class="hljs-attr">_area_btn_form</span>: { <span class="hljs-attr">list</span>: <span class="hljs-string">&#x27;misc&#x27;</span> },
+};
+</code></pre></div>
+<h3 id="mainjs-실행-및-테스트">main.js 실행 및 테스트<a class="heading-anchor" href="#mainjs-실행-및-테스트" aria-label="main.js 실행 및 테스트 링크">#</a></h3>
+<p>초기에 실행할 명령(list) 을 지정하고, 결과를 확인합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">$(<span class="hljs-variable language_">document</span>).<span class="hljs-title function_">ready</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+  bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;list&#x27;</span>].<span class="hljs-title function_">execute</span>();
+});
+</code></pre></div>
+<h2 id="5-2-단계-명령create-서비스-객체-구성">5-2 단계 : 명령(create) 서비스 객체 구성<a class="heading-anchor" href="#5-2-단계-명령create-서비스-객체-구성" aria-label="5-2 단계 : 명령(create) 서비스 객체 구성 링크">#</a></h2>
+<p>입력폼 양식에서 데이터를 입력받아 서버로 전송합니다.</p>
+<p><img src="../assets/images/examples/create.png" alt="새 데이터 등록 화면"></p>
+<h3 id="html-구성">html 구성<a class="heading-anchor" href="#html-구성" aria-label="html 구성 링크">#</a></h3>
+<div class="code-block"><div class="code-toolbar"><span>html</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;notice-form&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;hidden&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ntc_idx&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-group&quot;</span>&gt;</span>
+	  <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">for</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span>날짜<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+	  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;create_dt&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-group&quot;</span>&gt;</span>
+	  <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">for</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span>Title<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+	  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-control&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-group&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">for</span>=<span class="hljs-string">&quot;contents&quot;</span>&gt;</span>Content<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">textarea</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-control&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;contents&quot;</span> <span class="hljs-attr">rows</span>=<span class="hljs-string">&quot;3&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">textarea</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>
+	    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-check&quot;</span>&gt;</span>
+	      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-check-input&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;check1&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;top_yn&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Y&quot;</span>&gt;</span>
+		  <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-check-label&quot;</span> <span class="hljs-attr">for</span>=<span class="hljs-string">&quot;check1&quot;</span>&gt;</span>top notice<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+		<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+	  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>
+	    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-check&quot;</span>&gt;</span>
+		  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-check-input&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;radio1&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;active_cd&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;D&quot;</span> <span class="hljs-attr">checked</span>&gt;</span>
+		  <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-check-label&quot;</span> <span class="hljs-attr">for</span>=<span class="hljs-string">&quot;radio1&quot;</span>&gt;</span>Standby<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+	    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+	    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-check&quot;</span>&gt;</span>
+		  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-check-input&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;radio2&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;active_cd&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;A&quot;</span>&gt;</span>
+		  <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-check-label&quot;</span> <span class="hljs-attr">for</span>=<span class="hljs-string">&quot;radio2&quot;</span>&gt;</span>Activation<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+	    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+	    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-check&quot;</span>&gt;</span>
+		  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-check-input&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;radio3&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;active_cd&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;H&quot;</span>&gt;</span>
+		  <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-check-label&quot;</span> <span class="hljs-attr">for</span>=<span class="hljs-string">&quot;radio3&quot;</span>&gt;</span>Hidden<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+	    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+	<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+	
+	<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;edit-button&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;d-none&quot;</span>&gt;</span>
+		<span class="hljs-comment">&lt;!-- edit button --&gt;</span>
+		<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn btn-primary mt-3&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;btn_Update&quot;</span>&gt;</span>Update<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+		<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn btn-primary mt-3&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;btn_Delete&quot;</span>&gt;</span>Delete<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+		<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn btn-primary mt-3&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;btn_List&quot;</span>&gt;</span>List<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+	<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+	
+	<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;create-button&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;d-none&quot;</span>&gt;</span>
+		<span class="hljs-comment">&lt;!-- create button --&gt;</span>
+	  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;reset&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn btn-primary mt-3&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;btn_Reset&quot;</span>&gt;</span>Reset<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+	  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn btn-primary mt-3&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;btn_Save&quot;</span>&gt;</span>Save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+	  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;btn btn-primary mt-3&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;btn_Cancel&quot;</span>&gt;</span>Cancel<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+	<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+</code></pre></div>
+<h3 id="items-서비스-객체-구성-2">items 서비스 객체 구성<a class="heading-anchor" href="#items-서비스-객체-구성-2" aria-label="items 서비스 객체 구성 링크">#</a></h3>
+<p>아이템 대상이 되는 항목을 정의합니다.</p>
+<ul>
+<li>서버로 전송하거나 받을 항목</li>
+<li>제어가 필요한 위치를 아이템으로 구성합니다.</li>
+</ul>
+<p>각 아이템</p>
+<ul>
+<li><code>ntc_idx</code> 는 <code>hidden</code> 값으로 지정합니다.</li>
+<li><code>title</code> 은 필수 조건으로 지정합니다. (required = true)</li>
+<li><code>top_yn</code>, <code>active_cd</code> 은 <code>setFilter</code>,  <code>getFilter</code> 를 설정하여 지정합니다.</li>
+</ul>
+<blockquote>
+<p><strong>Tip</strong>
+아니의 아이템이 복수의 요소를 제어하거나, 실제 값과 표현되는 값이 다를 경우 getFilter, setFilter 를 활용합니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span> = {
+  <span class="hljs-attr">ntc_idx</span>: { <span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">`#ntc_idx<span class="hljs-subst">${_SUFF}</span>`</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;value&#x27;</span> } },
+  <span class="hljs-attr">title</span>: {
+	<span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">`#title<span class="hljs-subst">${_SUFF}</span>`</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;value&#x27;</span> },
+	<span class="hljs-attr">required</span>: <span class="hljs-literal">true</span>,
+  },
+  <span class="hljs-attr">contents</span>: { <span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">`#contents<span class="hljs-subst">${_SUFF}</span>`</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;value&#x27;</span> } },
+  <span class="hljs-attr">top_yn</span>: {
+	<span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">`input[name=top_yn<span class="hljs-subst">${_SUFF}</span>]`</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;none&#x27;</span> },
+	<span class="hljs-title function_">setFilter</span>(<span class="hljs-params">val</span>) {
+	  $(<span class="hljs-string">`input[name=top_yn<span class="hljs-subst">${_SUFF}</span>]`</span>).<span class="hljs-title function_">prop</span>(<span class="hljs-string">&#x27;checked&#x27;</span>, val == <span class="hljs-string">&#x27;Y&#x27;</span> ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>);
+    },
+	<span class="hljs-title function_">getFilter</span>(<span class="hljs-params">val</span>) {
+	  <span class="hljs-keyword">return</span> $(<span class="hljs-string">`input[name=top_yn<span class="hljs-subst">${_SUFF}</span>]:checked`</span>).<span class="hljs-title function_">val</span>() || <span class="hljs-string">&#x27;N&#x27;</span>;
+	}
+  },
+  <span class="hljs-attr">active_cd</span>: {
+	<span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">`input[name=active_cd<span class="hljs-subst">${_SUFF}</span>][type=radio]`</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;none&#x27;</span> },
+	<span class="hljs-title function_">setFilter</span>(<span class="hljs-params">val</span>) {
+	  $(<span class="hljs-string">`input[name=active_cd<span class="hljs-subst">${_SUFF}</span>][value=<span class="hljs-subst">${val}</span>]`</span>).<span class="hljs-title function_">prop</span>(<span class="hljs-string">&#x27;checked&#x27;</span>, <span class="hljs-literal">true</span>);
+	},
+	<span class="hljs-title function_">getFilter</span>(<span class="hljs-params">val</span>) {
+	  <span class="hljs-keyword">return</span> $(<span class="hljs-string">`input[name=active_cd<span class="hljs-subst">${_SUFF}</span>]:checked`</span>).<span class="hljs-title function_">val</span>();
+	}
+  }
+};
+</code></pre></div>
+<h3 id="command-서비스-객체-구성-2">command 서비스 객체 구성<a class="heading-anchor" href="#command-서비스-객체-구성-2" aria-label="command 서비스 객체 구성 링크">#</a></h3>
+<p>cbEnd 콜백함수를 설정하여 등록 완료 후에 사용자에게 메세지를 표시합니다.</p>
+<p><code>_this</code> 객체는 서비스 클래스 정의시 자신을 가르키는 속성입니다.</p>
+<p>cmd 인자를 사용하여  <code>cmd._model.cmd['list'].execute()</code> 으로 지정할 수도 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">command</span> = {
+  <span class="hljs-attr">create</span>: {
+	<span class="hljs-title function_">cbEnd</span>(<span class="hljs-params">status, cmd, res</span>) {
+	  <span class="hljs-keyword">if</span> (res) {
+		<span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;The post has been created.&#x27;</span>);
+		_this.<span class="hljs-property">bindModel</span>.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;list&#x27;</span>].<span class="hljs-title function_">execute</span>();
+	  }
+	}
+  },
+};
+</code></pre></div>
+<h3 id="mapping-서비스-객체-구성-2">mapping 서비스 객체 구성<a class="heading-anchor" href="#mapping-서비스-객체-구성-2" aria-label="mapping 서비스 객체 구성 링크">#</a></h3>
+<p><code>title</code> 은 <code>valid</code> 뷰에 지정하여 유효성 검사에 포함 시킵니다.</p>
+<p><code>bind</code> 뷰에 지정된 아이템은 명령 실행시 서버로 전송되는 데이터입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">mapping</span> = {
+  <span class="hljs-attr">title</span>: { <span class="hljs-attr">create</span>: [<span class="hljs-string">&#x27;valid&#x27;</span>, <span class="hljs-string">&#x27;bind&#x27;</span>] },
+  <span class="hljs-attr">contents</span>: { <span class="hljs-attr">create</span>: <span class="hljs-string">&#x27;bind&#x27;</span> },
+  <span class="hljs-attr">top_yn</span>: { <span class="hljs-attr">create</span>: <span class="hljs-string">&#x27;bind&#x27;</span> },
+  <span class="hljs-attr">active_cd</span>: { <span class="hljs-attr">create</span>: <span class="hljs-string">&#x27;bind&#x27;</span> },
+};
+</code></pre></div>
+<h3 id="fn-서비스-객체-구성-2">fn 서비스 객체 구성<a class="heading-anchor" href="#fn-서비스-객체-구성-2" aria-label="fn 서비스 객체 구성 링크">#</a></h3>
+<p>등록 버튼을 선택시 폼을 초기화 하고, 폼양식을 화면에 보여줌니다.</p>
+<p>selector 속성에 <code>type: 'attr.class'</code> 값으로  숨김/보기 기능을 설정합니다. (부트스트립트)</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">fn</span> = {
+  <span class="hljs-title function_">createFrom</span>(<span class="hljs-params">form</span>) {
+	<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(form).<span class="hljs-title function_">reset</span>();
+	_this.<span class="hljs-property">bindModel</span>.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;_area_form&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;&#x27;</span>;
+	_this.<span class="hljs-property">bindModel</span>.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;_area_create&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;&#x27;</span>;
+	_this.<span class="hljs-property">bindModel</span>.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;_area_edit&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;d-none&#x27;</span>;
+	_this.<span class="hljs-property">bindModel</span>.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;_area_button&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;d-none&#x27;</span>;
+  }
+};
+</code></pre></div>
+<h3 id="mainjs-이벤트-등록">main.js 이벤트 등록<a class="heading-anchor" href="#mainjs-이벤트-등록" aria-label="main.js 이벤트 등록 링크">#</a></h3>
+<p>등록 폼 보기 버튼과, 저장, 취소 버튼에 대한 이벤트를 연결합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// create button event handlers</span>
+$(<span class="hljs-string">&#x27;#btn_From&#x27;</span>).<span class="hljs-title function_">click</span>(<span class="hljs-function">()=&gt;</span> bm.<span class="hljs-property">fn</span>.<span class="hljs-title function_">createFrom</span>(<span class="hljs-string">&#x27;notice-form&#x27;</span>));
+$(<span class="hljs-string">&#x27;#btn_Save&#x27;</span>).<span class="hljs-title function_">click</span>(<span class="hljs-function">()=&gt;</span> bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;create&#x27;</span>].<span class="hljs-title function_">execute</span>());
+$(<span class="hljs-string">&#x27;#btn_Cancel&#x27;</span>).<span class="hljs-title function_">click</span>(<span class="hljs-function">()=&gt;</span> bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;list&#x27;</span>].<span class="hljs-title function_">execute</span>());
+</code></pre></div>
+<h2 id="5-3-단계-명령read-서비스-객체-구성">5-3 단계 : 명령(read) 서비스 객체 구성<a class="heading-anchor" href="#5-3-단계-명령read-서비스-객체-구성" aria-label="5-3 단계 : 명령(read) 서비스 객체 구성 링크">#</a></h2>
+<p>지정한 서버 데이터를 각 폼 요소에 가져옵니다.</p>
+<p><img src="../assets/images/examples/crudl.png" alt="CRUD 목록과 편집 폼 전체 화면"></p>
+<h3 id="items-서비스-객체-구성-3">items 서비스 객체 구성<a class="heading-anchor" href="#items-서비스-객체-구성-3" aria-label="items 서비스 객체 구성 링크">#</a></h3>
+<p><code>_index</code> 는  정적 JSON 을 샘플로 가져오므로 임시로 데이터를 가져오는데 활용하였습니다.</p>
+<p>등록일 아이템 create_dt 을 추가합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span> = {
+  <span class="hljs-attr">_index</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">create_dt</span>: { <span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">`#create_dt<span class="hljs-subst">${_SUFF}</span>`</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;text&#x27;</span> } }
+};
+</code></pre></div>
+<h3 id="command-서비스-객체-구성-3">command 서비스 객체 구성<a class="heading-anchor" href="#command-서비스-객체-구성-3" aria-label="command 서비스 객체 구성 링크">#</a></h3>
+<p>서버 경로에서 데이터를 가져오기  지정된 index 에 데이터를 value 을 가져오기 위해 outputOption: 'VIEW' 로 지정하였습니다.</p>
+<p>처음으로 실행되는 <code>cbBegin</code> 콜백함수에 폼 추가 버튼 영역은 숨기고, 폼양식은 보이도록 설정합니다.</p>
+<p>정적 JSON 데이터를 가져오기 위해서 임으로 <code>_index</code>을 임으로 지정하여 값을 가져올 수 있게 합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">command</span> = {
+  <span class="hljs-attr">read</span>: {
+	<span class="hljs-attr">outputOption</span>: <span class="hljs-string">&#x27;VIEW&#x27;</span>,
+	<span class="hljs-title function_">cbBegin</span>(<span class="hljs-params">model, cmd</span>) {
+	  cmd.<span class="hljs-property">outputOption</span>.<span class="hljs-property">index</span> = <span class="hljs-title class_">Number</span>(cmd.<span class="hljs-property">_model</span>.<span class="hljs-property">items</span>.<span class="hljs-property">_index</span>);
+	  model.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;_area_form&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;&#x27;</span>; <span class="hljs-comment">// form show</span>
+	  model.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;_area_edit&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;&#x27;</span>; <span class="hljs-comment">// button show</span>
+	  model.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;_area_create&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;d-none&#x27;</span>;
+	  model.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;_area_button&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;d-none&#x27;</span>;
+	},
+  },
+};
+</code></pre></div>
+<h3 id="mapping-서비스-객체-구성-3">mapping 서비스 객체 구성<a class="heading-anchor" href="#mapping-서비스-객체-구성-3" aria-label="mapping 서비스 객체 구성 링크">#</a></h3>
+<p>ntc_idx 을 서버에 전송하고, 모든 아이템을 <code>output</code> 으로 지정하여 출력뷰에 가져올 수 있게 지정합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">mapping</span> = {
+  <span class="hljs-attr">ntc_idx</span>: { <span class="hljs-attr">read</span>: [<span class="hljs-string">&#x27;bind&#x27;</span>, <span class="hljs-string">&#x27;output&#x27;</span>] },
+  <span class="hljs-attr">title</span>: { <span class="hljs-attr">read</span>: <span class="hljs-string">&#x27;output&#x27;</span> },
+  <span class="hljs-attr">contents</span>: { <span class="hljs-attr">read</span>: <span class="hljs-string">&#x27;output&#x27;</span> },
+  <span class="hljs-attr">top_yn</span>: { <span class="hljs-attr">read</span>: <span class="hljs-string">&#x27;output&#x27;</span> },
+  <span class="hljs-attr">active_cd</span>: { <span class="hljs-attr">read</span>: <span class="hljs-string">&#x27;output&#x27;</span> },
+  <span class="hljs-attr">create_dt</span>: { <span class="hljs-attr">read</span>: <span class="hljs-string">&#x27;output&#x27;</span> },
+};
+</code></pre></div>
+<h3 id="mainjs-이벤트-등록-2">main.js 이벤트 등록<a class="heading-anchor" href="#mainjs-이벤트-등록-2" aria-label="main.js 이벤트 등록 링크">#</a></h3>
+<p>목록 보기 버튼 이벤트를 연결합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// read/update button event handlers</span>
+$(<span class="hljs-string">&#x27;#btn_List&#x27;</span>).<span class="hljs-title function_">click</span>(<span class="hljs-function">()=&gt;</span> bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;list&#x27;</span>].<span class="hljs-title function_">execute</span>());
+</code></pre></div>
+<h2 id="5-4-단계-명령update-서비스-객체-구성">5-4 단계 : 명령(update) 서비스 객체 구성<a class="heading-anchor" href="#5-4-단계-명령update-서비스-객체-구성" aria-label="5-4 단계 : 명령(update) 서비스 객체 구성 링크">#</a></h2>
+<p>수정 처리 완료후 처리 결과를 alert() 메세지로 출력합니다.</p>
+<p><img src="../assets/images/examples/update.png" alt="데이터 수정 화면"></p>
+<h3 id="items-서비스-객체-구성-4">items 서비스 객체 구성<a class="heading-anchor" href="#items-서비스-객체-구성-4" aria-label="items 서비스 객체 구성 링크">#</a></h3>
+<p>기존의 items 사용합니다.</p>
+<h3 id="command-서비스-객체-구성-4">command 서비스 객체 구성<a class="heading-anchor" href="#command-서비스-객체-구성-4" aria-label="command 서비스 객체 구성 링크">#</a></h3>
+<p>cbEnd 콜백함수를 지정하여 수정 완료후 결과를 메세지로 표시합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">command</span> = {
+  <span class="hljs-attr">update</span>: {
+	<span class="hljs-title function_">cbEnd</span>(<span class="hljs-params">status, cmd, res</span>) {
+	  <span class="hljs-keyword">if</span> (res) <span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;It has been modified.&#x27;</span>);
+	}
+  },
+};
+</code></pre></div>
+<h3 id="mapping-서비스-객체-구성-4">mapping 서비스 객체 구성<a class="heading-anchor" href="#mapping-서비스-객체-구성-4" aria-label="mapping 서비스 객체 구성 링크">#</a></h3>
+<p>ntc_idx, title, top_yn, active_cd  아이템을 valid 뷰에 지정하여 유효성을 검사합니다.</p>
+<p>유효성 검사가 성공하면 bind 뷰에 지정되 아이템은 서버로 전송됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">mapping</span> = {
+  <span class="hljs-attr">ntc_idx</span>: { <span class="hljs-attr">update</span>: [<span class="hljs-string">&#x27;valid&#x27;</span>, <span class="hljs-string">&#x27;bind&#x27;</span>] },
+  <span class="hljs-attr">title</span>: { <span class="hljs-attr">update</span>: [<span class="hljs-string">&#x27;valid&#x27;</span>, <span class="hljs-string">&#x27;bind&#x27;</span>] },
+  <span class="hljs-attr">contents</span>: { <span class="hljs-attr">update</span>: <span class="hljs-string">&#x27;bind&#x27;</span> },
+  <span class="hljs-attr">top_yn</span>: { <span class="hljs-attr">update</span>: [<span class="hljs-string">&#x27;valid&#x27;</span>, <span class="hljs-string">&#x27;bind&#x27;</span>] },
+  <span class="hljs-attr">active_cd</span>: { <span class="hljs-attr">update</span>: [<span class="hljs-string">&#x27;valid&#x27;</span>, <span class="hljs-string">&#x27;bind&#x27;</span>] },
+};
+</code></pre></div>
+<h3 id="mainjs-이벤트-등록-3">main.js 이벤트 등록<a class="heading-anchor" href="#mainjs-이벤트-등록-3" aria-label="main.js 이벤트 등록 링크">#</a></h3>
+<p>수정 버튼에 이벤트를 등록합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// read/update button event handlers</span>
+$(<span class="hljs-string">&#x27;#btn_Update&#x27;</span>).<span class="hljs-title function_">click</span>(<span class="hljs-function">()=&gt;</span> bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;update&#x27;</span>].<span class="hljs-title function_">execute</span>());
+</code></pre></div>
+<h2 id="5-5-단계-명령delete-서비스-객체-구성">5-5 단계 : 명령(delete) 서비스 객체 구성<a class="heading-anchor" href="#5-5-단계-명령delete-서비스-객체-구성" aria-label="5-5 단계 : 명령(delete) 서비스 객체 구성 링크">#</a></h2>
+<p>삭제 버튼을 클릭하면 사용자에게 confirm() 확인 삭제 처리 후에 목록 보기로 이동합니다.</p>
+<p><img src="../assets/images/examples/delete.png" alt="데이터 삭제 화면"></p>
+<h3 id="items-서비스-객체-구성-5">items 서비스 객체 구성<a class="heading-anchor" href="#items-서비스-객체-구성-5" aria-label="items 서비스 객체 구성 링크">#</a></h3>
+<p>기존의 items 사용합니다.</p>
+<h3 id="command-서비스-객체-구성-5">command 서비스 객체 구성<a class="heading-anchor" href="#command-서비스-객체-구성-5" aria-label="command 서비스 객체 구성 링크">#</a></h3>
+<p>cbValid 콜백함수를 활용해서 사용자에 삭제유무를 확인하도록 추가합니다.</p>
+<p>cbEnd 콜백함수를 지정하여 삭제 처리 결과를 메세지로 표시합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">command</span> = {
+  <span class="hljs-attr">delete</span>: {
+	<span class="hljs-title function_">cbValid</span>(<span class="hljs-params">valid, cmd</span>) {
+	  <span class="hljs-keyword">if</span> (<span class="hljs-title function_">confirm</span>(<span class="hljs-string">&#x27;Are you sure you want to delete it?&#x27;</span>)) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+	},
+	<span class="hljs-title function_">cbEnd</span>(<span class="hljs-params">status, cmd, res</span>) {
+	  <span class="hljs-keyword">if</span> (res) {
+		<span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;The post has been deleted.&#x27;</span>);
+		cmd.<span class="hljs-property">_model</span>.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;list&#x27;</span>].<span class="hljs-title function_">execute</span>();
+	  }
+	}
+  }
+};
+</code></pre></div>
+<h3 id="mapping-서비스-객체-구성-5">mapping 서비스 객체 구성<a class="heading-anchor" href="#mapping-서비스-객체-구성-5" aria-label="mapping 서비스 객체 구성 링크">#</a></h3>
+<p>ntc_idx 아이템을 유효성 검사후 서버에 전송합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">mapping</span> = {
+  <span class="hljs-attr">ntc_idx</span>: { <span class="hljs-attr">delete</span>: [<span class="hljs-string">&#x27;valid&#x27;</span>, <span class="hljs-string">&#x27;bind&#x27;</span>] }
+};
+</code></pre></div>
+<h3 id="mainjs-이벤트-등록-4">main.js 이벤트 등록<a class="heading-anchor" href="#mainjs-이벤트-등록-4" aria-label="main.js 이벤트 등록 링크">#</a></h3>
+<p>삭제 버튼에 이벤트를 등록합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// read/update button event handlers</span>
+$(<span class="hljs-string">&#x27;#btn_Delete&#x27;</span>).<span class="hljs-title function_">click</span>(<span class="hljs-function">()=&gt;</span> bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;delete&#x27;</span>].<span class="hljs-title function_">execute</span>());
+</code></pre></div>
+</div>
+    <div class="doc-feedback"><span>더 나은 문서를 함께 만들어요.</span><a href="https://github.com/white-base/bind-model/issues">오류 제보 및 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></div>
+    <nav class="page-pagination" aria-label="이전·다음 문서"><a class="page-link prev" href="../advanced/composition.html"><span>이전 문서</span><strong>객체 구성 방법</strong></a><a class="page-link next" href="../api/bind-model.html"><span>다음 문서</span><strong>BindModel<svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></strong></a></nav>
+  </article><footer class="doc-footer">BindModel · White Lab<a href="../index.html">홈으로 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></footer></main>
+  <aside class="page-toc" id="page-toc" aria-label="이 페이지의 내용"><p>이 페이지의 내용</p><nav><a class="toc-level-2" href="#1단계-화면-구성">1단계 : 화면 구성</a><a class="toc-level-2" href="#2-단계-서버-데이터-샘플">2 단계 : 서버 데이터 샘플</a><a class="toc-level-2" href="#3단계-mainjs-구성">3단계 : main.js 구성</a><a class="toc-level-2" href="#4단계-서비스객체-구성">4단계 :  서비스객체  구성</a><a class="toc-level-2" href="#5-1단계-명령list-서비스-객체-구성">5-1단계 : 명령(list) 서비스 객체 구성</a><a class="toc-level-3" href="#items-서비스-객체-구성">items 서비스 객체 구성</a><a class="toc-level-3" href="#fn-서비스-객체-구성">fn 서비스 객체 구성</a><a class="toc-level-3" href="#command-서비스-객체-구성">command 서비스 객체 구성</a><a class="toc-level-3" href="#mapping-서비스-객체-구성">mapping 서비스 객체 구성</a><a class="toc-level-3" href="#mainjs-실행-및-테스트">main.js 실행 및 테스트</a><a class="toc-level-2" href="#5-2-단계-명령create-서비스-객체-구성">5-2 단계 : 명령(create) 서비스 객체 구성</a><a class="toc-level-3" href="#html-구성">html 구성</a><a class="toc-level-3" href="#items-서비스-객체-구성-2">items 서비스 객체 구성</a><a class="toc-level-3" href="#command-서비스-객체-구성-2">command 서비스 객체 구성</a><a class="toc-level-3" href="#mapping-서비스-객체-구성-2">mapping 서비스 객체 구성</a><a class="toc-level-3" href="#fn-서비스-객체-구성-2">fn 서비스 객체 구성</a><a class="toc-level-3" href="#mainjs-이벤트-등록">main.js 이벤트 등록</a><a class="toc-level-2" href="#5-3-단계-명령read-서비스-객체-구성">5-3 단계 : 명령(read) 서비스 객체 구성</a><a class="toc-level-3" href="#items-서비스-객체-구성-3">items 서비스 객체 구성</a><a class="toc-level-3" href="#command-서비스-객체-구성-3">command 서비스 객체 구성</a><a class="toc-level-3" href="#mapping-서비스-객체-구성-3">mapping 서비스 객체 구성</a><a class="toc-level-3" href="#mainjs-이벤트-등록-2">main.js 이벤트 등록</a><a class="toc-level-2" href="#5-4-단계-명령update-서비스-객체-구성">5-4 단계 : 명령(update) 서비스 객체 구성</a><a class="toc-level-3" href="#items-서비스-객체-구성-4">items 서비스 객체 구성</a><a class="toc-level-3" href="#command-서비스-객체-구성-4">command 서비스 객체 구성</a><a class="toc-level-3" href="#mapping-서비스-객체-구성-4">mapping 서비스 객체 구성</a><a class="toc-level-3" href="#mainjs-이벤트-등록-3">main.js 이벤트 등록</a><a class="toc-level-2" href="#5-5-단계-명령delete-서비스-객체-구성">5-5 단계 : 명령(delete) 서비스 객체 구성</a><a class="toc-level-3" href="#items-서비스-객체-구성-5">items 서비스 객체 구성</a><a class="toc-level-3" href="#command-서비스-객체-구성-5">command 서비스 객체 구성</a><a class="toc-level-3" href="#mapping-서비스-객체-구성-5">mapping 서비스 객체 구성</a><a class="toc-level-3" href="#mainjs-이벤트-등록-4">main.js 이벤트 등록</a></nav><a class="back-top" href="#main">맨 위로 ↑</a></aside>
+  </div><dialog id="search-dialog" class="search-dialog" aria-labelledby="search-label"><div class="search-top"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><label class="sr-only" id="search-label" for="search-input">문서 검색</label><input id="search-input" type="search" placeholder="문서, 메서드, 개념 검색…" autocomplete="off" spellcheck="false" aria-controls="search-results"><button class="dialog-close" aria-label="검색 닫기">ESC</button></div><p id="search-status" class="search-status" role="status">검색어를 입력해 보세요.</p><div id="search-results" class="search-results"></div><div class="search-footer"><span><kbd>↑</kbd><kbd>↓</kbd> 이동 <kbd>↵</kbd> 열기</span><span>BindModel 문서 검색</span></div></dialog><div class="toast" role="status" aria-live="polite"></div></body>
+</html>

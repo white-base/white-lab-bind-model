@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="ko" data-root="../">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>명령 복수 출력 구성 | BindModel</title>
+  <meta name="description" content="하나의 명령에서 여러 출력 뷰를 구성하고 응답을 처리합니다."><meta name="theme-color" content="#f8f8f4">
+  <meta property="og:type" content="website"><meta property="og:title" content="명령 복수 출력 구성 | BindModel"><meta property="og:description" content="하나의 명령에서 여러 출력 뷰를 구성하고 응답을 처리합니다."><meta property="og:url" content="https://white-base.github.io/white-lab-bind-model/advanced/multiple-outputs.html"><meta property="og:image" content="https://white-base.github.io/white-lab-bind-model/assets/social.svg">
+  <link rel="canonical" href="https://white-base.github.io/white-lab-bind-model/advanced/multiple-outputs.html"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('bindmodel-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+  <link rel="stylesheet" href="../assets/site.css"><script src="../assets/site.js" defer></script>
+</head>
+<body class="documentation"><a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html" aria-label="BindModel 홈"><span class="brand-mark" aria-hidden="true">b<span>.</span></span><span class="brand-name">bindmodel<span class="brand-dot">.</span></span></a>
+    <nav class="main-nav" id="main-nav" aria-label="주 메뉴">
+      <a href="../guide/introduction.html">시작하기</a><a href="../guide/features/model.html">기능 가이드</a><a href="../advanced/column-value-flow.html" class="is-active" aria-current="true">고급 기능</a><a href="../examples/crudl.html">예제</a><a href="../api/bind-model.html">API</a>
+    </nav>
+    <div class="header-tools"><button class="search-trigger" data-search aria-label="문서 검색"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span>문서 검색</span><kbd>⌘ K</kbd></button>
+    <button class="icon-button theme-toggle" aria-label="어두운 테마로 전환" title="테마 전환"><svg class="icon theme-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13A8 8 0 0 1 11 4a8 8 0 1 0 9 9Z"/></svg></button>
+    <a class="icon-button github-link" href="https://github.com/white-base/bind-model" aria-label="BindModel GitHub 저장소"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-4a3.5 3.5 0 0 0-1-2.7c3.3-.4 6.7-1.6 6.7-7.3A5.6 5.6 0 0 0 20 4.1 5.2 5.2 0 0 0 19.9.3S18.6-.1 16 1.8a13.5 13.5 0 0 0-7 0C6.4-.1 5.1.3 5.1.3A5.2 5.2 0 0 0 5 4.1 5.6 5.6 0 0 0 3.3 8c0 5.7 3.4 6.9 6.7 7.3A3.5 3.5 0 0 0 9 18v4"/></svg></a>
+    <button class="icon-button menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="주 메뉴 열기"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div>
+  </div></header>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <div class="mobile-docbar"><button class="sidebar-toggle" aria-controls="docs-sidebar" aria-expanded="false"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>문서 메뉴</button><a href="#page-toc">이 페이지의 내용 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div>
+  <div class="docs-layout"><button class="sidebar-backdrop" aria-label="문서 메뉴 닫기" hidden></button><aside class="docs-sidebar" id="docs-sidebar" aria-label="문서 목록"><a class="sidebar-home" href="../index.html"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M12 5C9 3 5 3 2 4v15c3-1 7-1 10 2 3-3 7-3 10-2V4c-3-1-7-1-10 1Z"/></svg>문서 둘러보기</a><section class="sidebar-group"><h2><span>시작하기</span><span>03</span></h2><ul><li><a href="../guide/introduction.html">소개</a></li><li><a href="../guide/quick-start.html">빠른 시작</a></li><li><a href="../guide/core-concepts.html">핵심 개념</a></li></ul></section><section class="sidebar-group"><h2><span>기능 가이드</span><span>07</span></h2><ul><li><a href="../guide/features/model.html">모델 구성</a></li><li><a href="../guide/features/command.html">명령 구성</a></li><li><a href="../guide/features/columns.html">컬럼 관리</a></li><li><a href="../guide/features/shared-column-properties.html">공통 컬럼 속성</a></li><li><a href="../guide/features/flow-control.html">흐름 제어</a></li><li><a href="../guide/features/service-injection.html">서비스 객체 주입</a></li><li><a href="../guide/features/json-schema.html">JSON 스키마 가이드</a></li></ul></section><section class="sidebar-group"><h2><span>고급 기능</span><span>06</span></h2><ul><li><a href="../advanced/column-value-flow.html">컬럼값 호출 구조</a></li><li><a href="../advanced/tables.html">테이블 관리</a></li><li><a href="../advanced/multiple-outputs.html" class="is-current" aria-current="page">명령 복수 출력 구성</a></li><li><a href="../advanced/execution.html">실행 및 동기화</a></li><li><a href="../advanced/events.html">이벤트 설정</a></li><li><a href="../advanced/composition.html">객체 구성 방법</a></li></ul></section><section class="sidebar-group"><h2><span>예제</span><span>01</span></h2><ul><li><a href="../examples/crudl.html">CRUD + List 구현하기</a></li></ul></section><section class="sidebar-group"><h2><span>API 레퍼런스</span><span>06</span></h2><ul><li><a href="../api/bind-model.html">BindModel</a></li><li><a href="../api/bind-command.html">BindCommand</a></li><li><a href="../api/meta-view.html">MetaView</a></li><li><a href="../api/html-column.html">HTMLColumn</a></li><li><a href="../api/property-collection.html">PropertyCollection</a></li><li><a href="../api/meta-object.html">MetaObject</a></li></ul></section><a class="sidebar-bottom" href="https://github.com/white-base/bind-model/issues">문서 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></aside>
+  <main class="doc-main" id="main"><article data-search-content>
+    <div class="doc-breadcrumb"><a href="../index.html">문서</a><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span>고급 기능</span></div>
+    <header class="doc-heading"><div class="eyebrow">고급 기능<span class="eyebrow-rule"></span>03</div><h1>명령 복수 출력 구성</h1><p>하나의 명령에서 여러 출력 뷰를 구성하고 응답을 처리합니다.</p><div class="doc-meta"><span>한국어 문서</span><span>약 13분</span></div></header>
+    <div class="doc-content"><p>서버에서 다중 엔티티(테이블) 데이터를 응답받을 경우, 명령(BindCommand) 객체에서 복수의 출력 뷰(MetaView)를 구성하여 데이터를 처리할 수 있습니다.</p>
+<h2 id="_outputs-컬렉션의-구조"><code>_outputs</code> 컬렉션의 구조<a class="heading-anchor" href="#_outputs-컬렉션의-구조" aria-label="_outputs 컬렉션의 구조 링크">#</a></h2>
+<p>명령(BindCommand) 객체는 <code>_outputs</code> 컬렉션을 통해 여러 출력 뷰(MetaView)를 관리합니다.</p>
+<ul>
+<li>
+<p>기본 출력 뷰는 <code>output</code> 속성을 통해 접근할 수 있으며, 이는 <code>_outputs['output1']</code>를 참조합니다.</p>
+</li>
+<li>
+<p>추가 출력 뷰는 newOutput() 메서드를 통해 생성되며, <code>_outputs</code> 컬렉션에 등록됩니다.</p>
+</li>
+</ul>
+<figure class="diagram"><pre class="mermaid">classDiagram
+	BindCommand o--&gt; MetaView : valid
+	BindCommand o--&gt; MetaView : bind
+	BindCommand o--&gt; MetaView : output == _outputs[&#39;output1&#39;]
+	BindCommand *--&gt; MetaViewCollection : _outputs
+	MetaViewCollection ..&gt; MetaView : outputs1
+	
+    class BindCommand {
+		- _outputs: MetaViewCollection
+		+ outputOption
+		+ valid: MetaView
+		+ bind: MetaView
+		+ output = _outputs[&#39;output1&#39;]
+		+ newOutput(outputName)
+		+ removeOutput(outputName)
+    }
+    class MetaViewCollection {
+		+ output1: MetaView
+		+ ....
+    }
+    
+    class MetaView {
+    }
+</pre><figcaption>구조와 흐름을 설명하는 다이어그램</figcaption></figure>
+<h2 id="출력-뷰metaview-추가">출력 뷰(MetaView) 추가<a class="heading-anchor" href="#출력-뷰metaview-추가" aria-label="출력 뷰(MetaView) 추가 링크">#</a></h2>
+<p>newOutput() 메서드를 사용하여 명령(BindCommand) 객체에 출력 뷰를 추가할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">newOutput</span>(<span class="hljs-params"><span class="hljs-attr">outputName</span>?: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>outputName</code> : 새롭게 추가할 출력 뷰의 이름입니다.</li>
+</ul>
+<p>이름을 지정하지 않은 경우, 기본 이름 규칙<code>('output' + 숫자)</code>에 따라 출력 뷰가 자동으로 추가됩니다.</p>
+<blockquote>
+<p><em>Tip</em>
+명령(BindCommand) 객체에는 <code>output</code>과 <code>output1</code> 속성이 기본으로 제공되며, 두 속성은 동일한 값을 참조합니다.</p>
+</blockquote>
+<h3 id="기본-출력-뷰-추가">기본 출력 뷰 추가<a class="heading-anchor" href="#기본-출력-뷰-추가" aria-label="기본 출력 뷰 추가 링크">#</a></h3>
+<p>아무 이름도 지정하지 않을 경우, 기본 이름 규칙(<code>'output' + number</code>)에 따라 출력 뷰가 추가됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+<span class="hljs-comment">// 명령 추가</span>
+bm.<span class="hljs-title function_">addCommand</span>(<span class="hljs-string">&#x27;cmd1&#x27;</span>);  
+
+<span class="hljs-comment">// 출력 뷰 추가</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">newOutput</span>();  
+
+<span class="hljs-comment">// bm.command[&#x27;cmd1&#x27;].output2 instanceof MetaView</span>
+<span class="hljs-comment">// bm.command[&#x27;cmd1&#x27;].output2 === bm.command[&#x27;cmd1&#x27;]._outputs[&#x27;output2&#x27;]</span>
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+기본 출력 뷰 이름은 <code>output2</code>, <code>output3</code>, … 순으로 자동 생성됩니다.</p>
+</blockquote>
+<h3 id="사용자-지정-출력-뷰-추가">사용자 지정 출력 뷰 추가<a class="heading-anchor" href="#사용자-지정-출력-뷰-추가" aria-label="사용자 지정 출력 뷰 추가 링크">#</a></h3>
+<p>사용자 정의 이름을 사용하면 기본 출력 뷰와 사용자 정의 이름으로 출력 뷰가 추가됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">newOutput</span>(<span class="hljs-string">&#x27;three&#x27;</span>);
+
+<span class="hljs-comment">// bm.command[&#x27;cmd1&#x27;].output3 instanceof MetaView</span>
+<span class="hljs-comment">// bm.command[&#x27;cmd1&#x27;].three instanceof MetaView</span>
+<span class="hljs-comment">// bm.command[&#x27;cmd1&#x27;].output3 === bm.command[&#x27;cmd1&#x27;].three</span>
+</code></pre></div>
+<p><em>Tip</em></p>
+<blockquote>
+<p>출력 뷰 이름이  <strong>명령(BindCommand)의 키값</strong>과 <strong>중복되지 않아야</strong> 합니다.
+예약어 목록 : <code>config, url, _outputs, _model, _baseTable, valid, bind, output, output1, misc, outputOption, outOpt, cbBind, cbValid, cbBind, cbResult, cbOutput, cbEnd, _guid, _type</code></p>
+</blockquote>
+<h2 id="출력-뷰metaview-제거">출력 뷰(MetaView) 제거<a class="heading-anchor" href="#출력-뷰metaview-제거" aria-label="출력 뷰(MetaView) 제거 링크">#</a></h2>
+<p>명령(BindCommand) 객체에서 추가한 출력 뷰(MetaView)를 제거할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">removeOutput</span>(<span class="hljs-params"><span class="hljs-attr">outputName</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>outputName</code> : 제거할 출력 뷰(MetaView)의 이름입니다.</li>
+</ul>
+<p>출력 뷰를 제거할 때, 기본적으로 생성된 <code>'output' + 숫자 형식</code>의 자동 속성명도 함께 제거됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+bm.<span class="hljs-title function_">addCommand</span>(<span class="hljs-string">&#x27;cmd1&#x27;</span>);
+<span class="hljs-comment">// bm.cmd[&#x27;cmd1&#x27;]._outputs.count == 1</span>
+
+<span class="hljs-comment">// 기본 출력 뷰 생성</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">newOutput</span>();  <span class="hljs-comment">// output2 생성</span>
+<span class="hljs-comment">// bm.cmd[&#x27;cmd1&#x27;]._outputs.count == 2</span>
+
+<span class="hljs-comment">// 제거</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">removeOutput</span>(<span class="hljs-string">&#x27;output2&#x27;</span>);
+<span class="hljs-comment">// bm.cmd[&#x27;cmd1&#x27;]._outputs.count == 1</span>
+</code></pre></div>
+<p>사용자 정의 이름을 사용해 추가한 출력 뷰를 제거합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">newOutput</span>(<span class="hljs-string">&#x27;three&#x27;</span>);
+<span class="hljs-comment">// bm.cmd[&#x27;cmd1&#x27;]._outputs.count == 2</span>
+<span class="hljs-comment">// bm.command[&#x27;cmd1&#x27;].output2 == MetaView</span>
+<span class="hljs-comment">// bm.command[&#x27;cmd1&#x27;].three == MetaView</span>
+
+<span class="hljs-comment">// Remove</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">removeOutput</span>(<span class="hljs-string">&#x27;three&#x27;</span>);
+<span class="hljs-comment">// bm.cmd[&#x27;cmd1&#x27;]._outputs.count == 1</span>
+</code></pre></div>
+<p><em>Tip</em></p>
+<blockquote>
+<p>기본 뷰인 <code>output</code> 또는 <code>output1</code> 속성은 제거할 수 없습니다.</p>
+</blockquote>
+<h2 id="출력-뷰-가져오기">출력 뷰 가져오기<a class="heading-anchor" href="#출력-뷰-가져오기" aria-label="출력 뷰 가져오기 링크">#</a></h2>
+<p>서버 응답 데이터가 여러 엔티티로 구성된 경우, 출력 뷰(MetaView)를 활용하여 데이터를 가져올 수 있습니다. 출력 옵션(opt)에 따라 데이터 처리 방식이 달라집니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>json</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-json"><span class="hljs-comment">// SERVER DATA</span>
+<span class="hljs-punctuation">[</span>
+	<span class="hljs-punctuation">{</span>
+	    <span class="hljs-attr">&quot;rows&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+	        <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;aa&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;bb&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-number">20</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;cc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+	        <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;aa&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">11</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;bb&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-number">21</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;cc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">31</span> <span class="hljs-punctuation">}</span>
+	    <span class="hljs-punctuation">]</span>
+	<span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+	<span class="hljs-punctuation">{</span>
+	    <span class="hljs-attr">&quot;rows&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+	        <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;dd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">40</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;ee&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-number">50</span> <span class="hljs-punctuation">}</span>
+	    <span class="hljs-punctuation">]</span>
+	<span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span>
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+서버 응답 형식이 다를 경우, cbResult 및 cbBaseResult 콜백을 사용하여 데이터를 변환할 수 있습니다.</p>
+</blockquote>
+<p>서버 응답 데이터가 다수의 엔티티로 구성되어 있을 경우, 출력 뷰(MetaView)는 생성된 출력 뷰의 개수만큼 데이터를 가져옵니다.</p>
+<blockquote>
+<p>참조 : <em>흐름 제어 &gt; 응답 처리 콜백</em>, <em>JSON 스키마 가이드 &gt; ENTITY 모드</em></p>
+</blockquote>
+<h3 id="모든-데이터-가져오기-outopt-all">모든 데이터 가져오기 (outOpt = 'ALL')<a class="heading-anchor" href="#모든-데이터-가져오기-outopt-all" aria-label="모든 데이터 가져오기 (outOpt = &#39;ALL&#39;) 링크">#</a></h3>
+<p>서버의 모든 데이터를 출력 뷰(MetaView)에 매핑합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+<span class="hljs-comment">// 출력 옵션 &#x27;ALL&#x27;으로 명령 추가</span>
+bm.<span class="hljs-title function_">addCommand</span>(<span class="hljs-string">&#x27;cmd1&#x27;</span>, <span class="hljs-string">&#x27;ALL&#x27;</span>);    
+
+<span class="hljs-comment">// &#x27;output2&#x27; 추가</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">newOutput</span>();  
+
+<span class="hljs-comment">// 명령 실행</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">execute</span>();
+
+<span class="hljs-comment">// bm.columns.count == 5</span>
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output.rows[0][&#x27;aa&#x27;] == 10</span>
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output.rows[0][&#x27;bb&#x27;] == 20</span>
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output.rows[0][&#x27;cc&#x27;] == 30</span>
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output.rows[1][&#x27;aa&#x27;] == 11</span>
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output.rows[1][&#x27;bb&#x27;] == 21</span>
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output.rows[1][&#x27;cc&#x27;] == 31</span>
+
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output2.rows[0][&#x27;dd&#x27;] == 40</span>
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output2.rows[0][&#x27;ee&#x27;] == 50</span>
+</code></pre></div>
+<ul>
+<li><strong>모든 데이터를 출력 뷰에</strong> 가져옵니다.</li>
+</ul>
+<blockquote>
+<p><em>Tip</em>
+서버 데이터를 가져올 때, 출력 뷰(MetaView)에 미리 컬럼 정의가 되어 있다면, 해당 정의를 그대로 사용합니다.</p>
+</blockquote>
+<h3 id="지정-데이터-가져오기-outopt-pick">지정 데이터 가져오기 (outOpt ='PICK')<a class="heading-anchor" href="#지정-데이터-가져오기-outopt-pick" aria-label="지정 데이터 가져오기 (outOpt =&#39;PICK&#39;) 링크">#</a></h3>
+<p>서버에서 지정한 컬럼명을 가져와 출력 뷰에 매핑합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+<span class="hljs-comment">// 출력 옵션 &#x27;PICK&#x27;으로 명령 추가</span>
+bm.<span class="hljs-title function_">addCommand</span>(<span class="hljs-string">&#x27;cmd1&#x27;</span>, <span class="hljs-string">&#x27;PICK&#x27;</span>);
+
+<span class="hljs-comment">// &#x27;output2&#x27; 추가</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">newOutput</span>();
+
+<span class="hljs-comment">// 컬럼 추가 및 출력 뷰에 매핑</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;aa&#x27;</span>, <span class="hljs-string">&#x27;output&#x27;</span>);
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;bb&#x27;</span>, <span class="hljs-string">&#x27;output&#x27;</span>);
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;dd&#x27;</span>, <span class="hljs-string">&#x27;output2&#x27;</span>);
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;ee&#x27;</span>, <span class="hljs-string">&#x27;output2&#x27;</span>);
+
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">execute</span>();
+
+<span class="hljs-comment">// bm.columns.count == 4  (&#x27;aa&#x27;, &#x27;bb&#x27;, &#x27;dd&#x27;, &#x27;ee&#x27;)</span>
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output.rows[0][&#x27;aa&#x27;] == 10</span>
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output.rows[0][&#x27;bb&#x27;] == 20</span>
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output.rows[1][&#x27;aa&#x27;] == 11</span>
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output.rows[1][&#x27;bb&#x27;] == 21</span>
+
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output2.rows[0][&#x27;dd&#x27;] == 40</span>
+<span class="hljs-comment">// bm.columns[&#x27;cmd1&#x27;].output2.rows[0][&#x27;ee&#x27;] == 50</span>
+</code></pre></div>
+<ul>
+<li><strong>지정된 컬럼명만 출력 뷰에 매핑</strong>합니다.</li>
+<li>각 출력 뷰의 컬럼 개수는 지정된 컬럼으로 제한됩니다.</li>
+</ul>
+<h3 id="지정-데이터-가져와서-컬럼-설정-outopt-view">지정 데이터 가져와서 컬럼 설정 (outOpt ='VIEW')<a class="heading-anchor" href="#지정-데이터-가져와서-컬럼-설정-outopt-view" aria-label="지정 데이터 가져와서 컬럼 설정 (outOpt =&#39;VIEW&#39;) 링크">#</a></h3>
+<p>서버에서 지정한 컬럼 데이터를 출력 뷰에 매핑하고, <code>index</code> 위치의 <code>rows</code> 데이터를 컬럼값으로 설정합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+<span class="hljs-comment">// 출력 옵션 &#x27;VIEW&#x27;으로 명령 추가</span>
+bm.<span class="hljs-title function_">addCommand</span>(<span class="hljs-string">&#x27;cmd1&#x27;</span>, <span class="hljs-string">&#x27;VIEW&#x27;</span>);
+
+<span class="hljs-comment">// &#x27;output2&#x27; 추가</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">newOutput</span>();  
+
+<span class="hljs-comment">// 컬럼 추가 및 출력 뷰에 매핑</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;aa&#x27;</span>, <span class="hljs-string">&#x27;output&#x27;</span>);
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;bb&#x27;</span>, <span class="hljs-string">&#x27;output&#x27;</span>);
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;dd&#x27;</span>, <span class="hljs-string">&#x27;output2&#x27;</span>);
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;ee&#x27;</span>, <span class="hljs-string">&#x27;output2&#x27;</span>);
+
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">execute</span>();
+
+<span class="hljs-comment">// bm.columns.count == 4 (&#x27;aa&#x27;, &#x27;bb&#x27;, &#x27;dd&#x27;, &#x27;ee&#x27;)</span>
+<span class="hljs-comment">// bm.columns[&#x27;aa&#x27;].value == 10</span>
+<span class="hljs-comment">// bm.columns[&#x27;bb&#x27;].value == 20</span>
+<span class="hljs-comment">// bm.columns[&#x27;dd&#x27;].value == 40</span>
+<span class="hljs-comment">// bm.columns[&#x27;ee&#x27;].value == 50</span>
+</code></pre></div>
+<ul>
+<li>1단계 : <strong>지정된 컬럼 데이터를 출력 뷰에 매핑</strong>합니다.</li>
+<li>2단계 : <code>index</code> 위치의 <code>rows</code> 데이터 값을 컬럼의 값(<strong>value</strong>)으로 설정합니다.</li>
+</ul>
+<p><em>Tip</em></p>
+<blockquote>
+<p><code>outputOption.index</code>는 <code>rows</code>에서 설정할 위치를 의미하며, 기본값은 <code>0</code>입니다.</p>
+</blockquote>
+<h2 id="복수-출력-인덱스">복수 출력 인덱스<a class="heading-anchor" href="#복수-출력-인덱스" aria-label="복수 출력 인덱스 링크">#</a></h2>
+<h3 id="복수-출력-인덱스-설정하기">복수 출력 인덱스 설정하기<a class="heading-anchor" href="#복수-출력-인덱스-설정하기" aria-label="복수 출력 인덱스 설정하기 링크">#</a></h3>
+<p>명령(BindCommand) 객체의 <code>outputOption.index</code> 속성을 사용하여 출력 데이터를 가져올 인덱스를 배열 또는 단일 숫자로 지정할 수 있습니다.</p>
+<blockquote>
+<p><em>Tip</em>
+인덱스 설정은 <strong>outputOption = 'VIEW'</strong> 인 경우에만 유효하며, 기본 인덱스 값은 0입니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">OptionType</span> = <span class="hljs-string">&#x27;SEND&#x27;</span> | <span class="hljs-string">&#x27;VIEW&#x27;</span> | <span class="hljs-string">&#x27;ALL&#x27;</span> | <span class="hljs-string">&#x27;PICK&#x27;</span>; <span class="hljs-comment">// default &#x27;SEND&#x27;</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">SchemaType</span> = <span class="hljs-string">&#x27;AUTO&#x27;</span> | <span class="hljs-string">&#x27;DATA&#x27;</span> | <span class="hljs-string">&#x27;ENTITY&#x27;</span>;       <span class="hljs-comment">// default &#x27;AUTO&#x27;</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">IndexType</span> = <span class="hljs-built_in">number</span> | <span class="hljs-built_in">number</span>[]; <span class="hljs-comment">// // default 0</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">OutOptType</span> = { <span class="hljs-attr">option</span>: <span class="hljs-title class_">OptionType</span>, <span class="hljs-attr">schema</span>: <span class="hljs-title class_">SchemaType</span>, <span class="hljs-attr">index</span>: <span class="hljs-title class_">IndexType</span> }
+
+<span class="hljs-keyword">type</span> outputOption = <span class="hljs-title class_">OutOptType</span> | <span class="hljs-title class_">OptionType</span> | <span class="hljs-title class_">SchemaType</span> | <span class="hljs-title class_">IndexType</span>;
+<span class="hljs-keyword">type</span> outOpt = outputOption;   <span class="hljs-comment">// outputOption의 별칭</span>
+</code></pre></div>
+<p>명령(BindCommand)의 <code>index</code> 값을 배열 또는 숫자로 지정합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-property">outputOption</span>.<span class="hljs-property">index</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>];
+bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;cmd2&#x27;</span>].<span class="hljs-property">outputOption</span>.<span class="hljs-property">index</span> = <span class="hljs-number">1</span>;
+bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;cmd3&#x27;</span>].<span class="hljs-property">outputOption</span> = { <span class="hljs-attr">index</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>] };
+bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;cmd4&#x27;</span>].<span class="hljs-property">outOpt</span>.<span class="hljs-property">index</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>];
+</code></pre></div>
+<ul>
+<li>'cmd1' 은 첫 번째 엔티티 <code>index = 1</code>, 두 번째 엔티티 <code>index = 2</code></li>
+<li>'cmd2' 은 모든 엔티티 <code>index = 1</code></li>
+<li>'cmd3' 은 첫 번째 엔티티 <code>index = 1</code>, 두 번째 엔티티 <code>index = 2</code></li>
+<li>'cmd4' 은 첫 번째 엔티티 <code>index = 1</code>, 두 번째 엔티티 <code>index = 2</code></li>
+</ul>
+<h3 id="복수-출력-인덱스-가져오기">복수 출력 인덱스 가져오기<a class="heading-anchor" href="#복수-출력-인덱스-가져오기" aria-label="복수 출력 인덱스 가져오기 링크">#</a></h3>
+<p>서버 응답 데이터가 여러 엔티티로 구성되어 있을 때, 각 엔티티에 대해 가져올 <strong>컬럼값 인덱스</strong>를 지정할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>json</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-json"><span class="hljs-comment">// SERVER DATA</span>
+<span class="hljs-punctuation">[</span>
+	<span class="hljs-punctuation">{</span>
+	    <span class="hljs-attr">&quot;rows&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+	        <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;aa&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;bb&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-number">20</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;cc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+	        <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;aa&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">11</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;bb&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-number">21</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;cc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">31</span> <span class="hljs-punctuation">}</span>
+	    <span class="hljs-punctuation">]</span>
+	<span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+	<span class="hljs-punctuation">{</span>
+	    <span class="hljs-attr">&quot;rows&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+	        <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;dd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">40</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;ee&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-number">50</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+	        <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;dd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">41</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;ee&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-number">51</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+	        <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;dd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">42</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;ee&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-number">52</span> <span class="hljs-punctuation">}</span>
+	    <span class="hljs-punctuation">]</span>
+	<span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span>
+</code></pre></div>
+<p>복수 엔티티에 대해 <code>index</code> 는 배열로 지정합니다.</p>
+<blockquote>
+<p><em>Tip</em>
+index 는 배열과 같이 <code>0</code>부터 시작합니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+bm.<span class="hljs-title function_">addCommand</span>(<span class="hljs-string">&#x27;cmd1&#x27;</span>, <span class="hljs-string">&#x27;VIEW&#x27;</span>);
+
+<span class="hljs-comment">// &#x27;output2&#x27; 추가</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">newOutput</span>();  
+
+<span class="hljs-comment">// 첫 번째 엔티티: index 1, 두 번째 엔티티: index 2</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-property">outputOption</span>.<span class="hljs-property">index</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>];
+
+<span class="hljs-comment">// 컬럼 추가 및 출력 뷰 매핑</span>
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;aa&#x27;</span>, <span class="hljs-string">&#x27;output&#x27;</span>);
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;bb&#x27;</span>, <span class="hljs-string">&#x27;output&#x27;</span>);
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;dd&#x27;</span>, <span class="hljs-string">&#x27;output2&#x27;</span>);
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;ee&#x27;</span>, <span class="hljs-string">&#x27;output2&#x27;</span>);
+
+bm.<span class="hljs-property">cmd</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">execute</span>();
+
+<span class="hljs-comment">// bm.columns.count == 4</span>
+<span class="hljs-comment">// bm.columns[&#x27;aa&#x27;].value == 11</span>
+<span class="hljs-comment">// bm.columns[&#x27;bb&#x27;].value == 21</span>
+<span class="hljs-comment">// bm.columns[&#x27;dd&#x27;].value == 42</span>
+<span class="hljs-comment">// bm.columns[&#x27;ee&#x27;].value == 52</span>
+</code></pre></div>
+<ul>
+<li>첫번째 엔티티에서 <code>index = 1</code> 의 <code>rows</code> 값을 가져옵니다.</li>
+<li>두번째 엔티티에서 <code>index = 2</code> 의 <code>rows</code> 값을 가져옵니다.</li>
+</ul>
+<blockquote>
+<p><em>Tip</em>
+엔티티 개수보다 index <strong>배열 길이가 작으면</strong>, 부족한 인덱스는 기본값 0으로 설정됩니다.
+엔티티 개수보다 index <strong>배열 길이가 크면</strong>, 초과된 값은 무시됩니다.</p>
+</blockquote>
+</div>
+    <div class="doc-feedback"><span>더 나은 문서를 함께 만들어요.</span><a href="https://github.com/white-base/bind-model/issues">오류 제보 및 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></div>
+    <nav class="page-pagination" aria-label="이전·다음 문서"><a class="page-link prev" href="../advanced/tables.html"><span>이전 문서</span><strong>테이블 관리</strong></a><a class="page-link next" href="../advanced/execution.html"><span>다음 문서</span><strong>실행 및 동기화<svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></strong></a></nav>
+  </article><footer class="doc-footer">BindModel · White Lab<a href="../index.html">홈으로 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></footer></main>
+  <aside class="page-toc" id="page-toc" aria-label="이 페이지의 내용"><p>이 페이지의 내용</p><nav><a class="toc-level-2" href="#_outputs-컬렉션의-구조">_outputs 컬렉션의 구조</a><a class="toc-level-2" href="#출력-뷰metaview-추가">출력 뷰(MetaView) 추가</a><a class="toc-level-3" href="#기본-출력-뷰-추가">기본 출력 뷰 추가</a><a class="toc-level-3" href="#사용자-지정-출력-뷰-추가">사용자 지정 출력 뷰 추가</a><a class="toc-level-2" href="#출력-뷰metaview-제거">출력 뷰(MetaView) 제거</a><a class="toc-level-2" href="#출력-뷰-가져오기">출력 뷰 가져오기</a><a class="toc-level-3" href="#모든-데이터-가져오기-outopt-all">모든 데이터 가져오기 (outOpt = &#39;ALL&#39;)</a><a class="toc-level-3" href="#지정-데이터-가져오기-outopt-pick">지정 데이터 가져오기 (outOpt =&#39;PICK&#39;)</a><a class="toc-level-3" href="#지정-데이터-가져와서-컬럼-설정-outopt-view">지정 데이터 가져와서 컬럼 설정 (outOpt =&#39;VIEW&#39;)</a><a class="toc-level-2" href="#복수-출력-인덱스">복수 출력 인덱스</a><a class="toc-level-3" href="#복수-출력-인덱스-설정하기">복수 출력 인덱스 설정하기</a><a class="toc-level-3" href="#복수-출력-인덱스-가져오기">복수 출력 인덱스 가져오기</a></nav><a class="back-top" href="#main">맨 위로 ↑</a></aside>
+  </div><dialog id="search-dialog" class="search-dialog" aria-labelledby="search-label"><div class="search-top"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><label class="sr-only" id="search-label" for="search-input">문서 검색</label><input id="search-input" type="search" placeholder="문서, 메서드, 개념 검색…" autocomplete="off" spellcheck="false" aria-controls="search-results"><button class="dialog-close" aria-label="검색 닫기">ESC</button></div><p id="search-status" class="search-status" role="status">검색어를 입력해 보세요.</p><div id="search-results" class="search-results"></div><div class="search-footer"><span><kbd>↑</kbd><kbd>↓</kbd> 이동 <kbd>↵</kbd> 열기</span><span>BindModel 문서 검색</span></div></dialog><div class="toast" role="status" aria-live="polite"></div></body>
+</html>

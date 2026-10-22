@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://white-base.github.io/white-lab-bind-model/advanced/column-value-flow.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/advanced/composition.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/advanced/events.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/advanced/execution.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/advanced/multiple-outputs.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/advanced/tables.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/api/bind-command.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/api/bind-model.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/api/html-column.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/api/meta-object.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/api/meta-view.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/api/property-collection.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/examples/crudl.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/guide/core-concepts.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/guide/features/columns.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/guide/features/command.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/guide/features/flow-control.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/guide/features/json-schema.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/guide/features/model.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/guide/features/service-injection.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/guide/features/shared-column-properties.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/guide/introduction.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/guide/quick-start.html</loc></url>
+  <url><loc>https://white-base.github.io/white-lab-bind-model/</loc></url>
+</urlset>

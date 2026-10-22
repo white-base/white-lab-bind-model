@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="ko" data-root="../../">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>흐름 제어 | BindModel</title>
+  <meta name="description" content="콜백 라이프사이클과 오류 처리로 실행 흐름을 제어합니다."><meta name="theme-color" content="#f8f8f4">
+  <meta property="og:type" content="website"><meta property="og:title" content="흐름 제어 | BindModel"><meta property="og:description" content="콜백 라이프사이클과 오류 처리로 실행 흐름을 제어합니다."><meta property="og:url" content="https://white-base.github.io/white-lab-bind-model/guide/features/flow-control.html"><meta property="og:image" content="https://white-base.github.io/white-lab-bind-model/assets/social.svg">
+  <link rel="canonical" href="https://white-base.github.io/white-lab-bind-model/guide/features/flow-control.html"><link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('bindmodel-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+  <link rel="stylesheet" href="../../assets/site.css"><script src="../../assets/site.js" defer></script>
+</head>
+<body class="documentation"><a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../../index.html" aria-label="BindModel 홈"><span class="brand-mark" aria-hidden="true">b<span>.</span></span><span class="brand-name">bindmodel<span class="brand-dot">.</span></span></a>
+    <nav class="main-nav" id="main-nav" aria-label="주 메뉴">
+      <a href="../../guide/introduction.html">시작하기</a><a href="../../guide/features/model.html" class="is-active" aria-current="true">기능 가이드</a><a href="../../advanced/column-value-flow.html">고급 기능</a><a href="../../examples/crudl.html">예제</a><a href="../../api/bind-model.html">API</a>
+    </nav>
+    <div class="header-tools"><button class="search-trigger" data-search aria-label="문서 검색"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span>문서 검색</span><kbd>⌘ K</kbd></button>
+    <button class="icon-button theme-toggle" aria-label="어두운 테마로 전환" title="테마 전환"><svg class="icon theme-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13A8 8 0 0 1 11 4a8 8 0 1 0 9 9Z"/></svg></button>
+    <a class="icon-button github-link" href="https://github.com/white-base/bind-model" aria-label="BindModel GitHub 저장소"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-4a3.5 3.5 0 0 0-1-2.7c3.3-.4 6.7-1.6 6.7-7.3A5.6 5.6 0 0 0 20 4.1 5.2 5.2 0 0 0 19.9.3S18.6-.1 16 1.8a13.5 13.5 0 0 0-7 0C6.4-.1 5.1.3 5.1.3A5.2 5.2 0 0 0 5 4.1 5.6 5.6 0 0 0 3.3 8c0 5.7 3.4 6.9 6.7 7.3A3.5 3.5 0 0 0 9 18v4"/></svg></a>
+    <button class="icon-button menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="주 메뉴 열기"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div>
+  </div></header>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <div class="mobile-docbar"><button class="sidebar-toggle" aria-controls="docs-sidebar" aria-expanded="false"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>문서 메뉴</button><a href="#page-toc">이 페이지의 내용 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div>
+  <div class="docs-layout"><button class="sidebar-backdrop" aria-label="문서 메뉴 닫기" hidden></button><aside class="docs-sidebar" id="docs-sidebar" aria-label="문서 목록"><a class="sidebar-home" href="../../index.html"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M12 5C9 3 5 3 2 4v15c3-1 7-1 10 2 3-3 7-3 10-2V4c-3-1-7-1-10 1Z"/></svg>문서 둘러보기</a><section class="sidebar-group"><h2><span>시작하기</span><span>03</span></h2><ul><li><a href="../../guide/introduction.html">소개</a></li><li><a href="../../guide/quick-start.html">빠른 시작</a></li><li><a href="../../guide/core-concepts.html">핵심 개념</a></li></ul></section><section class="sidebar-group"><h2><span>기능 가이드</span><span>07</span></h2><ul><li><a href="../../guide/features/model.html">모델 구성</a></li><li><a href="../../guide/features/command.html">명령 구성</a></li><li><a href="../../guide/features/columns.html">컬럼 관리</a></li><li><a href="../../guide/features/shared-column-properties.html">공통 컬럼 속성</a></li><li><a href="../../guide/features/flow-control.html" class="is-current" aria-current="page">흐름 제어</a></li><li><a href="../../guide/features/service-injection.html">서비스 객체 주입</a></li><li><a href="../../guide/features/json-schema.html">JSON 스키마 가이드</a></li></ul></section><section class="sidebar-group"><h2><span>고급 기능</span><span>06</span></h2><ul><li><a href="../../advanced/column-value-flow.html">컬럼값 호출 구조</a></li><li><a href="../../advanced/tables.html">테이블 관리</a></li><li><a href="../../advanced/multiple-outputs.html">명령 복수 출력 구성</a></li><li><a href="../../advanced/execution.html">실행 및 동기화</a></li><li><a href="../../advanced/events.html">이벤트 설정</a></li><li><a href="../../advanced/composition.html">객체 구성 방법</a></li></ul></section><section class="sidebar-group"><h2><span>예제</span><span>01</span></h2><ul><li><a href="../../examples/crudl.html">CRUD + List 구현하기</a></li></ul></section><section class="sidebar-group"><h2><span>API 레퍼런스</span><span>06</span></h2><ul><li><a href="../../api/bind-model.html">BindModel</a></li><li><a href="../../api/bind-command.html">BindCommand</a></li><li><a href="../../api/meta-view.html">MetaView</a></li><li><a href="../../api/html-column.html">HTMLColumn</a></li><li><a href="../../api/property-collection.html">PropertyCollection</a></li><li><a href="../../api/meta-object.html">MetaObject</a></li></ul></section><a class="sidebar-bottom" href="https://github.com/white-base/bind-model/issues">문서 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></aside>
+  <main class="doc-main" id="main"><article data-search-content>
+    <div class="doc-breadcrumb"><a href="../../index.html">문서</a><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span>기능 가이드</span></div>
+    <header class="doc-heading"><div class="eyebrow">기능 가이드<span class="eyebrow-rule"></span>02</div><h1>흐름 제어</h1><p>콜백 라이프사이클과 오류 처리로 실행 흐름을 제어합니다.</p><div class="doc-meta"><span>한국어 문서</span><span>약 13분</span></div></header>
+    <div class="doc-content"><h2 id="콜백-라이프-사이클">콜백 라이프 사이클<a class="heading-anchor" href="#콜백-라이프-사이클" aria-label="콜백 라이프 사이클 링크">#</a></h2>
+<p>다음은 <code>BindCommand</code> 실행 시의 <strong>콜백 함수 라이프사이클</strong>을 도식화한 것입니다. 각 단계에서 호출되는 콜백 함수와 관련 동작이 나열되어 있습니다.</p>
+<figure class="diagram"><pre class="mermaid">graph TD
+	E1(&quot;1.onExecute 이벤트&quot;) --&gt; C1(&quot;2.cbBegin&quot;)
+	
+	subgraph client_area
+		C2(&quot;3.cbValid&quot;) --&gt; V1(&quot;4.valid:유효성검사&quot;)
+	end
+	C1 --&gt; C2
+	C1 --&gt; |cbValid 없을경우| V1
+	V1 --&gt; C3(&quot;6.cbBind&quot;)
+	client_area --&gt; |논리적 실패| F1(&quot;5.cbFail&quot;)
+	subgraph callback_area
+		C3 --&gt; V2(&quot;7.bind:서버전송&quot;)
+		V2 --&gt; C4(&quot;8.cbResult&quot;)
+		C4 --&gt; |outOpt &gt; 0| V3(&quot;9.output:바인딩&quot;)
+		V3 --&gt; C5(&quot;10.cbOutput&quot;)
+	end
+	callback_area --&gt; |오류| F2(&quot;11.cbError&quot;)
+	C5 --&gt; C6(&quot;12.cbEnd&quot;)
+	C4 --&gt; |outOpt == 0| C6
+	F1 --&gt; C6
+	F2 --&gt; C6
+	C6 --&gt; E2(&quot;13.onExecuted 이벤트&quot;)
+	
+	style C1 fill:gray,color:#fff	
+	style C2 fill:gray,color:#fff	
+	style C3 fill:gray,color:#fff	
+	style C4 fill:gray,color:#fff	
+	style C5 fill:gray,color:#fff	
+	style C6 fill:gray,color:#fff
+	style E1 fill:green,color:#fff
+	style E2 fill:green,color:#fff
+	style F1 fill:orange,color:#fff
+	style F2 fill:orange,color:#fff
+
+</pre><figcaption>구조와 흐름을 설명하는 다이어그램</figcaption></figure>
+<ol>
+<li><strong>onExecute 이벤트</strong>
+<ul>
+<li>명령 실행 시작 시 발생하는 이벤트입니다.</li>
+</ul>
+</li>
+<li><strong>cbBegin</strong>
+<ul>
+<li>실행 시작 콜백. 초기 설정이나 검증 전에 호출됩니다.</li>
+</ul>
+</li>
+<li><strong>cbValid</strong>
+<ul>
+<li>유효성 검사를 위한 콜백. valid: MetaView에 설정된 조건을 확인합니다.</li>
+<li>cbValid가 없을 경우, 바로 유효성 검사로 넘어갑니다.</li>
+</ul>
+</li>
+<li><strong>valid: MetaView 유효성 검사</strong>
+<ul>
+<li>컬럼의 제약조건(required, constraints)을 검사합니다.</li>
+</ul>
+</li>
+<li><strong>cbFail</strong>
+<ul>
+<li>유효성 검사 실패 시 호출되는 콜백함수를 호출합니다.</li>
+</ul>
+</li>
+<li><strong>cbBind</strong>
+<ul>
+<li>서버 요청 전 데이터를 호출되는 콜백함수를 호출합니다.</li>
+</ul>
+</li>
+<li><strong>bind: MetaView 요청</strong>
+<ul>
+<li>서버 요청을 실행합니다.</li>
+</ul>
+</li>
+<li><strong>cbResult</strong>
+<ul>
+<li>서버 응답 데이터를 처리하는 콜백함수를 호출합니다.</li>
+</ul>
+</li>
+<li><strong>output: MetaView 바인딩</strong>
+<ul>
+<li><code>outputOption.option</code> = 'SEND' 가 아닌 경우</li>
+<li>응답 데이터를 output: MetaView에 바인딩합니다.</li>
+</ul>
+</li>
+<li><strong>cbOutput</strong>
+<ul>
+<li>output: MetaView에 데이터를 바인딩한 후 호출되는 콜백입니다.</li>
+</ul>
+</li>
+<li><strong>cbError</strong>
+<ul>
+<li>실행 중 오류가 발생하면 호출되는 콜백함수를 호출합니다.</li>
+</ul>
+</li>
+<li><strong>cbEnd</strong>
+<ul>
+<li>명령 실행이 완료된 후 호출되는 콜백함수를 호출합니다.</li>
+</ul>
+</li>
+<li><strong>onExecuted 이벤트</strong>
+<ul>
+<li>명령 실행 종료 시 발생하는 이벤트입니다.</li>
+</ul>
+</li>
+</ol>
+<h2 id="실패-및-에러-처리">실패 및 에러 처리<a class="heading-anchor" href="#실패-및-에러-처리" aria-label="실패 및 에러 처리 링크">#</a></h2>
+<p><code>cbError</code>와 <code>cbFail</code> 콜백함수는 기본값을 제공합니다. 필요에 따라 커스터마이징하여 사용할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">cbFail = <span class="hljs-keyword">function</span>(<span class="hljs-params">msg, valid</span>) { 
+	<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(<span class="hljs-string">&#x27;Failed. Err:&#x27;</span>+ msg); 
+};
+
+cbError = <span class="hljs-keyword">function</span>(<span class="hljs-params">msg, status, response</span>) { 
+	<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;An error has occurred. : &#x27;</span>+ msg); 
+};
+</code></pre></div>
+<h3 id="오류-콜백cberror">오류  콜백(cbError)<a class="heading-anchor" href="#오류-콜백cberror" aria-label="오류  콜백(cbError) 링크">#</a></h3>
+<p>execute() 실행 중에 발생한 모든 오류를 처리합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> cbError = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">msg</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">status</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">response</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>msg</code> : 에러 메세지</li>
+<li><code>status</code> : 에러 번호</li>
+<li><code>response</code> : 응답 객체</li>
+</ul>
+<p>예제 : 유효성 검사 실패시 경고창을 표시합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">bm.<span class="hljs-property">cbError</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">msg, status, res</span>) { 
+    <span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;Err: &#x27;</span>+ msg); 
+};
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+execute()는 내부적으로 <code>try</code>문으로 감싸져 있어 예외를 던지지 않습니다. 예외 처리를 위해서는 <code>cbError</code>에서 직접 구현해야 합니다.</p>
+</blockquote>
+<h3 id="실패-콜백">실패 콜백<a class="heading-anchor" href="#실패-콜백" aria-label="실패 콜백 링크">#</a></h3>
+<p>execute() 실행 중 유효성 검사가 실패했을 때 호출됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> cbFail = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">msg</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">valid</span>: <span class="hljs-title class_">MetaView</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>msg</code> : 실패 메세지</li>
+<li><code>valid</code> : 유효성 검사 대상 <code>MetaView</code></li>
+</ul>
+<p>예제 : 유효성 검사 실패시 경고창을 표시합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">bm.<span class="hljs-property">cbFail</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">msg, valid</span>) { 
+    <span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;Failed: &#x27;</span>+ msg); 
+};
+</code></pre></div>
+<h2 id="콜백-함수-호출-순서">콜백 함수 호출 순서<a class="heading-anchor" href="#콜백-함수-호출-순서" aria-label="콜백 함수 호출 순서 링크">#</a></h2>
+<p>명령(BindCommand)의 execute() 호출 시 단계별로 실행되는 콜백 함수는 다음과 같습니다.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="데이터 표"><table>
+<thead>
+<tr>
+<th><em>구분</em></th>
+<th><em>기본콜백</em>&lt;br&gt;(BindModel)</th>
+<th><em>명령콜백</em>&lt;br&gt;(BindCommand)</th>
+<th><em>설명</em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>시작</td>
+<td>cbBaseBegin</td>
+<td>cbBegin</td>
+<td>명령 실행 시작 시 호출됩니다.</td>
+</tr>
+<tr>
+<td>유효성 검사</td>
+<td>cbBaseValid</td>
+<td>cbValid</td>
+<td>valid: MetaView 유효성 검사 전에 호출됩니다.</td>
+</tr>
+<tr>
+<td>서버 요청</td>
+<td>cbBaseBind</td>
+<td>cbBind</td>
+<td>bind: MetaView 요청 전에 호출됩니다.</td>
+</tr>
+<tr>
+<td>응답 결과</td>
+<td>cbBaseResult</td>
+<td>cbResult</td>
+<td>서버 응답 데이터를 처리한 후 호출됩니다.</td>
+</tr>
+<tr>
+<td>결과 출력</td>
+<td>cbBaseOutput</td>
+<td>cbOutput</td>
+<td>output: MetaView에 데이터 매핑 후 호출됩니다.</td>
+</tr>
+<tr>
+<td>종료</td>
+<td>cbBaseEnd</td>
+<td>cbEnd</td>
+<td>명령 실행 종료 시 호출됩니다.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>명령 콜백</strong>이 정의된 경우, <strong>기본 콜백</strong>은 무시됩니다.
+예를 들어, <code>cbBegin</code> 콜백함수가 정의되어 있으면 <code>cbBaseBegin</code> 콜백함수는 실행되지 않습니다.</p>
+<h3 id="1-시작-콜백">1. 시작 콜백<a class="heading-anchor" href="#1-시작-콜백" aria-label="1. 시작 콜백 링크">#</a></h3>
+<p>execute() 호출 시 가장 먼저 실행되는 콜백입니다.</p>
+<p><code>cbBaseBegin</code>은 모델(BindModel)의 기본 콜백함수이며, <code>cbBegin</code>은 각 명령(BindCommand)의 콜백함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">BeginType</span> = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">model</span>: <span class="hljs-title class_">BindModel</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+
+<span class="hljs-keyword">type</span> cbBaseBegin = <span class="hljs-title class_">BeginType</span>;
+<span class="hljs-keyword">type</span> cbBegin = <span class="hljs-title class_">BeginType</span>;
+</code></pre></div>
+<ul>
+<li><code>model</code> : 현재 모델(BindModel) 객체 입니다.</li>
+<li><code>cmd</code> : 실행 대상 명령(BindCommand) 객체입니다.</li>
+</ul>
+<p><strong>예제 : 기본 시작 콜백과, <code>list</code> 명령(BindCommand) 시작 콜백을 설정</strong></p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">bm.<span class="hljs-property">cbBaseBegin</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">model, cmd</span>) {
+	cmd.<span class="hljs-property">url</span> = <span class="hljs-string">&#x27;/member/1&#x27;</span>;
+};
+
+bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;list&#x27;</span>].<span class="hljs-property">cbBegin</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">model, cmd</span>) { 
+    cmd.<span class="hljs-property">url</span> = <span class="hljs-string">&#x27;/member/1&#x27;</span>; 
+};
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+시작 콜백은 동적으로 서버 요청 경로를 설정하거나 초기화를 수행하는 데 유용합니다.</p>
+</blockquote>
+<h3 id="2-유효성-검사-콜백">2. 유효성 검사 콜백<a class="heading-anchor" href="#2-유효성-검사-콜백" aria-label="2. 유효성 검사 콜백 링크">#</a></h3>
+<p>execute() 호출시 valid(MetaView)에 대한 유효성 검사 전에 호출됩니다.</p>
+<p><code>cbBaseValid</code>은 모델(BindModel)의 기본 콜백함수이며, <code>cbValid</code>는 각 명령(BindCommand)의 콜백함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">ValidType</span> = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">valid</span>: <span class="hljs-title class_">MetaView</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>, <span class="hljs-attr">model</span>: <span class="hljs-title class_">BindModel</span></span>) =&gt;</span> <span class="hljs-built_in">boolean</span> | <span class="hljs-literal">undefined</span>;
+
+<span class="hljs-keyword">type</span> cbBaseValid = <span class="hljs-title class_">ValidType</span>;
+<span class="hljs-keyword">type</span> cbValid = <span class="hljs-title class_">ValidType</span>;
+</code></pre></div>
+<ul>
+<li><code>valid</code> : 유효성 검사 대상 <code>MetaView</code></li>
+<li><code>cmd</code> : 실행 대상 명령(BindCommand)</li>
+<li><code>model</code> : 현재 모델(BindModel) 객체 입니다.</li>
+<li><code>return</code>
+<ul>
+<li><code>true</code> : 유효성 검사를 통과하고 다음 단계를 진행합니다.</li>
+<li><code>false</code> : 유효성 검사가 실패하며, <code>cbFail</code> 콜백함수가 호출됩니다.</li>
+<li><code>undefined</code> : 유효성 검사가 실패하지만 <code>cbFail</code> 콜백함수가 호출되지 않습니다</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><em>Tip</em>
+유효성 검사 콜백에서 <code>return</code> 값으로 <code>undefined</code>를 반환하면, 오류 메시지 출력 등의 처리를 콜백 내부에서 직접 수행하며, 별도로 <code>cbFail</code> 콜백 함수를 호출하지 않습니다.</p>
+</blockquote>
+<p><strong>예제 : 기본 유효성 검사 콜백과, <code>list</code> 명령(BindCommand) 유효성 검사 콜백을 설정</strong></p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">bm.<span class="hljs-property">cbBaseValid</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">valid, cmd, model</span>) { 
+    <span class="hljs-keyword">if</span> (valid.<span class="hljs-property">colums</span>.<span class="hljs-property">count</span> &gt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    <span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;valid(MetaView) 컬럼이 없습니다.&#x27;</span>);
+};
+
+bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;list&#x27;</span>].<span class="hljs-property">cbValid</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">valid, cmd, model</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">confirm</span> (<span class="hljs-string">&#x27;삭제하시겠습니까?&#x27;</span>);
+};
+</code></pre></div>
+<ul>
+<li><code>cbBaseValid</code> : 실패 시 <code>undefined</code>를 반환하여 <code>cbFail</code> 콜백함수가 호출되지 않습니다.</li>
+<li><code>cbValid</code> : <code>confirm</code> 결과가 <code>false</code> 면 <code>cbFail</code> 콜백함수가 호출됩니다.</li>
+</ul>
+<blockquote>
+<p><em>Tip</em>
+유효성 검사 콜백은 선택창 확인이나 추가 검증 로직에 주로 활용됩니다.</p>
+</blockquote>
+<h3 id="3-서버-요청-콜백">3. 서버 요청 콜백<a class="heading-anchor" href="#3-서버-요청-콜백" aria-label="3. 서버 요청 콜백 링크">#</a></h3>
+<p>execute() 호출시 bind(MetaView) 컬럼값을 서버로 요청하기 전에 호출됩니다.</p>
+<p><code>cbBaseBind</code> 은 모델(BindModel)의 기본 콜백이며, <code>cbBind</code>는 각 명령(BindCommand) 콜백함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">BindType</span> = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">bind</span>: <span class="hljs-title class_">MetaView</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>,<span class="hljs-attr">config</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+
+<span class="hljs-keyword">type</span> cbBaseBind = <span class="hljs-title class_">BindType</span>;
+<span class="hljs-keyword">type</span> cbBind = <span class="hljs-title class_">BindType</span>;
+</code></pre></div>
+<ul>
+<li><code>bind</code> : 요청할 데이터가 포함된 <code>MetaView</code></li>
+<li><code>cmd</code> : 실행 대상 명령(BindCommand)</li>
+<li><code>config</code> : <code>axios</code> 설정 객체</li>
+</ul>
+<blockquote>
+<p><em>Tip</em>
+서버 요청 콜백은 전송 데이터 타입 설정, 인증 토큰 추가, 암호화 처리 등에 활용됩니다.</p>
+</blockquote>
+<h3 id="4-응답-처리-콜백">4. 응답 처리 콜백<a class="heading-anchor" href="#4-응답-처리-콜백" aria-label="4. 응답 처리 콜백 링크">#</a></h3>
+<p>execute() 호출시 서버에서 응답을 받은 후에 호출됩니다.</p>
+<p><code>cbBaseResult</code> 은 모델(BindModel)의 기본 콜백이며, <code>cbResult</code> 는 각 명령(BindCommand) 콜백함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">ResultType</span> = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">data</span>: <span class="hljs-built_in">object</span>,<span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>,<span class="hljs-attr">response</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">object</span>;
+
+<span class="hljs-keyword">type</span> cbBaseResult = <span class="hljs-title class_">ResultType</span>;
+<span class="hljs-keyword">type</span> cbResult = <span class="hljs-title class_">ResultType</span>;
+</code></pre></div>
+<ul>
+<li><code>data</code> : 서버 응답 데이터</li>
+<li><code>cmd</code> : 실행 대상 명령(BindCommand)</li>
+<li><code>response</code> : <code>axios</code> 응답 객체</li>
+<li><code>return</code> :  반환 데이터 (<code>return</code> 값이 없으면 data 객체로 대체 됩니다)</li>
+</ul>
+<p><strong>예제 : 기본 응답 결과 콜백과, <code>list</code> 명령(BindCommand) 응답 결과 콜백을 설정</strong></p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// data = { aa: 1, bb: 2 }</span>
+bm.<span class="hljs-property">cbBaseResult</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) {
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-attr">rows</span>: data
+    };
+};
+
+bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;list&#x27;</span>].<span class="hljs-property">cbResult</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) {
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-attr">rows</span>: data
+    };
+};
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+서버 응답 데이터를 스키마 구조로 변환하는 데 주로 활용됩니다. #참조</p>
+</blockquote>
+<h3 id="5-출력-콜백">5. 출력 콜백<a class="heading-anchor" href="#5-출력-콜백" aria-label="5. 출력 콜백 링크">#</a></h3>
+<p>execute() 호출시 응답 데이터를 output(MetaView)에 매핑한 후 호출됩니다.</p>
+<p><code>cbBaseOutput</code>은 모델(BindModel)의 기본 콜백이며, <code>cbOutput</code>는 각 명령(BindCommand)의 콜백함수입니다.</p>
+<blockquote>
+<p><em>Tip</em>
+명령(BindCommand)의 <code>outputOption</code> 이 <code>0</code> 일 경우에는 출력 콜백은 무시됩니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">OutputType</span> = <span class="hljs-function">(<span class="hljs-params">
+	<span class="hljs-attr">outputs</span>: <span class="hljs-title class_">MetaViewColleciton</span>, 
+	<span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>,
+	<span class="hljs-attr">response</span>: <span class="hljs-built_in">object</span>
+</span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+
+<span class="hljs-keyword">type</span> cbBaseOutput = <span class="hljs-title class_">OutputType</span>;
+<span class="hljs-keyword">type</span> cbOutput = <span class="hljs-title class_">OutputType</span>;
+</code></pre></div>
+<ul>
+<li><code>outputs</code> : MetaView 컬렉션. (<code>output  === _outputs[0]</code>)</li>
+<li><code>cmd</code> : 실행 대상 명령(BindCommand).</li>
+<li><code>response</code> : <code>axios</code> 응답 객체.</li>
+</ul>
+<blockquote>
+<p><em>Tip</em>
+output(MetaView) 는 <code>_outputs[0]</code> 컬렉션 을 참조합니다. 여러개의 출력 결과를 받을때  <code>addOutput()</code> 을 사용하여 추가할 수 있습니다. #참조</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>json</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-json"><span class="hljs-comment">// SERVER DATA</span>
+<span class="hljs-punctuation">[</span>
+	<span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;u_name&quot;</span><span class="hljs-punctuation">:</span>  <span class="hljs-string">&quot;Neo&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;gender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;M&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+	<span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;u_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Jane&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;gender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;W&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+<span class="hljs-punctuation">]</span>
+</code></pre></div>
+<p><strong>예제 : <code>list</code> 명령(BindCommand) 출력 콜백을 설정</strong></p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;list&#x27;</span>].<span class="hljs-property">cbOutput</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">outputs</span>) {
+	outputs[<span class="hljs-number">0</span>].<span class="hljs-property">rows</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">row, i</span>) =&gt;</span> {
+	    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i, row[<span class="hljs-string">&#x27;name&#x27;</span>], row[<span class="hljs-string">&#x27;gender&#x27;</span>]);
+	});
+};
+
+<span class="hljs-comment">// 0  Neo   M</span>
+<span class="hljs-comment">// 1  Jane  W</span>
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+출력 콜백은 데이터를 화면에 출력하거나 추가 처리를 수행할 때 유용합니다.</p>
+</blockquote>
+<h3 id="6-종료-콜백">6. 종료 콜백<a class="heading-anchor" href="#6-종료-콜백" aria-label="6. 종료 콜백 링크">#</a></h3>
+<p>execute() 호출시 실행이 완료된 후 호출됩니다.</p>
+<p><code>cbBaseEnd</code> 은 모델(BindModel)의 기본 콜백이며, <code>cbEnd</code> 는 각 명령(BindCommand) 콜백함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">EndType</span> = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">status</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>,<span class="hljs-attr">response</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+
+<span class="hljs-keyword">type</span> cbBaseEnid = <span class="hljs-title class_">EndType</span>;
+<span class="hljs-keyword">type</span> cbEnd = <span class="hljs-title class_">EndType</span>;
+</code></pre></div>
+<ul>
+<li><code>status</code> : 응답 상태 코드.</li>
+<li><code>cmd</code> : 실행 대상 명령(BindCommand).</li>
+<li><code>response</code> : <code>axios</code> 응답 객체.</li>
+</ul>
+<p><strong>예제 : 기본 종료 콜백과, <code>list</code> 명령(BindCommand) 종료 콜백함수를 설정</strong></p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">bm.<span class="hljs-property">cbBaseEnd</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">status, cmd, res</span>) {
+    <span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;처리가 완료되었습니다.&#x27;</span>);
+};
+
+bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;list&#x27;</span>].<span class="hljs-property">cbEnd</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">status, cmd, res</span>) {
+    bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;read&#x27;</span>].<span class="hljs-title function_">execute</span>(); <span class="hljs-comment">// // &#x27;read&#x27; 명령 실행 (체이닝)</span>
+}
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+종료 콜백은 결과 메시지 표시, 리다이렉트, 명령 체인 실행 등에 활용됩니다.</p>
+</blockquote>
+</div>
+    <div class="doc-feedback"><span>더 나은 문서를 함께 만들어요.</span><a href="https://github.com/white-base/bind-model/issues">오류 제보 및 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></div>
+    <nav class="page-pagination" aria-label="이전·다음 문서"><a class="page-link prev" href="../../guide/features/shared-column-properties.html"><span>이전 문서</span><strong>공통 컬럼 속성</strong></a><a class="page-link next" href="../../guide/features/service-injection.html"><span>다음 문서</span><strong>서비스 객체 주입<svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></strong></a></nav>
+  </article><footer class="doc-footer">BindModel · White Lab<a href="../../index.html">홈으로 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></footer></main>
+  <aside class="page-toc" id="page-toc" aria-label="이 페이지의 내용"><p>이 페이지의 내용</p><nav><a class="toc-level-2" href="#콜백-라이프-사이클">콜백 라이프 사이클</a><a class="toc-level-2" href="#실패-및-에러-처리">실패 및 에러 처리</a><a class="toc-level-3" href="#오류-콜백cberror">오류  콜백(cbError)</a><a class="toc-level-3" href="#실패-콜백">실패 콜백</a><a class="toc-level-2" href="#콜백-함수-호출-순서">콜백 함수 호출 순서</a><a class="toc-level-3" href="#1-시작-콜백">1. 시작 콜백</a><a class="toc-level-3" href="#2-유효성-검사-콜백">2. 유효성 검사 콜백</a><a class="toc-level-3" href="#3-서버-요청-콜백">3. 서버 요청 콜백</a><a class="toc-level-3" href="#4-응답-처리-콜백">4. 응답 처리 콜백</a><a class="toc-level-3" href="#5-출력-콜백">5. 출력 콜백</a><a class="toc-level-3" href="#6-종료-콜백">6. 종료 콜백</a></nav><a class="back-top" href="#main">맨 위로 ↑</a></aside>
+  </div><dialog id="search-dialog" class="search-dialog" aria-labelledby="search-label"><div class="search-top"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><label class="sr-only" id="search-label" for="search-input">문서 검색</label><input id="search-input" type="search" placeholder="문서, 메서드, 개념 검색…" autocomplete="off" spellcheck="false" aria-controls="search-results"><button class="dialog-close" aria-label="검색 닫기">ESC</button></div><p id="search-status" class="search-status" role="status">검색어를 입력해 보세요.</p><div id="search-results" class="search-results"></div><div class="search-footer"><span><kbd>↑</kbd><kbd>↓</kbd> 이동 <kbd>↵</kbd> 열기</span><span>BindModel 문서 검색</span></div></dialog><div class="toast" role="status" aria-live="polite"></div></body>
+</html>

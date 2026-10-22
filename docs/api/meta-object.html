@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ko" data-root="../">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>MetaObject | BindModel</title>
+  <meta name="description" content="객체 식별, 타입 확인, 직렬화를 위한 기본 API입니다."><meta name="theme-color" content="#f8f8f4">
+  <meta property="og:type" content="website"><meta property="og:title" content="MetaObject | BindModel"><meta property="og:description" content="객체 식별, 타입 확인, 직렬화를 위한 기본 API입니다."><meta property="og:url" content="https://white-base.github.io/white-lab-bind-model/api/meta-object.html"><meta property="og:image" content="https://white-base.github.io/white-lab-bind-model/assets/social.svg">
+  <link rel="canonical" href="https://white-base.github.io/white-lab-bind-model/api/meta-object.html"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('bindmodel-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+  <link rel="stylesheet" href="../assets/site.css"><script src="../assets/site.js" defer></script>
+</head>
+<body class="documentation"><a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html" aria-label="BindModel 홈"><span class="brand-mark" aria-hidden="true">b<span>.</span></span><span class="brand-name">bindmodel<span class="brand-dot">.</span></span></a>
+    <nav class="main-nav" id="main-nav" aria-label="주 메뉴">
+      <a href="../guide/introduction.html">시작하기</a><a href="../guide/features/model.html">기능 가이드</a><a href="../advanced/column-value-flow.html">고급 기능</a><a href="../examples/crudl.html">예제</a><a href="../api/bind-model.html" class="is-active" aria-current="true">API</a>
+    </nav>
+    <div class="header-tools"><button class="search-trigger" data-search aria-label="문서 검색"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span>문서 검색</span><kbd>⌘ K</kbd></button>
+    <button class="icon-button theme-toggle" aria-label="어두운 테마로 전환" title="테마 전환"><svg class="icon theme-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13A8 8 0 0 1 11 4a8 8 0 1 0 9 9Z"/></svg></button>
+    <a class="icon-button github-link" href="https://github.com/white-base/bind-model" aria-label="BindModel GitHub 저장소"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-4a3.5 3.5 0 0 0-1-2.7c3.3-.4 6.7-1.6 6.7-7.3A5.6 5.6 0 0 0 20 4.1 5.2 5.2 0 0 0 19.9.3S18.6-.1 16 1.8a13.5 13.5 0 0 0-7 0C6.4-.1 5.1.3 5.1.3A5.2 5.2 0 0 0 5 4.1 5.6 5.6 0 0 0 3.3 8c0 5.7 3.4 6.9 6.7 7.3A3.5 3.5 0 0 0 9 18v4"/></svg></a>
+    <button class="icon-button menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="주 메뉴 열기"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div>
+  </div></header>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <div class="mobile-docbar"><button class="sidebar-toggle" aria-controls="docs-sidebar" aria-expanded="false"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>문서 메뉴</button><a href="#page-toc">이 페이지의 내용 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div>
+  <div class="docs-layout"><button class="sidebar-backdrop" aria-label="문서 메뉴 닫기" hidden></button><aside class="docs-sidebar" id="docs-sidebar" aria-label="문서 목록"><a class="sidebar-home" href="../index.html"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M12 5C9 3 5 3 2 4v15c3-1 7-1 10 2 3-3 7-3 10-2V4c-3-1-7-1-10 1Z"/></svg>문서 둘러보기</a><section class="sidebar-group"><h2><span>시작하기</span><span>03</span></h2><ul><li><a href="../guide/introduction.html">소개</a></li><li><a href="../guide/quick-start.html">빠른 시작</a></li><li><a href="../guide/core-concepts.html">핵심 개념</a></li></ul></section><section class="sidebar-group"><h2><span>기능 가이드</span><span>07</span></h2><ul><li><a href="../guide/features/model.html">모델 구성</a></li><li><a href="../guide/features/command.html">명령 구성</a></li><li><a href="../guide/features/columns.html">컬럼 관리</a></li><li><a href="../guide/features/shared-column-properties.html">공통 컬럼 속성</a></li><li><a href="../guide/features/flow-control.html">흐름 제어</a></li><li><a href="../guide/features/service-injection.html">서비스 객체 주입</a></li><li><a href="../guide/features/json-schema.html">JSON 스키마 가이드</a></li></ul></section><section class="sidebar-group"><h2><span>고급 기능</span><span>06</span></h2><ul><li><a href="../advanced/column-value-flow.html">컬럼값 호출 구조</a></li><li><a href="../advanced/tables.html">테이블 관리</a></li><li><a href="../advanced/multiple-outputs.html">명령 복수 출력 구성</a></li><li><a href="../advanced/execution.html">실행 및 동기화</a></li><li><a href="../advanced/events.html">이벤트 설정</a></li><li><a href="../advanced/composition.html">객체 구성 방법</a></li></ul></section><section class="sidebar-group"><h2><span>예제</span><span>01</span></h2><ul><li><a href="../examples/crudl.html">CRUD + List 구현하기</a></li></ul></section><section class="sidebar-group"><h2><span>API 레퍼런스</span><span>06</span></h2><ul><li><a href="../api/bind-model.html">BindModel</a></li><li><a href="../api/bind-command.html">BindCommand</a></li><li><a href="../api/meta-view.html">MetaView</a></li><li><a href="../api/html-column.html">HTMLColumn</a></li><li><a href="../api/property-collection.html">PropertyCollection</a></li><li><a href="../api/meta-object.html" class="is-current" aria-current="page">MetaObject</a></li></ul></section><a class="sidebar-bottom" href="https://github.com/white-base/bind-model/issues">문서 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></aside>
+  <main class="doc-main" id="main"><article data-search-content>
+    <div class="doc-breadcrumb"><a href="../index.html">문서</a><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span>API 레퍼런스</span></div>
+    <header class="doc-heading"><div class="eyebrow">API 레퍼런스<span class="eyebrow-rule"></span>05</div><h1>MetaObject</h1><p>객체 식별, 타입 확인, 직렬화를 위한 기본 API입니다.</p><div class="doc-meta"><span>한국어 문서</span><span>약 10분</span></div></header>
+    <div class="doc-content"><p>MetaObject 는 모델(BindModel)과 연관된 모든 클래스의  최상위 클래스 입니다.</p>
+<h2 id="구성-요소">구성 요소<a class="heading-anchor" href="#구성-요소" aria-label="구성 요소 링크">#</a></h2>
+<h3 id="속성">속성<a class="heading-anchor" href="#속성" aria-label="속성 링크">#</a></h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="데이터 표"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_guid</td>
+<td>객체의 고유 식별자입니다.</td>
+</tr>
+<tr>
+<td>_type</td>
+<td>객체의 생성 함수를 참조합니다.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="메소드">메소드<a class="heading-anchor" href="#메소드" aria-label="메소드 링크">#</a></h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="데이터 표"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>equal()</td>
+<td>두 객체를 비교하여 동일성을 확인합니다.</td>
+</tr>
+<tr>
+<td>getTypes()</td>
+<td>객체의 상속 계층 구조를 반환합니다.</td>
+</tr>
+<tr>
+<td>instanceOf()</td>
+<td>객체가 특정 클래스의 인스턴스인지 확인합니다.</td>
+</tr>
+<tr>
+<td>getObject()</td>
+<td>현재 객체를 직렬화된 객체로 반환합니다.</td>
+</tr>
+<tr>
+<td>setObject()</td>
+<td>직렬화된 객체를 현재 객체에 설정합니다.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="주요-속성">주요 속성<a class="heading-anchor" href="#주요-속성" aria-label="주요 속성 링크">#</a></h2>
+<h3 id="_guid">_guid<a class="heading-anchor" href="#_guid" aria-label="_guid 링크">#</a></h3>
+<p>객체의 고유 식별자 속성입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> _guid = <span class="hljs-built_in">string</span>;
+</code></pre></div>
+<p><code>_guid</code> 속성은 객체의 고유성을 보장하는 중요한 속성입니다. BindModel의 모든 객체는 <code>_guid</code> 값을 가지며, 객체 생성 시 자동으로 설정됩니다.</p>
+<ul>
+<li>이 값은 수동으로 수정하거나 변경할 수 없습니다.</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// 객체 생성</span>
+<span class="hljs-keyword">const</span> obj1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaObject</span>();
+<span class="hljs-keyword">const</span> obj2 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaObject</span>();
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Object 1 GUID:&quot;</span>, obj1.<span class="hljs-property">_guid</span>); 
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Object 2 GUID:&quot;</span>, obj2.<span class="hljs-property">_guid</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Are GUIDs unique? &quot;</span>, obj1.<span class="hljs-property">_guid</span> !== obj2.<span class="hljs-property">_guid</span>); <span class="hljs-comment">// Out: true</span>
+</code></pre></div>
+<ul>
+<li><code>obj1._guid</code>와 <code>obj2._guid</code>를 비교하여 두 값이 서로 다른지 확인합니다.</li>
+</ul>
+<hr>
+<h3 id="_type">_type<a class="heading-anchor" href="#_type" aria-label="_type 링크">#</a></h3>
+<p>객체의 생성 함수를 참조하는 속성입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> _type = <span class="hljs-title class_">Function</span>;
+</code></pre></div>
+<p><code>_type</code> 속성은 <code>MetaObject</code> 클래스를 상속한 모든 객체가 생성될 때 자동으로 설정되며, 객체의 클래스 또는 생성자를 가르킵니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// 객체 생성</span>
+<span class="hljs-keyword">const</span> obj1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaTable</span>(<span class="hljs-string">&#x27;t1&#x27;</span>);
+<span class="hljs-keyword">const</span> obj2 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaColumn</span>(<span class="hljs-string">&#x27;c1&#x27;</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj1.<span class="hljs-property">_type</span> === <span class="hljs-title class_">MetaTable</span>);  <span class="hljs-comment">// Out: true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj2.<span class="hljs-property">_type</span> === <span class="hljs-title class_">MetaColumn</span>); <span class="hljs-comment">// Out: true</span>
+</code></pre></div>
+<ul>
+<li><code>_type</code> 속성은 MetaObject 을 상속한 객체의 생성자를 확인하는데 사용됩니다.</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// MetaObject 자식 클래스 정의</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClass</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">MetaObject</span> {}
+
+<span class="hljs-comment">// 객체 생성</span>
+<span class="hljs-keyword">const</span> metaObj = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaObject</span>();
+<span class="hljs-keyword">const</span> myObj = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyClass</span>();
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(metaObj.<span class="hljs-property">_type</span> === <span class="hljs-title class_">MetaObject</span>); <span class="hljs-comment">// Out: true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(myObj.<span class="hljs-property">_type</span> === <span class="hljs-title class_">MyClass</span>);      <span class="hljs-comment">// Out: true</span>
+</code></pre></div>
+<ul>
+<li>MetaObject 클래스를 상속한 클래스에서 <code>_type</code> 을 통해 생성자를 확인할 수 있습니다.</li>
+</ul>
+<hr>
+<h2 id="주요-메소드">주요 메소드<a class="heading-anchor" href="#주요-메소드" aria-label="주요 메소드 링크">#</a></h2>
+<h3 id="equal">equal()<a class="heading-anchor" href="#equal" aria-label="equal() 링크">#</a></h3>
+<p>현재 객체와 지정된 객체가 동일하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">equal</span>(<span class="hljs-params"><span class="hljs-attr">target</span>: <span class="hljs-title class_">MetaObject</span></span>): <span class="hljs-built_in">boolean</span>;
+</code></pre></div>
+<ul>
+<li><code>target</code>: 비교할 대상 객체</li>
+</ul>
+<p>equal() 메서드는 <code>_guid</code> 속성을 제외하고 객체가 동일한지 비교합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// 객체 생성</span>
+<span class="hljs-keyword">const</span> obj1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaObject</span>();
+<span class="hljs-keyword">const</span> obj2 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaObject</span>();
+<span class="hljs-keyword">const</span> obj3 = {};
+
+<span class="hljs-comment">// equal() 메서드 사용</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj1.<span class="hljs-title function_">equal</span>(obj2)); <span class="hljs-comment">// Out: true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj1.<span class="hljs-title function_">equal</span>(obj3)); <span class="hljs-comment">// Out: false</span>
+</code></pre></div>
+<ul>
+<li>equal() 메서드 사용하여 객체가 동일한지 확인합니다.</li>
+</ul>
+<hr>
+<h3 id="gettypes">getTypes()<a class="heading-anchor" href="#gettypes" aria-label="getTypes() 링크">#</a></h3>
+<p>객체의 상속 계층 구조를 반환하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getTypes</span>(<span class="hljs-params"></span>) : <span class="hljs-title class_">Function</span>[];
+</code></pre></div>
+<ul>
+<li><code>Array&lt;Function&gt;</code>: 상속 계층의 함수 배열
+<ul>
+<li>배열의 첫 번째 요소는 생성자 함수입니다.</li>
+<li>이후 요소는 상위 클래스 생성자 함수가 순서대로 포함됩니다.</li>
+</ul>
+</li>
+</ul>
+<p>getTypes() 메서드는 객체의 클래스의 상속 계층 구조를 배열로 반환합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// 클래스 정의</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClass</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">MetaObject</span> {}
+
+<span class="hljs-comment">// 객체 생성</span>
+<span class="hljs-keyword">const</span> obj = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyClass</span>();
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-title function_">getTypes</span>()); <span class="hljs-comment">// Out: [MyClass, MetaObject]</span>
+</code></pre></div>
+<ul>
+<li>반환된 배열은 <code>MyClass</code>부터 시작하여 <code>MetaObject</code> 순으로 상속 계층 구조를 보여줍니다.</li>
+</ul>
+<hr>
+<h3 id="instanceof">instanceOf()<a class="heading-anchor" href="#instanceof" aria-label="instanceOf() 링크">#</a></h3>
+<p>객체가 특정 클래스의 인스턴스인지 확인하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">instanceOf</span>(<span class="hljs-params"><span class="hljs-attr">target</span>: <span class="hljs-built_in">object</span> | <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">boolean</span>;
+</code></pre></div>
+<ul>
+<li><code>target</code>: 클래스 생성자 함수 또는 클래스 이름(문자열)</li>
+<li>반환값 : 객체의 생성자 함수와 일치하거나, 상속 관계에 있는 경우 <code>true</code>를 반환합니다.</li>
+</ul>
+<p><code>instanceOf()</code> 메서드는 객체의 생성자 함수 또는 생성자 이름을 사용하여 인스턴스 여부를 검사합니다.</p>
+<p><code>instanceof</code> 연산자 같은 역활을 수행하지만 추가적으로 다음 기능을 제공합니다.</p>
+<ul>
+<li>인터페이스 타입 검사 : 정의된 인터페이스 타입을 함께 검사할 수 있습니다. (별도 제공 예정)</li>
+<li>느슨한 검사 지원 : 생성자 함수를 문자열로 검사하여 의존성 문제를 우회할 수 있습니다.</li>
+</ul>
+<p><strong>인스턴스 검사 예제</strong></p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// 클래스 정의</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClass</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">MetaObject</span> { <span class="hljs-comment">/* 클래스 정의 */</span>}
+
+<span class="hljs-comment">// 객체 생성</span>
+<span class="hljs-keyword">const</span> obj = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyClass</span>();
+<span class="hljs-keyword">const</span> meta = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaObject</span>();
+
+<span class="hljs-comment">// 생성자 기반 타입 확인</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-title function_">instanceOf</span>(<span class="hljs-title class_">MetaObject</span>));   <span class="hljs-comment">// Out: true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-title function_">instanceOf</span>(<span class="hljs-title class_">MyClass</span>));      <span class="hljs-comment">// Out: true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(meta.<span class="hljs-title function_">instanceOf</span>(<span class="hljs-title class_">MetaObject</span>));  <span class="hljs-comment">// Out: true</span>
+<span class="hljs-comment">// 문자열 기반 타입 확인</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-title function_">instanceOf</span>(<span class="hljs-string">&#x27;MetaObject&#x27;</span>));   <span class="hljs-comment">// Out: true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-title function_">instanceOf</span>(<span class="hljs-string">&#x27;MyClass&#x27;</span>));      <span class="hljs-comment">// Out: true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(meta.<span class="hljs-title function_">instanceOf</span>(<span class="hljs-string">&#x27;MetaObject&#x27;</span>));  <span class="hljs-comment">// Out: true</span>
+</code></pre></div>
+<ul>
+<li><code>instanceOf()</code> 메소드를 사용해서 생성자 또는 생성자명으로 인스턴스 여부를 검사합니다.</li>
+</ul>
+<p><strong>정적 인터페이스 타입</strong></p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClass</span> {
+  <span class="hljs-keyword">static</span> <span class="hljs-attr">_UNION</span>: <span class="hljs-title class_">Function</span>[];
+}
+<span class="hljs-comment">// 또는</span>
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClass</span> {}
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">namespace</span> <span class="hljs-title class_">MyClass</span> {
+  <span class="hljs-keyword">const</span> <span class="hljs-attr">_UNION</span>: <span class="hljs-title class_">Function</span>[];
+}
+</code></pre></div>
+<ul>
+<li><code>_UNION</code> 정적 배열 타입으로 인터페이스를 정의할 수 있습니다.</li>
+</ul>
+<p><strong>인터페이스 구현 검사 예제</strong></p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// 인터페이스 정의</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">IClassA</span> {}
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">IClassB</span> {}
+
+<span class="hljs-comment">// 클래스 정의</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClass</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">MetaObject</span> {} 
+
+<span class="hljs-comment">// 인터페이스 구현 지정</span>
+<span class="hljs-title class_">MyClass</span>.<span class="hljs-property">_UNION</span> = [<span class="hljs-title class_">IClassA</span>, <span class="hljs-title class_">IClassB</span>]; 
+
+<span class="hljs-keyword">const</span> obj = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyClass</span>();
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-title function_">instanceOf</span>(<span class="hljs-title class_">MyClass</span>)); <span class="hljs-comment">// Out: true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-title function_">instanceOf</span>(<span class="hljs-title class_">IClassA</span>)); <span class="hljs-comment">// Out: true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-title function_">instanceOf</span>(<span class="hljs-title class_">IClassB</span>)); <span class="hljs-comment">// Out: true</span>
+</code></pre></div>
+<ul>
+<li><code>obj</code> 객체가  <code>MyClass</code>의 인스턴스이거나, <code>IClassA</code>, <code>IClassB</code> 인터페이스를 구현했는지 검사합니다.</li>
+</ul>
+<blockquote>
+<p>추후 인터페이스 사용 방법이 제공될 예정입니다.</p>
+</blockquote>
+<hr>
+<h3 id="getobject">getObject()<a class="heading-anchor" href="#getobject" aria-label="getObject() 링크">#</a></h3>
+<p>현재 객체를 직렬화된 객체로 반환하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getObject</span>(<span class="hljs-params">
+	<span class="hljs-attr">vOpt</span>?: <span class="hljs-built_in">number</span>, 
+	<span class="hljs-attr">owned</span>?: <span class="hljs-built_in">object</span> | <span class="hljs-built_in">object</span>[]
+</span>): <span class="hljs-built_in">object</span>;
+</code></pre></div>
+<ul>
+<li><code>vOpt(선택)</code> : 직렬화 옵션  (기본값 <code>0</code>)
+<ul>
+<li><code>0</code>: guid 참조 구조를 유지합니다 (<code>_guid: 예</code>, <code>$ref: 예</code>)</li>
+<li><code>1</code>: guid 중복 구조로 출력합니다 (<code>_guid: 예</code>, <code>$ref: 예</code>)</li>
+<li><code>2</code>: 비참조 구조로 출력합니다 (<code>_guid: 아니오</code>, <code>$ref: 아니오</code>).</li>
+</ul>
+</li>
+<li><code>owned(선택)</code> : 소유 객체나 소유 객체 배열
+<ul>
+<li>기본값은 빈 객체이며, 데이터 출력 시 소유 관계를 포함하거나 필터링할 때 사용됩니다.</li>
+</ul>
+</li>
+</ul>
+<p><code>getObject()</code> 메서드는 현재 객체를 직렬화된 JSON 형식의 객체로 반환합니다. 이를 활용하여 객체의 내부 데이터를 시각화하거나 외부로 전달할 수 있습니다.</p>
+<p>반환된 데이터는 객체의 현재 상태를 복사한 값이며, 원본 객체에 영향을 주지 않습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// 객체 생성</span>
+<span class="hljs-keyword">const</span> v1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaView</span>(<span class="hljs-string">&#x27;view1&#x27;</span>);
+<span class="hljs-keyword">const</span> v2 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaView</span>(<span class="hljs-string">&#x27;view2&#x27;</span>);
+
+<span class="hljs-comment">// 객체 직렬화</span>
+<span class="hljs-keyword">const</span> obj = v1.<span class="hljs-title function_">getObject</span>();
+
+<span class="hljs-comment">// 객체 역직렬화</span>
+v2.<span class="hljs-title function_">setObject</span>(obj);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(v1.<span class="hljs-property">_guid</span> === v2.<span class="hljs-property">_guid</span>); <span class="hljs-comment">// Out: false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(v1.<span class="hljs-property">viewName</span>);           <span class="hljs-comment">// Out: &#x27;view1&#x27;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(v2.<span class="hljs-property">viewName</span>);           <span class="hljs-comment">// Out: &#x27;view1&#x27;</span>
+</code></pre></div>
+<ul>
+<li><code>v1</code> 객체는 <code>v2</code>와 동일한 데이터를 갖지만, 고유 식별자(<code>_guid</code>)는 서로 다릅니다.</li>
+</ul>
+<hr>
+<h3 id="setobject">setObject()<a class="heading-anchor" href="#setobject" aria-label="setObject() 링크">#</a></h3>
+<p>직렬화된 객체를 현재 객체에 설정하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">setObject</span>(<span class="hljs-params"><span class="hljs-attr">oGuid</span>: <span class="hljs-built_in">object</span>, <span class="hljs-attr">origin</span>?: <span class="hljs-built_in">object</span></span>): <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>oGuid</code>: 직렬화된 객체
+<ul>
+<li>데이터로, 현재 객체에 설정할 속성과 값을 포함합니다.</li>
+</ul>
+</li>
+<li><code>origin(선택)</code>: 내부 컨텍스트 객체
+<ul>
+<li>설정시 내부적으로 사용되면 추가적인 컨텍스트 정보를 설정할 수 있습니다.</li>
+</ul>
+</li>
+</ul>
+<p><code>setObject()</code> 메서드는 <code>getObject()</code>를 통해 얻은 직렬화 객체를 사용하여 현재 객체를 설정합니다. 이 과정에서 기존에 설정된 데이터는 모두 삭제됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// 객체 생성</span>
+<span class="hljs-keyword">const</span> v1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaView</span>(<span class="hljs-string">&#x27;view1&#x27;</span>);
+<span class="hljs-keyword">const</span> v2 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaView</span>(<span class="hljs-string">&#x27;view2&#x27;</span>);
+
+<span class="hljs-comment">// 객체 직렬화</span>
+<span class="hljs-keyword">const</span> obj = v1.<span class="hljs-title function_">getObject</span>();
+
+<span class="hljs-comment">// 객체 역직렬화</span>
+v2.<span class="hljs-title function_">setObject</span>(obj);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(v1.<span class="hljs-property">_guid</span> === v2.<span class="hljs-property">_guid</span>); <span class="hljs-comment">// Out: false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(v1.<span class="hljs-property">viewName</span>);           <span class="hljs-comment">// Out: &#x27;view1&#x27;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(v2.<span class="hljs-property">viewName</span>);           <span class="hljs-comment">// Out: &#x27;view1&#x27;</span>
+</code></pre></div>
+<ul>
+<li><code>v1</code> 객체는 <code>v2</code>와 동일한 데이터를 가지지만, 고유 식별자(<code>_guid</code>)는 다릅니다.</li>
+</ul>
+<hr>
+<p>#메모</p>
+<p>Util.implements() : 메소드에서는 대상 객체가 인터페이스를 구현하였으면, <code>_inteface</code> 속성이 추가 됩니다.</p>
+<p><code>Function._UNION = []</code> : 함수 정의된 정적 인터페이스
+<code>{}._interface = []</code> : 객체에 정의된 동적 인터페이스</p>
+</div>
+    <div class="doc-feedback"><span>더 나은 문서를 함께 만들어요.</span><a href="https://github.com/white-base/bind-model/issues">오류 제보 및 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></div>
+    <nav class="page-pagination" aria-label="이전·다음 문서"><a class="page-link prev" href="../api/property-collection.html"><span>이전 문서</span><strong>PropertyCollection</strong></a><span></span></nav>
+  </article><footer class="doc-footer">BindModel · White Lab<a href="../index.html">홈으로 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></footer></main>
+  <aside class="page-toc" id="page-toc" aria-label="이 페이지의 내용"><p>이 페이지의 내용</p><nav><a class="toc-level-2" href="#구성-요소">구성 요소</a><a class="toc-level-3" href="#속성">속성</a><a class="toc-level-3" href="#메소드">메소드</a><a class="toc-level-2" href="#주요-속성">주요 속성</a><a class="toc-level-3" href="#_guid">_guid</a><a class="toc-level-3" href="#_type">_type</a><a class="toc-level-2" href="#주요-메소드">주요 메소드</a><a class="toc-level-3" href="#equal">equal()</a><a class="toc-level-3" href="#gettypes">getTypes()</a><a class="toc-level-3" href="#instanceof">instanceOf()</a><a class="toc-level-3" href="#getobject">getObject()</a><a class="toc-level-3" href="#setobject">setObject()</a></nav><a class="back-top" href="#main">맨 위로 ↑</a></aside>
+  </div><dialog id="search-dialog" class="search-dialog" aria-labelledby="search-label"><div class="search-top"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><label class="sr-only" id="search-label" for="search-input">문서 검색</label><input id="search-input" type="search" placeholder="문서, 메서드, 개념 검색…" autocomplete="off" spellcheck="false" aria-controls="search-results"><button class="dialog-close" aria-label="검색 닫기">ESC</button></div><p id="search-status" class="search-status" role="status">검색어를 입력해 보세요.</p><div id="search-results" class="search-results"></div><div class="search-footer"><span><kbd>↑</kbd><kbd>↓</kbd> 이동 <kbd>↵</kbd> 열기</span><span>BindModel 문서 검색</span></div></dialog><div class="toast" role="status" aria-live="polite"></div></body>
+</html>

@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="ko" data-root="../">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>PropertyCollection | BindModel</title>
+  <meta name="description" content="키와 인덱스로 접근하는 컬렉션의 속성과 메서드를 확인합니다."><meta name="theme-color" content="#f8f8f4">
+  <meta property="og:type" content="website"><meta property="og:title" content="PropertyCollection | BindModel"><meta property="og:description" content="키와 인덱스로 접근하는 컬렉션의 속성과 메서드를 확인합니다."><meta property="og:url" content="https://white-base.github.io/white-lab-bind-model/api/property-collection.html"><meta property="og:image" content="https://white-base.github.io/white-lab-bind-model/assets/social.svg">
+  <link rel="canonical" href="https://white-base.github.io/white-lab-bind-model/api/property-collection.html"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('bindmodel-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+  <link rel="stylesheet" href="../assets/site.css"><script src="../assets/site.js" defer></script>
+</head>
+<body class="documentation"><a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html" aria-label="BindModel 홈"><span class="brand-mark" aria-hidden="true">b<span>.</span></span><span class="brand-name">bindmodel<span class="brand-dot">.</span></span></a>
+    <nav class="main-nav" id="main-nav" aria-label="주 메뉴">
+      <a href="../guide/introduction.html">시작하기</a><a href="../guide/features/model.html">기능 가이드</a><a href="../advanced/column-value-flow.html">고급 기능</a><a href="../examples/crudl.html">예제</a><a href="../api/bind-model.html" class="is-active" aria-current="true">API</a>
+    </nav>
+    <div class="header-tools"><button class="search-trigger" data-search aria-label="문서 검색"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span>문서 검색</span><kbd>⌘ K</kbd></button>
+    <button class="icon-button theme-toggle" aria-label="어두운 테마로 전환" title="테마 전환"><svg class="icon theme-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13A8 8 0 0 1 11 4a8 8 0 1 0 9 9Z"/></svg></button>
+    <a class="icon-button github-link" href="https://github.com/white-base/bind-model" aria-label="BindModel GitHub 저장소"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-4a3.5 3.5 0 0 0-1-2.7c3.3-.4 6.7-1.6 6.7-7.3A5.6 5.6 0 0 0 20 4.1 5.2 5.2 0 0 0 19.9.3S18.6-.1 16 1.8a13.5 13.5 0 0 0-7 0C6.4-.1 5.1.3 5.1.3A5.2 5.2 0 0 0 5 4.1 5.6 5.6 0 0 0 3.3 8c0 5.7 3.4 6.9 6.7 7.3A3.5 3.5 0 0 0 9 18v4"/></svg></a>
+    <button class="icon-button menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="주 메뉴 열기"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div>
+  </div></header>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <div class="mobile-docbar"><button class="sidebar-toggle" aria-controls="docs-sidebar" aria-expanded="false"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>문서 메뉴</button><a href="#page-toc">이 페이지의 내용 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div>
+  <div class="docs-layout"><button class="sidebar-backdrop" aria-label="문서 메뉴 닫기" hidden></button><aside class="docs-sidebar" id="docs-sidebar" aria-label="문서 목록"><a class="sidebar-home" href="../index.html"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M12 5C9 3 5 3 2 4v15c3-1 7-1 10 2 3-3 7-3 10-2V4c-3-1-7-1-10 1Z"/></svg>문서 둘러보기</a><section class="sidebar-group"><h2><span>시작하기</span><span>03</span></h2><ul><li><a href="../guide/introduction.html">소개</a></li><li><a href="../guide/quick-start.html">빠른 시작</a></li><li><a href="../guide/core-concepts.html">핵심 개념</a></li></ul></section><section class="sidebar-group"><h2><span>기능 가이드</span><span>07</span></h2><ul><li><a href="../guide/features/model.html">모델 구성</a></li><li><a href="../guide/features/command.html">명령 구성</a></li><li><a href="../guide/features/columns.html">컬럼 관리</a></li><li><a href="../guide/features/shared-column-properties.html">공통 컬럼 속성</a></li><li><a href="../guide/features/flow-control.html">흐름 제어</a></li><li><a href="../guide/features/service-injection.html">서비스 객체 주입</a></li><li><a href="../guide/features/json-schema.html">JSON 스키마 가이드</a></li></ul></section><section class="sidebar-group"><h2><span>고급 기능</span><span>06</span></h2><ul><li><a href="../advanced/column-value-flow.html">컬럼값 호출 구조</a></li><li><a href="../advanced/tables.html">테이블 관리</a></li><li><a href="../advanced/multiple-outputs.html">명령 복수 출력 구성</a></li><li><a href="../advanced/execution.html">실행 및 동기화</a></li><li><a href="../advanced/events.html">이벤트 설정</a></li><li><a href="../advanced/composition.html">객체 구성 방법</a></li></ul></section><section class="sidebar-group"><h2><span>예제</span><span>01</span></h2><ul><li><a href="../examples/crudl.html">CRUD + List 구현하기</a></li></ul></section><section class="sidebar-group"><h2><span>API 레퍼런스</span><span>06</span></h2><ul><li><a href="../api/bind-model.html">BindModel</a></li><li><a href="../api/bind-command.html">BindCommand</a></li><li><a href="../api/meta-view.html">MetaView</a></li><li><a href="../api/html-column.html">HTMLColumn</a></li><li><a href="../api/property-collection.html" class="is-current" aria-current="page">PropertyCollection</a></li><li><a href="../api/meta-object.html">MetaObject</a></li></ul></section><a class="sidebar-bottom" href="https://github.com/white-base/bind-model/issues">문서 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></aside>
+  <main class="doc-main" id="main"><article data-search-content>
+    <div class="doc-breadcrumb"><a href="../index.html">문서</a><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span>API 레퍼런스</span></div>
+    <header class="doc-heading"><div class="eyebrow">API 레퍼런스<span class="eyebrow-rule"></span>05</div><h1>PropertyCollection</h1><p>키와 인덱스로 접근하는 컬렉션의 속성과 메서드를 확인합니다.</p><div class="doc-meta"><span>한국어 문서</span><span>약 32분</span></div></header>
+    <div class="doc-content"><ol>
+<li>
+<p><strong>모델(BindModel)의 컬렉션 관리</strong>
+• <code>command, fn, items, columns</code> 의 컬렉션 속성에 사용됩니다.</p>
+</li>
+<li>
+<p><strong>명령(BindCommand)의 뷰 컬렉션 관리</strong>
+• <code>valid.columns, bind.columns, output.columns</code> 속성에 사용됩니다.</p>
+</li>
+<li>
+<p><strong>엔티티 컬렉션 관리</strong>
+• MetaTable과 MetaView의 <code>columns</code> 컬렉션으로 사용됩니다.</p>
+</li>
+</ol>
+<h2 id="구성-요소">구성 요소<a class="heading-anchor" href="#구성-요소" aria-label="구성 요소 링크">#</a></h2>
+<h3 id="속성">속성<a class="heading-anchor" href="#속성" aria-label="속성 링크">#</a></h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="데이터 표"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_owner</td>
+<td>소유한 객체를 참조합니다.</td>
+</tr>
+<tr>
+<td>_elemTypes</td>
+<td>컬렉션에 포함될 수 있는 요소들의 타입을 제한합니다.</td>
+</tr>
+<tr>
+<td>_list</td>
+<td>컬렉션에 포함된 모든 요소를 저장하는 내부 배열입니다.</td>
+</tr>
+<tr>
+<td>count</td>
+<td>컬렉션의 요소 개수를 나타냅니다.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="메소드">메소드<a class="heading-anchor" href="#메소드" aria-label="메소드 링크">#</a></h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="데이터 표"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>add()</td>
+<td>컬렉션에 새로운 요소를 추가합니다.</td>
+</tr>
+<tr>
+<td>clear()</td>
+<td>컬렉션의 모든 요소를 제거합니다.</td>
+</tr>
+<tr>
+<td>exists()</td>
+<td>컬렉션에 특정 키가 존재하는지 확인합니다.</td>
+</tr>
+<tr>
+<td>remove()</td>
+<td>컬렉션에서 특정 요소를 제거합니다.</td>
+</tr>
+<tr>
+<td>removeAt()</td>
+<td>컬렉션에서 지정된 위치의 요소를 제거합니다.</td>
+</tr>
+<tr>
+<td>contains()</td>
+<td>컬렉션에 특정 요소가 포함되어 있는지 확인합니다.</td>
+</tr>
+<tr>
+<td>indexOf()</td>
+<td>컬렉션에서 특정 요소의 인덱스를 반환합니다.</td>
+</tr>
+<tr>
+<td>keyToIndex()</td>
+<td>컬렉션에서 특정 키에 해당하는 인덱스를 반환합나다.</td>
+</tr>
+<tr>
+<td>indexToKey()</td>
+<td>컬렉션에서 지정된 인덱스에 해당하는 요소의 키를 반환합니다.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="고차-함수">고차 함수<a class="heading-anchor" href="#고차-함수" aria-label="고차 함수 링크">#</a></h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="데이터 표"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>map()</td>
+<td>컬렉션의 각 요소에 함수를 적용하여 새로운 배열을 반환합니다.</td>
+</tr>
+<tr>
+<td>filter()</td>
+<td>조건을 만족하는 요소만 포함하는 새로운 배열을 반환합니다.</td>
+</tr>
+<tr>
+<td>reduce()</td>
+<td>컬렉션의 모든 요소를 순회하며 누적 값을 계산합니다.</td>
+</tr>
+<tr>
+<td>find()</td>
+<td>컬렉션에서 조건을 만족하는 첫 번째 요소를 반환합니다.</td>
+</tr>
+<tr>
+<td>findIndex()</td>
+<td>컬렉션에서 조건을 만족하는 첫 번째 요소의 인덱스를 반환합니다.</td>
+</tr>
+<tr>
+<td>forEach()</td>
+<td>컬렉션의 각 요소에 대해 주어진 작업을 수행합니다.</td>
+</tr>
+<tr>
+<td>some()</td>
+<td>조건을 만족하는 요소가 하나라도 있으면 true를 반환합니다.</td>
+</tr>
+<tr>
+<td>every()</td>
+<td>컬렉션의 모든 요소가 주어진 조건을 만족하면 <code>true</code>를 반환합니다.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="이벤트">이벤트<a class="heading-anchor" href="#이벤트" aria-label="이벤트 링크">#</a></h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="데이터 표"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>onAdd</td>
+<td>컬렉션에 요소를 추가하기 직전에 호출됩니다.</td>
+</tr>
+<tr>
+<td>onAdded</td>
+<td>컬렉션에 요소가 성공적으로 추가된 후 호출됩니다.</td>
+</tr>
+<tr>
+<td>onRemove</td>
+<td>컬렉션에서 요소가 제거되기 전에 호출됩니다.</td>
+</tr>
+<tr>
+<td>onRemoved</td>
+<td>컬렉션에서 요소가 성공적으로 제거된 후 호출됩니다.</td>
+</tr>
+<tr>
+<td>onClear</td>
+<td>컬렉션의 모든 요소가 제거되기 전에 호출됩니다.</td>
+</tr>
+<tr>
+<td>onCleared</td>
+<td>컬렉션의 모든 요소가 성공적으로 제거된 후 호출됩니다.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="주요-속성">주요 속성<a class="heading-anchor" href="#주요-속성" aria-label="주요 속성 링크">#</a></h2>
+<h3 id="_owner">_owner<a class="heading-anchor" href="#_owner" aria-label="_owner 링크">#</a></h3>
+<p>소유한 객체를 참조하는 속성입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> _owner = <span class="hljs-title class_">Object</span> | <span class="hljs-literal">null</span>;
+</code></pre></div>
+<ul>
+<li><code>Object</code>: 현재 객체를 소유한 개체</li>
+<li><code>null</code>: 소유 개체가 없을 때 (기본값)</li>
+</ul>
+<p><code>_owner</code> 속성은 객체의 소유자를 참조하는 속성으로, 소유 관계를 정의하고 추적하는 데 사용됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">UserTable</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>(<span class="hljs-variable language_">this</span>);
+    }
+}
+
+<span class="hljs-comment">// UserTable 객체 생성</span>
+<span class="hljs-keyword">const</span> user = <span class="hljs-keyword">new</span> <span class="hljs-title class_">UserTable</span>();
+
+<span class="hljs-comment">// _owner가 올바르게 설정되었는지 확인</span>
+user.<span class="hljs-property">data</span>.<span class="hljs-property">_owner</span> === user <span class="hljs-comment">// true</span>
+</code></pre></div>
+<ul>
+<li>생성자를 통해서 <code>_onwer</code>속성이 설정됩니다.</li>
+</ul>
+<hr>
+<h3 id="_elemtypes">_elemTypes<a class="heading-anchor" href="#_elemtypes" aria-label="_elemTypes 링크">#</a></h3>
+<p>컬렉션에 포함될 수 있는 요소들의 타입을 제한하는 속성입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> _elemTypes = <span class="hljs-built_in">any</span>[];
+</code></pre></div>
+<p><code>_elemTypes</code> 속성은 컬렉션에서 허용되는 데이터 유형을 정의하며, 특정 유형만 추가할 수 있습니다.</p>
+<ul>
+<li>값을 지정하지 않으면 모든 유형이 허용됩니다.</li>
+</ul>
+<blockquote>
+<p>타입 관리 추후 정보가 제공될 예정입니다.</p>
+</blockquote>
+<hr>
+<h3 id="_list">_list<a class="heading-anchor" href="#_list" aria-label="_list 링크">#</a></h3>
+<p>컬렉션에 포함된 모든 요소를 저장하는 내부 배열 속성입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">_list</span>: <span class="hljs-built_in">any</span>[];
+</code></pre></div>
+<p><code>_list</code> 속성은 컬렉션 객체에서 데이터를 저장하는 핵심 속성으로, 요소의 추가, 제거, 검색을 담당하는 내부 배열입니다.</p>
+<ul>
+<li>직접 접근하기보다는 제공된 메서드를 통해 조작하는 것을 권장합니다.</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-property">_list</span>); <span class="hljs-comment">// Out: [&#x27;item1&#x27;, &#x27;item2&#x27;]</span>
+</code></pre></div>
+<ul>
+<li><code>add()</code> 메소드로 요소를 추가하면 내부적으로 <code>_list</code> 에 저장됩니다.</li>
+</ul>
+<hr>
+<h3 id="count-또는-length">count 또는 length<a class="heading-anchor" href="#count-또는-length" aria-label="count 또는 length 링크">#</a></h3>
+<p>컬렉션의 요소 개수를 나타내는 속성입니다.</p>
+<blockquote>
+<p>별칭으로 <code>length</code> 참조 속성을 제공합니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">count</span>: <span class="hljs-built_in">number</span>;
+</code></pre></div>
+<p><code>count</code>는 컬렉션 객체에서 요소의 개수를 나타내는 읽기 전용 속성입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-property">count</span>);  <span class="hljs-comment">// Out: 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-property">length</span>); <span class="hljs-comment">// Out: 2</span>
+</code></pre></div>
+<ul>
+<li><code>count</code>속성과 <code>length</code>속성을 통해 현재 컬렉션의 요소 개수를 확인합니다.</li>
+</ul>
+<hr>
+<h2 id="주요-메소드">주요 메소드<a class="heading-anchor" href="#주요-메소드" aria-label="주요 메소드 링크">#</a></h2>
+<h3 id="add">add()<a class="heading-anchor" href="#add" aria-label="add() 링크">#</a></h3>
+<p>컬렉션에 새로운 요소를 추가하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">
+	<span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>, 
+	<span class="hljs-attr">elem</span>: <span class="hljs-built_in">any</span>, 
+	<span class="hljs-attr">desc</span>?: <span class="hljs-title class_">PropertyDescriptor</span>
+</span>): <span class="hljs-built_in">number</span>;
+</code></pre></div>
+<ul>
+<li><code>key</code>: string: 추가할 요소의 고유 키</li>
+<li><code>elem</code>: any: 컬렉션에 추가할 요소</li>
+<li><code>desc(선택)</code>: 속성을 설명하는 디스크립터</li>
+<li>반환값 : 추가한 요소의 인덱스</li>
+</ul>
+<p>add() 메서드는 컬렉션에 새로운 요소를 추가하고, 고유 키를 기반으로 관리합니다.</p>
+<ul>
+<li>선택적으로 <code>PropertyDescriptor</code>를 사용하여 요소의 속성을 정의할 수 있습니다.</li>
+<li>중복된 키가 사용될 경우 예외가 발생합니다.</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>, { <span class="hljs-attr">writable</span>: <span class="hljs-literal">true</span> });
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-property">count</span>);   <span class="hljs-comment">// Out: 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-property">length</span>);  <span class="hljs-comment">// Out: 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">contains</span>(<span class="hljs-string">&#x27;key1&#x27;</span>)); <span class="hljs-comment">// Out: true</span>
+</code></pre></div>
+<ul>
+<li>add() 메서드를 사용하여 컬렉션에 고유 키와 함께 새로운 요소를 추가합니다.</li>
+</ul>
+<hr>
+<h3 id="clear">clear()<a class="heading-anchor" href="#clear" aria-label="clear() 링크">#</a></h3>
+<p>컬렉션의 모든 요소를 제거하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">clear</span>(<span class="hljs-params"></span>): <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<p><code>clear()</code> 메서드는 컬렉션의 모든 데이터를 삭제하여 초기화합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">contains</span>(<span class="hljs-string">&#x27;key1&#x27;</span>));  <span class="hljs-comment">// Out: true</span>
+
+<span class="hljs-comment">// 컬렉션 초기화</span>
+collection.<span class="hljs-title function_">clear</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">contains</span>(<span class="hljs-string">&#x27;key1&#x27;</span>)); <span class="hljs-comment">// Out: false</span>
+</code></pre></div>
+<ul>
+<li>컬렉션의 모든 데이터를 제거하여 비어 있는 상태로 만듭니다.</li>
+</ul>
+<hr>
+<h3 id="exist">exist()<a class="heading-anchor" href="#exist" aria-label="exist() 링크">#</a></h3>
+<p>컬렉션에 특정 키가 존재하는지 확인하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">exist</span>(<span class="hljs-params"><span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">boolean</span>;
+</code></pre></div>
+<ul>
+<li><code>key</code>: 확인할 키</li>
+<li>반환값 : 키가 존재하면 <code>true</code>, 존재하지 않으면 <code>false</code>를 반환합니다.</li>
+</ul>
+<p><code>exist()</code> 메서드는 컬렉션에 특정 키가 포함되어 있는지 <code>boolean</code> 값으로 나타냅니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">exist</span>(<span class="hljs-string">&#x27;key1&#x27;</span>)); <span class="hljs-comment">// Out: true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">exist</span>(<span class="hljs-string">&#x27;key3&#x27;</span>)); <span class="hljs-comment">// Out: false</span>
+</code></pre></div>
+<ul>
+<li>exist() 메서드를 사용하여 특정 요소가 컬렉션에 포함되어 있는지 확인합니다.</li>
+</ul>
+<hr>
+<h3 id="remove">remove()<a class="heading-anchor" href="#remove" aria-label="remove() 링크">#</a></h3>
+<p>컬렉션에서 특정 요소를 제거하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">remove</span>(<span class="hljs-params"><span class="hljs-attr">elem</span>: <span class="hljs-built_in">any</span></span>): <span class="hljs-built_in">number</span>;
+</code></pre></div>
+<ul>
+<li><code>elem</code>: 제거할 요소</li>
+<li>반환값 : 제거된 요소의 인덱스 반환하고, 요소가 존재하지 않을 경우 <code>-1</code>을 반환합니다.</li>
+</ul>
+<p><code>remove()</code> 메서드는 컬렉션에서 특정 요소를 제거하고, 제거된 요소의 인덱스를 반환합니다.</p>
+<ul>
+<li>요소가 존재하지 않으면 -1을 반환하며, 첫 번째로 매칭된 요소만 제거합니다.</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>);
+
+<span class="hljs-comment">// 요소 제거</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;item1&#x27;</span>)); <span class="hljs-comment">// Out: 0  (인덱스 번호)</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;item3&#x27;</span>)); <span class="hljs-comment">// Out: -1 (요소가 존재하지 않음)</span>
+
+<span class="hljs-comment">// 요소 확인</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">exist</span>(<span class="hljs-string">&#x27;key1&#x27;</span>)); <span class="hljs-comment">// Out: false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">exist</span>(<span class="hljs-string">&#x27;key2&#x27;</span>)); <span class="hljs-comment">// Out: true</span>
+</code></pre></div>
+<ul>
+<li>remove() 메서드는 지정된 요소를 기준으로 제거를 수행하며, 제거된 요소의 인덱스를 반환합니다.</li>
+</ul>
+<hr>
+<h3 id="removeat">removeAt()<a class="heading-anchor" href="#removeat" aria-label="removeAt() 링크">#</a></h3>
+<p>컬렉션에서 지정된 위치의 요소를 제거하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">removeAt</span>(<span class="hljs-params"><span class="hljs-attr">pos</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">boolean</span>;
+</code></pre></div>
+<ul>
+<li><code>pos</code>: 제거할 요소의 위치(인덱스)</li>
+<li>반환값 : 요소 제거에 성공하면 <code>true</code>, 인덱스가 유효하지 않으면 <code>false</code>를 반환합니다.</li>
+</ul>
+<p>removeAt() 메서드는 컬렉션에서 지정된 위치의 요소를 제거합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>);
+
+<span class="hljs-comment">// 인덱스로 요소 제거</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">removeAt</span>(<span class="hljs-number">0</span>)); <span class="hljs-comment">// Out: true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">removeAt</span>(<span class="hljs-number">2</span>)); <span class="hljs-comment">// Out: false (유효하지 않은 인덱스)</span>
+
+<span class="hljs-comment">// 요소 확인</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">exist</span>(<span class="hljs-string">&#x27;key1&#x27;</span>)); <span class="hljs-comment">// Out: false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">exist</span>(<span class="hljs-string">&#x27;key2&#x27;</span>)); <span class="hljs-comment">// Out: true</span>
+</code></pre></div>
+<ul>
+<li>removeAt() 메서드를 호출하여 지정된 인덱스의 요소를 제거합니다.</li>
+</ul>
+<hr>
+<h3 id="contains">contains()<a class="heading-anchor" href="#contains" aria-label="contains() 링크">#</a></h3>
+<p>컬렉션에 특정 요소가 포함되어 있는지 확인하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">contains</span>(<span class="hljs-params">elem</span>): <span class="hljs-built_in">boolean</span>;
+</code></pre></div>
+<ul>
+<li><code>elem</code>: 확인할 요소</li>
+<li>반환값 : 요소가 컬렉션에 포함되어 있으면 <code>true</code>, 그렇지 않으면 <code>false</code>를 반환합니다.</li>
+</ul>
+<p><code>contains()</code> 메서드는 컬렉션에 특정 요소가 포함되어 있는지 여부를 확인합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>);
+
+<span class="hljs-comment">// 요소 포함 여부 확인</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">contains</span>(<span class="hljs-string">&#x27;item1&#x27;</span>)); <span class="hljs-comment">// Out: true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">contains</span>(<span class="hljs-string">&#x27;item3&#x27;</span>)); <span class="hljs-comment">// Out: false</span>
+</code></pre></div>
+<ul>
+<li>contains() 메서드를 호출하여 특정 요소가 컬렉션에 포함되어 있는지 확인합니다.</li>
+</ul>
+<hr>
+<h3 id="indexof">indexOf()<a class="heading-anchor" href="#indexof" aria-label="indexOf() 링크">#</a></h3>
+<p>컬렉션에서 특정 요소의 인덱스를 반환하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">indexOf</span>(<span class="hljs-params"><span class="hljs-attr">elem</span>: <span class="hljs-built_in">any</span></span>): <span class="hljs-built_in">number</span>;
+</code></pre></div>
+<ul>
+<li><code>elem</code>: 인덱스를 찾을 요소</li>
+<li>반환값 : 요소의 인덱스를 반환하고, 요소가 존재하지 않을 경우 <code>-1</code>을 반환합니다.</li>
+</ul>
+<p><code>indexOf()</code> 메서드는 컬렉션에서 특정 요소의 인덱스를 검색하는 데 사용됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>);
+
+<span class="hljs-comment">// 요소 인덱스 확인</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&#x27;item1&#x27;</span>)); <span class="hljs-comment">// Out: 0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&#x27;item2&#x27;</span>)); <span class="hljs-comment">// Out: 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&#x27;item3&#x27;</span>)); <span class="hljs-comment">// Out: -1</span>
+</code></pre></div>
+<ul>
+<li>indexOf() 메서드를 호출하여 특정 요소의 인덱스를 검색합니다.</li>
+</ul>
+<hr>
+<h3 id="keytoindex">keyToIndex()<a class="heading-anchor" href="#keytoindex" aria-label="keyToIndex() 링크">#</a></h3>
+<p>컬렉션에서 특정 키에 해당하는 인덱스를 반환하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">keyToIndex</span>(<span class="hljs-params"><span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">number</span>;
+</code></pre></div>
+<ul>
+<li><code>key</code>: 인덱스를 찾을 요소의 키</li>
+<li>반환값 : 키의 인덱스를 반환하고, 키가 없으면 <code>-1</code>을 반환합니다.</li>
+</ul>
+<p><code>keyToIndex()</code> 메서드는 컬렉션에서 특정 키에 매핑된 요소의 인덱스를 검색합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>);
+
+<span class="hljs-comment">// 키의 인덱스 검색</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">keyToIndex</span>(<span class="hljs-string">&#x27;key1&#x27;</span>)); <span class="hljs-comment">// Out: 0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">keyToIndex</span>(<span class="hljs-string">&#x27;key2&#x27;</span>)); <span class="hljs-comment">// Out: 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">keyToIndex</span>(<span class="hljs-string">&#x27;key3&#x27;</span>)); <span class="hljs-comment">// Out: -1</span>
+</code></pre></div>
+<ul>
+<li>keyToIndex() 메서드를 호출하여 특정 키에 매핑된 요소의 인덱스를 검색합니다.</li>
+</ul>
+<hr>
+<h3 id="indextokey">indexToKey()<a class="heading-anchor" href="#indextokey" aria-label="indexToKey() 링크">#</a></h3>
+<p>컬렉션에서 지정된 인덱스에 해당하는 요소의 키를 반환하는 메서드입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">indexToKey</span>(<span class="hljs-params"><span class="hljs-attr">idx</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">string</span> | <span class="hljs-literal">undefined</span>;
+</code></pre></div>
+<ul>
+<li><code>index</code>: 키를 검색할 요소의 인덱스</li>
+<li>반환값 : 인덱스에 해당하는 키를 반환하며, 유효하지 않은 인덱스일 경우 <code>undefined</code>를 반환합니다.</li>
+</ul>
+<p><code>indexToKey()</code> 메서드는 컬렉션에서 지정된 인덱스의 요소에 매핑된 키를 반환합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>);
+
+<span class="hljs-comment">// 인덱스를 기반으로 키 검색</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">indexToKey</span>(<span class="hljs-number">0</span>)); <span class="hljs-comment">// Out: &#x27;key1&#x27;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">indexToKey</span>(<span class="hljs-number">1</span>)); <span class="hljs-comment">// Out: &#x27;key2&#x27;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">indexToKey</span>(<span class="hljs-number">2</span>)); <span class="hljs-comment">// Out: undefined (유효하지 않은 인덱스)</span>
+</code></pre></div>
+<ul>
+<li>indexToKey() 메서드를 호출하여 특정 인덱스에 매핑된 키를 반환합니다.</li>
+</ul>
+<hr>
+<h2 id="주요-고차-함수">주요 고차 함수<a class="heading-anchor" href="#주요-고차-함수" aria-label="주요 고차 함수 링크">#</a></h2>
+<h3 id="map">map()<a class="heading-anchor" href="#map" aria-label="map() 링크">#</a></h3>
+<p>컬렉션의 각 요소에 함수를 적용하여 새로운 배열을 반환하는 고차 함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> map&lt;T, U&gt;(
+	<span class="hljs-attr">callbackfn</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">value</span>: T, <span class="hljs-attr">index</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">array</span>: T[]</span>) =&gt;</span> U, 
+	<span class="hljs-attr">thisArg</span>?: <span class="hljs-built_in">any</span>
+): U[];
+</code></pre></div>
+<ul>
+<li><code>callbackfn</code>: 새로운 배열 요소를 생성하는 함수
+<ul>
+<li><code>value</code>: 처리할 현재 요소</li>
+<li><code>index</code>: 처리할 현재 요소의 인덱스</li>
+<li><code>key</code>: 처리할 현재 요소의 키</li>
+<li><code>array</code>: <code>map()</code>을 호출한 배열</li>
+</ul>
+</li>
+<li><code>thisArg(선택)</code>: <code>callback</code>을 실행할 때 <code>this</code>로 사용되는 값</li>
+<li><code>U[]</code>: 콜백 함수의 결과를 포함한 새로운 배열을 반환합니다.</li>
+</ul>
+<p><code>map()</code> 함수는 컬렉션의 모든 요소에 대해 순차적으로 주어진 콜백 함수를 실행하고, 각 실행 결과를 새로운 배열로 반환합니다.</p>
+<ul>
+<li>원본 컬렉션은 변경되지 않으며, 데이터 변환이나 계산 작업에 유용합니다.</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-number">1</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-number">2</span>);
+
+<span class="hljs-comment">// 요소 값을 두 배로 변환</span>
+<span class="hljs-keyword">const</span> doubledValues = collection.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value * <span class="hljs-number">2</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(doubledValues); <span class="hljs-comment">// Out: [2, 4]</span>
+</code></pre></div>
+<ul>
+<li>map() 함수를 호출하여 각 요소의 값을 두 배로 변환하는 콜백을 전달합니다.</li>
+</ul>
+<hr>
+<h3 id="filter">filter()<a class="heading-anchor" href="#filter" aria-label="filter() 링크">#</a></h3>
+<p>조건을 만족하는 요소만 포함하는 새로운 배열을 반환하는 고차 함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> filter&lt;T&gt;(
+    <span class="hljs-attr">callbackfn</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">value</span>: T, <span class="hljs-attr">index</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">array</span>: T[]</span>) =&gt;</span> <span class="hljs-built_in">boolean</span>, 
+    <span class="hljs-attr">thisArg</span>?: <span class="hljs-built_in">any</span>
+): T[];
+</code></pre></div>
+<ul>
+<li><code>callbackfn</code>: 조건을 검사하는 함수
+<ul>
+<li><code>value</code>: 처리할 현재 요소</li>
+<li><code>index</code>: 처리할 현재 요소의 인덱스</li>
+<li><code>key</code>: 처리할 현재 요소의 키</li>
+<li><code>array</code>: <code>filter()</code>를 호출한 배열</li>
+</ul>
+</li>
+<li><code>thisArg(선택)</code>: <code>callback</code>을 실행할 때 <code>this</code>로 사용되는 값</li>
+<li><code>T[]</code>: 조건을 만족하는 요소들로 구성된 새로운 배열.</li>
+</ul>
+<p><code>filter()</code> 함수는 컬렉션에서 주어진 조건을 만족하는 요소만 추출하여 새로운 배열을 반환합니다.</p>
+<ul>
+<li>원본 컬렉션은 변경되지 않으며, 데이터 필터링 작업에 유용합니다.</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-number">1</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-number">2</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key3&#x27;</span>, <span class="hljs-number">3</span>);
+
+<span class="hljs-comment">// 짝수 값만 필터링</span>
+<span class="hljs-keyword">const</span> evenValues = collection.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value % <span class="hljs-number">2</span> === <span class="hljs-number">0</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(evenValues); <span class="hljs-comment">// Out: [2]</span>
+</code></pre></div>
+<ul>
+<li>filter() 함수를 호출하여 짝수 조건에 만족하는 요소만 추출하여 반환합니다.</li>
+</ul>
+<hr>
+<h3 id="reduce">reduce()<a class="heading-anchor" href="#reduce" aria-label="reduce() 링크">#</a></h3>
+<p>컬렉션의 모든 요소를 순회하며 누적 값을 계산하는 고차 함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> reduce&lt;T, U&gt;(
+    <span class="hljs-attr">callbackfn</span>: <span class="hljs-function">(<span class="hljs-params">
+        <span class="hljs-attr">previousValue</span>: U, 
+        <span class="hljs-attr">currentValue</span>: T, 
+        <span class="hljs-attr">currentIndex</span>: <span class="hljs-built_in">number</span>, 
+        <span class="hljs-attr">currentKey</span>: <span class="hljs-built_in">string</span>,
+        <span class="hljs-attr">array</span>: T[]
+    </span>) =&gt;</span> U, 
+    <span class="hljs-attr">initialValue</span>: U
+): U;
+</code></pre></div>
+<ul>
+<li><code>callbackfn</code>: 누적 값을 계산하는 함수
+<ul>
+<li><code>previousValue</code>: 이전 콜백 실행의 반환값 또는 초기값</li>
+<li><code>currentValue</code>: 처리할 현재 요소</li>
+<li><code>currentIndex</code>: 처리할 현재 요소의 인덱스</li>
+<li><code>currentKey</code>: 처리할 현재 요소의 키</li>
+<li><code>array</code>: <code>reduce()</code>를 호출한 배열</li>
+</ul>
+</li>
+<li><code>initialValue</code>: 누적 연산의 초기값</li>
+<li>T: 배열 요소 타입</li>
+<li><code>U</code>: 최종 계산 결과</li>
+</ul>
+<p><code>reduce()</code> 함수는 컬렉션의 모든 요소를 순회하며, 주어진 콜백 함수를 사용해 누적 결과를 계산합니다.</p>
+<p>초기값이 설정되면 첫 번째 콜백 호출 시 <code>previousValue</code>로 사용되며, 설정하지 않으면 컬렉션의 첫 번째 요소가 초기값이 됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-number">1</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-number">2</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key3&#x27;</span>, <span class="hljs-number">3</span>);
+
+<span class="hljs-comment">// 모든 값을 합산</span>
+<span class="hljs-keyword">const</span> sum = collection.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">acc, value</span>) =&gt;</span> acc + value, <span class="hljs-number">0</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(sum); <span class="hljs-comment">// Out: 6</span>
+</code></pre></div>
+<ul>
+<li>reduce() 함수를 호출하여 각 요소를 순회하며 누적 값을 계산하는 콜백을 전달합니다.</li>
+</ul>
+<hr>
+<h3 id="find">find()<a class="heading-anchor" href="#find" aria-label="find() 링크">#</a></h3>
+<p>컬렉션에서 조건을 만족하는 첫 번째 요소를 반환하는 고차 함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> find&lt;T&gt;(
+    <span class="hljs-attr">callbackfn</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">value</span>: T, <span class="hljs-attr">index</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">array</span>: T[]</span>) =&gt;</span> <span class="hljs-built_in">boolean</span>, 
+    <span class="hljs-attr">thisArg</span>?: <span class="hljs-built_in">any</span>
+): T | <span class="hljs-literal">undefined</span>;
+</code></pre></div>
+<ul>
+<li><code>callbackfn</code>: 조건을 검사하는 함수
+<ul>
+<li><code>value</code>: 처리할 현재 요소</li>
+<li><code>index</code>: 처리할 현재 요소의 인덱스</li>
+<li><code>key</code>: 처리할 현재 요소의 키</li>
+<li><code>array</code>: <code>find()</code>를 호출한 배열</li>
+</ul>
+</li>
+<li><code>thisArg(선택)</code>: <code>callback</code>을 실행할 때 <code>this</code>로 사용되는 값</li>
+<li>반환값 : 조건을 만족하는 첫 번째 요소를 반환하며, 조건에 맞는 요소가 없으면 <code>undefined</code>를 반환합니다.</li>
+</ul>
+<p>find() 함수는 컬렉션에서 조건을 만족하는 첫 번째 요소를 반환합니다.</p>
+<blockquote>
+<p><em>Tip</em>: 데이터 검색이나 특정 조건에 부합하는 값을 찾는 데 유용합니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-number">10</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-number">20</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key3&#x27;</span>, <span class="hljs-number">30</span>);
+
+<span class="hljs-comment">// 조건을 만족하는 첫 번째 요소 검색</span>
+<span class="hljs-keyword">const</span> found = collection.<span class="hljs-title function_">find</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value &gt; <span class="hljs-number">15</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(found); <span class="hljs-comment">// Out: 20</span>
+</code></pre></div>
+<ul>
+<li>find() 함수를 호출하여 값이 15보다 큰 첫 번째 요소를 찾아 반환합니다.</li>
+</ul>
+<hr>
+<h3 id="findindex">findIndex()<a class="heading-anchor" href="#findindex" aria-label="findIndex() 링크">#</a></h3>
+<p>컬렉션에서 조건을 만족하는 첫 번째 요소의 인덱스를 반환하는 고차 함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> findIndex&lt;T&gt;(
+    <span class="hljs-attr">callbackfn</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">value</span>: T, <span class="hljs-attr">index</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">array</span>: T[]</span>) =&gt;</span> <span class="hljs-built_in">boolean</span>, 
+    <span class="hljs-attr">thisArg</span>?: <span class="hljs-built_in">any</span>
+): <span class="hljs-built_in">number</span>;
+</code></pre></div>
+<ul>
+<li><code>callbackfn</code>: 조건을 검사하는 함수
+<ul>
+<li><code>value</code>: 처리할 현재 요소</li>
+<li><code>index</code>: 처리할 현재 요소의 인덱스</li>
+<li><code>key</code>: 처리할 현재 요소의 키</li>
+<li><code>array</code>: <code>findIndex()</code>를 호출한 배열</li>
+</ul>
+</li>
+<li><code>thisArg(선택)</code>: <code>callback</code>을 실행할 때 <code>this</code>로 사용되는 값</li>
+<li>반환값 : 조건을 만족하는 첫 번째 요소의 인덱스를 반환하며, 조건에 맞는 요소가 없으면 <code>-1</code>을 반환합니다.</li>
+</ul>
+<p>findIndex() 함수는 컬렉션에서 조건에 만족하는 첫 번째 요소의 인덱스를 반환합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-number">10</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-number">20</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key3&#x27;</span>, <span class="hljs-number">30</span>);
+
+<span class="hljs-comment">// 조건을 만족하는 첫 번째 요소의 인덱스 검색</span>
+<span class="hljs-keyword">const</span> index = collection.<span class="hljs-title function_">findIndex</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value &gt; <span class="hljs-number">15</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(index); <span class="hljs-comment">// Out: 1</span>
+</code></pre></div>
+<ul>
+<li>findIndex 함수를 호출하여 값이 15보다 큰 첫 번째 요소의 인덱스를 찾아 반환합니다.</li>
+</ul>
+<hr>
+<h3 id="foreach">forEach<a class="heading-anchor" href="#foreach" aria-label="forEach 링크">#</a></h3>
+<p>컬렉션의 각 요소에 대해 주어진 작업을 수행하는 고차 함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> forEach&lt;T&gt;(
+    <span class="hljs-attr">callbackfn</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">value</span>: T, <span class="hljs-attr">index</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">array</span>: T[]</span>) =&gt;</span> <span class="hljs-built_in">void</span>, 
+    <span class="hljs-attr">thisArg</span>?: <span class="hljs-built_in">any</span>
+): <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>callbackfn</code>: 각 요소에 대해 호출되는 함수
+<ul>
+<li><code>value</code>: 처리할 현재 요소</li>
+<li><code>index</code>: 처리할 현재 요소의 인덱스</li>
+<li><code>key</code>: 처리할 현재 요소의 키</li>
+<li><code>array</code>: <code>forEach()</code>를 호출한 배열</li>
+</ul>
+</li>
+<li><code>thisArg(선택)</code>: <code>callback</code>을 실행할 때 <code>this</code>로 사용되는 값</li>
+</ul>
+<p><code>forEach()</code> 함수는 컬렉션의 각 요소에 대해 주어진 콜백 함수를 실행합니다. 이 함수는 반환값이 없으며 원본 컬렉션은 변경되지 않습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-number">10</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-number">20</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key3&#x27;</span>, <span class="hljs-number">30</span>);
+
+<span class="hljs-comment">// 각 요소 출력</span>
+collection.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">value, index</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`인덱스 <span class="hljs-subst">${index}</span>, 키 &quot;<span class="hljs-subst">${<span class="hljs-variable language_">this</span>.indexToKey(index)}</span>&quot;, 값 <span class="hljs-subst">${value}</span>`</span>);
+});
+<span class="hljs-comment">// Out:</span>
+<span class="hljs-comment">// &#x27;인덱스 0, 키 &quot;key1&quot;, 값 10&#x27;</span>
+<span class="hljs-comment">// &#x27;인덱스 1, 키 &quot;key2&quot;, 값 20&#x27;</span>
+<span class="hljs-comment">// &#x27;인덱스 2, 키 &quot;key3&quot;, 값 30&#x27;</span>
+</code></pre></div>
+<ul>
+<li>forEach 함수를 호출하여 각 요소와 해당 인덱스를 출력합니다.</li>
+</ul>
+<hr>
+<h3 id="some">some()<a class="heading-anchor" href="#some" aria-label="some() 링크">#</a></h3>
+<p>조건을 만족하는 요소가 하나라도 있으면 true를 반환하는 고차 함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> callbackFn = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">index</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">array</span>: <span class="hljs-variable language_">this</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>;
+<span class="hljs-keyword">type</span> some = <span class="hljs-function">(<span class="hljs-params">callbackFn, <span class="hljs-attr">thisArg</span>?: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">boolean</span>;
+</code></pre></div>
+<ul>
+<li><code>callbackfn</code>: 조건을 검사하는 함수
+<ul>
+<li><code>value</code>: 처리할 현재 요소</li>
+<li><code>index</code>: 처리할 현재 요소의 인덱스</li>
+<li><code>key</code>: 처리할 현재 요소의 키</li>
+<li><code>array</code>: <code>some()</code>을 호출한 배열</li>
+</ul>
+</li>
+<li><code>thisArg(선택)</code>: <code>callback</code>을 실행할 때 <code>this</code>로 사용되는 값</li>
+<li>반환값 : 조건을 만족하는 요소가 하나라도 있으면 <code>true</code>, 그렇지 않으면 <code>false</code>를 반환합니다.</li>
+</ul>
+<p><code>some()</code> 함수는 컬렉션에서 조건을 만족하는 요소가 하나라도 있으면 순회를 중단하고 <code>true</code>를 반환합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-number">10</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-number">20</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key3&#x27;</span>, <span class="hljs-number">30</span>);
+
+<span class="hljs-comment">// 조건 검사</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">some</span>(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> item &gt; <span class="hljs-number">25</span>)); <span class="hljs-comment">// Out: true</span>
+</code></pre></div>
+<ul>
+<li><code>some()</code> 함수는 첫 번째로 조건을 만족하는 요소를 찾으면 <code>true</code>를 반환하고 즉시 종료합니다.</li>
+</ul>
+<hr>
+<h3 id="every">every()<a class="heading-anchor" href="#every" aria-label="every() 링크">#</a></h3>
+<p>컬렉션의 모든 요소가 주어진 조건을 만족하면 <code>true</code>를 반환하는 고차 함수입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> some&lt;T&gt;(
+    <span class="hljs-attr">callbackfn</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">value</span>: T, <span class="hljs-attr">index</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">array</span>: T[]</span>) =&gt;</span> <span class="hljs-built_in">boolean</span>, 
+    <span class="hljs-attr">thisArg</span>?: <span class="hljs-built_in">any</span>
+): <span class="hljs-built_in">boolean</span>;
+</code></pre></div>
+<ul>
+<li><code>callbackfn</code>: 조건을 검사하는 함수
+<ul>
+<li><code>value</code>: 처리할 현재 요소</li>
+<li><code>index</code>: 처리할 현재 요소의 인덱스</li>
+<li><code>key</code>: 처리할 현재 요소의 키</li>
+<li><code>array</code>: <code>some()</code>을 호출한 배열</li>
+</ul>
+</li>
+<li><code>thisArg(선택)</code>: <code>callback</code>을 실행할 때 <code>this</code>로 사용되는 값</li>
+<li>반환값 : 모든 요소가 조건을 만족하면 <code>true</code>, 그렇지 않으면 <code>false</code>를 반환합니다.</li>
+</ul>
+<p><code>every()</code> 함수는 컬렉션의 모든 요소가 주어진 조건을 만족하면 <code>true</code>를 반환합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-number">10</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-number">20</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key3&#x27;</span>, <span class="hljs-number">30</span>);
+
+<span class="hljs-comment">// 모든 조건이 만족하는 확인</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-title function_">every</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value &gt; <span class="hljs-number">25</span>)); <span class="hljs-comment">// Out: false</span>
+</code></pre></div>
+<ul>
+<li>every() 함수를 호출하여 모든 값이 25보다 큰 요소인지 확인합니다.</li>
+</ul>
+<hr>
+<h2 id="주요-이벤트">주요 이벤트<a class="heading-anchor" href="#주요-이벤트" aria-label="주요 이벤트 링크">#</a></h2>
+<h3 id="onadd">onAdd<a class="heading-anchor" href="#onadd" aria-label="onAdd 링크">#</a></h3>
+<p>컬렉션에 요소를 추가하기 직전에 호출되는 이벤트입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> onAdd = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">elem</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">idx</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">_this</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>elem</code>: 추가하려는 요소</li>
+<li><code>idx</code>: 추가되는 요소의 인덱스</li>
+<li><code>_this</code>: 이벤트를 호출한 객체</li>
+</ul>
+<p><code>onAdd</code> 는 컬렉션에 요소가 추가되기 전에 실행되는 이벤트로, 요소 추가 전에 유효성 검사나 기타 사전 작업을 수행하는 데 활용됩니다.</p>
+<ul>
+<li>콜백 함수에서 <code>false</code>를 반환하면 해당 요소의 추가와 이벤트 처리가 중단됩니다.</li>
+</ul>
+<blockquote>
+<p><strong>Tip</strong> : 이벤트 속성에 콜백함수를 설정하면, 기존 이벤트는 그대로 유지되며 새 이벤트가 추가됩니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// onAdd 이벤트 설정</span>
+collection.<span class="hljs-property">onAdd</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">idx, elem, _this</span>) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> elem !== <span class="hljs-string">&quot;string&quot;</span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`인덱스 <span class="hljs-subst">${idx}</span>: 문자열만 추가 가능합니다.`</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`인덱스 <span class="hljs-subst">${idx}</span>: 추가된 요소는 &#x27;<span class="hljs-subst">${elem}</span>&#x27;입니다.`</span>);
+};
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&quot;Item&quot;</span>); <span class="hljs-comment">// Out: &#x27;인덱스 0: 추가된 요소는 &#x27;Item&#x27;입니다.&#x27;</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-number">123</span>);    <span class="hljs-comment">// Out: &#x27;인덱스 1: 문자열만 추가 가능합니다.&#x27;</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(collection.<span class="hljs-property">count</span>); <span class="hljs-comment">// Out: 1</span>
+</code></pre></div>
+<ul>
+<li>요소 추가시 요소 타입에 따라 콘솔에 로그를 출력합니다.</li>
+</ul>
+<hr>
+<h3 id="onadded">onAdded<a class="heading-anchor" href="#onadded" aria-label="onAdded 링크">#</a></h3>
+<p>컬렉션에 요소가 성공적으로 추가된 후 호출되는 이벤트입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> onAdded = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">elem</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">idx</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">_this</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>elem</code>: 추가된 요소</li>
+<li><code>idx</code>: 추가된 요소의 인덱스</li>
+<li><code>_this</code>: 이벤트를 호출한 객체</li>
+</ul>
+<p><code>onAdded</code>는 컬렉션에 요소가 성공적으로 추가된 후 실행되는 이벤트로, 후속 처리를 수행하거나 사용자에게 알림을 제공하는 데 활용됩니다.</p>
+<blockquote>
+<p><strong>Tip</strong> : 이벤트 속성에 콜백함수를 설정하면, 기존 이벤트는 그대로 유지되며 새 이벤트가 추가됩니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// onAdded 이벤트 설정</span>
+collection.<span class="hljs-property">onAdded</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">idx, elem, _this</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`인덱스 <span class="hljs-subst">${idx}</span>: <span class="hljs-subst">${elem}</span>이(가) 추가되었습니다.`</span>);
+};
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>); <span class="hljs-comment">// Out: &#x27;인덱스 0: item1이(가) 추가되었습니다.&#x27;</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>); <span class="hljs-comment">// Out: &#x27;인덱스 1: item2이(가) 추가되었습니다.&#x27;</span>
+</code></pre></div>
+<ul>
+<li>요소 추가시 콘솔에 로그를 출력합니다.</li>
+</ul>
+<hr>
+<h3 id="onremove">onRemove<a class="heading-anchor" href="#onremove" aria-label="onRemove 링크">#</a></h3>
+<p>컬렉션에서 요소가 제거되기 전에 호출되는 이벤트입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> onRemove = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">elem</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">idx</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">_this</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>elem</code>: 제거될 요소</li>
+<li><code>idx</code>: 제거될 요소의 인덱스</li>
+<li><code>_this</code>: 이벤트를 호출한 객체</li>
+</ul>
+<p><code>onRemove</code>는 컬렉션에서 요소가 제거되기 전에 실행되는 이벤트로, 제거 작업을 제어하는 데 사용됩니다.</p>
+<ul>
+<li>콜백 함수에서 <code>false</code>를 반환하면 해당 요소의 제거가 중단됩니다.</li>
+</ul>
+<blockquote>
+<p><strong>Tip</strong> : 이벤트 속성에 콜백함수를 설정하면, 기존 이벤트는 그대로 유지되며 새 이벤트가 추가됩니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// onRemove 이벤트 설정</span>
+collection.<span class="hljs-property">onRemove</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">idx, elem, _this</span>) {
+    <span class="hljs-keyword">if</span> (elem === <span class="hljs-string">&quot;protected&quot;</span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`인덱스 <span class="hljs-subst">${idx}</span>: 보호된 요소는 제거할 수 없습니다.`</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`인덱스 <span class="hljs-subst">${idx}</span>: <span class="hljs-subst">${elem}</span>이(가) 제거됩니다.`</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+};
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&quot;protected&quot;</span>);
+
+<span class="hljs-comment">// 요소 제거</span>
+collection.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;key1&#x27;</span>); <span class="hljs-comment">// Out: &#x27;인덱스 0: item1이(가) 제거됩니다.&#x27;</span>
+collection.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;key2&#x27;</span>); <span class="hljs-comment">// Out: &#x27;인덱스 1: 보호된 요소는 제거할 수 없습니다.&#x27;</span>
+</code></pre></div>
+<ul>
+<li><code>onRemove</code> 이벤트를 설정하여 유효성 검사를 통과한 요소만 제거됩니다.</li>
+</ul>
+<hr>
+<h3 id="onremoved">onRemoved<a class="heading-anchor" href="#onremoved" aria-label="onRemoved 링크">#</a></h3>
+<p>컬렉션에서 요소가 성공적으로 제거된 후 호출되는 이벤트입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> onRemoved = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">elem</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">idx</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">_this</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>elem</code>: 제거된 요소</li>
+<li><code>idx</code>: 제거된 요소의 인덱스</li>
+<li><code>_this</code>: 이벤트를 호출한 객체</li>
+</ul>
+<p><code>onRemoved</code>는 컬렉션에서 요소가 성공적으로 제거된 후 실행되는 이벤트로, 후속 작업을 수행하거나 로그를 기록하는 데 활용됩니다.</p>
+<ul>
+<li>데이터 변경 후 UI를 업데이트하거나 제거 작업의 결과를 사용자에게 알리는 데 사용됩니다.</li>
+</ul>
+<blockquote>
+<p><strong>Tip</strong> : 이벤트 속성에 콜백함수를 설정하면, 기존 이벤트는 그대로 유지되며 새 이벤트가 추가됩니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// onRemoved 이벤트 설정</span>
+collection.<span class="hljs-property">onRemoved</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">idx, elem, _this</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`인덱스 <span class="hljs-subst">${idx}</span>: <span class="hljs-subst">${elem}</span>이(가) 제거되었습니다.`</span>);
+};
+
+<span class="hljs-comment">// 요소 추가</span>
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>);
+collection.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>);
+
+<span class="hljs-comment">// 요소 제거</span>
+collection.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;key1&#x27;</span>); <span class="hljs-comment">// Out: &#x27;인덱스 0: item1이(가) 제거되었습니다.&#x27;</span>
+collection.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;key2&#x27;</span>); <span class="hljs-comment">// Out: &#x27;인덱스 1: item2이(가) 제거되었습니다.&#x27;</span>
+</code></pre></div>
+<ul>
+<li>요소 제거 시 콘솔에 로그를 출력합니다.</li>
+</ul>
+<hr>
+<h3 id="onclear">onClear<a class="heading-anchor" href="#onclear" aria-label="onClear 링크">#</a></h3>
+<p>컬렉션의 모든 요소가 제거되기 전에 호출되는 이벤트입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> onClear = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">_this</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>_this</code>: 이벤트를 호출한 객체</li>
+</ul>
+<p><code>onClear</code>는 컬렉션의 모든 요소가 제거되기 전에 실행되는 이벤트로, 초기화 작업 전에 후속 작업을 설정하거나 로그를 남기는 데 활용됩니다.</p>
+<ul>
+<li>콜백 함수에서 <code>false</code>를 반환하면 요소 제거가 중단됩니다.</li>
+</ul>
+<blockquote>
+<p><strong>Tip</strong> : 이벤트 속성에 콜백함수를 설정하면, 기존 이벤트는 그대로 유지되며 새 이벤트가 추가됩니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// onClear 이벤트 설정</span>
+collection.<span class="hljs-property">onClear</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">_this</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;컬렉션 초기화 작업을 시작합니다.&quot;</span>);
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`초기화되는 컬렉션:`</span>, _this);
+};
+
+<span class="hljs-comment">// 컬렉션 초기화</span>
+collection.<span class="hljs-title function_">clear</span>();
+</code></pre></div>
+<ul>
+<li><code>onClear</code> 이벤트를 설정하여 초기화 작업 전 콘솔에 로그를 출력합니다.</li>
+</ul>
+<hr>
+<h3 id="oncleared">onCleared<a class="heading-anchor" href="#oncleared" aria-label="onCleared 링크">#</a></h3>
+<p>컬렉션의 모든 요소가 성공적으로 제거된 후 호출되는 이벤트입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> onCleared = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">_this</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>_this</code>: 이벤트를 호출한 객체</li>
+</ul>
+<p><code>onCleared</code>는 컬렉션이 성공적으로 초기화된 후 실행되는 이벤트로, 초기화 후 후속 작업을 처리하거나 사용자에게 알림을 제공하는 데 유용합니다.</p>
+<blockquote>
+<p><strong>Tip</strong> : 이벤트 속성에 콜백함수를 설정하면, 기존 이벤트는 그대로 유지되며 새 이벤트가 추가됩니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> collection = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyCollection</span>();
+
+<span class="hljs-comment">// onCleared 이벤트 설정</span>
+collection.<span class="hljs-property">onCleared</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">_this</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;컬렉션이 성공적으로 초기화되었습니다.&#x27;</span>);
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`초기화된 컬렉션:`</span>, _this);
+};
+
+<span class="hljs-comment">// 컬렉션 초기화</span>
+collection.<span class="hljs-title function_">clear</span>();
+<span class="hljs-comment">// Out:</span>
+<span class="hljs-comment">// &#x27;컬렉션이 성공적으로 초기화되었습니다.&#x27;</span>
+<span class="hljs-comment">// `초기화된 컬렉션:` [Object PropertyCollection]</span>
+</code></pre></div>
+<ul>
+<li><code>onCleared</code> 이벤트를 설정하여 초기화 작업 완료 후 콘솔에 로그를 출력합니다.</li>
+</ul>
+<hr>
+</div>
+    <div class="doc-feedback"><span>더 나은 문서를 함께 만들어요.</span><a href="https://github.com/white-base/bind-model/issues">오류 제보 및 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></div>
+    <nav class="page-pagination" aria-label="이전·다음 문서"><a class="page-link prev" href="../api/html-column.html"><span>이전 문서</span><strong>HTMLColumn</strong></a><a class="page-link next" href="../api/meta-object.html"><span>다음 문서</span><strong>MetaObject<svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></strong></a></nav>
+  </article><footer class="doc-footer">BindModel · White Lab<a href="../index.html">홈으로 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></footer></main>
+  <aside class="page-toc" id="page-toc" aria-label="이 페이지의 내용"><p>이 페이지의 내용</p><nav><a class="toc-level-2" href="#구성-요소">구성 요소</a><a class="toc-level-3" href="#속성">속성</a><a class="toc-level-3" href="#메소드">메소드</a><a class="toc-level-3" href="#고차-함수">고차 함수</a><a class="toc-level-3" href="#이벤트">이벤트</a><a class="toc-level-2" href="#주요-속성">주요 속성</a><a class="toc-level-3" href="#_owner">_owner</a><a class="toc-level-3" href="#_elemtypes">_elemTypes</a><a class="toc-level-3" href="#_list">_list</a><a class="toc-level-3" href="#count-또는-length">count 또는 length</a><a class="toc-level-2" href="#주요-메소드">주요 메소드</a><a class="toc-level-3" href="#add">add()</a><a class="toc-level-3" href="#clear">clear()</a><a class="toc-level-3" href="#exist">exist()</a><a class="toc-level-3" href="#remove">remove()</a><a class="toc-level-3" href="#removeat">removeAt()</a><a class="toc-level-3" href="#contains">contains()</a><a class="toc-level-3" href="#indexof">indexOf()</a><a class="toc-level-3" href="#keytoindex">keyToIndex()</a><a class="toc-level-3" href="#indextokey">indexToKey()</a><a class="toc-level-2" href="#주요-고차-함수">주요 고차 함수</a><a class="toc-level-3" href="#map">map()</a><a class="toc-level-3" href="#filter">filter()</a><a class="toc-level-3" href="#reduce">reduce()</a><a class="toc-level-3" href="#find">find()</a><a class="toc-level-3" href="#findindex">findIndex()</a><a class="toc-level-3" href="#foreach">forEach</a><a class="toc-level-3" href="#some">some()</a><a class="toc-level-3" href="#every">every()</a><a class="toc-level-2" href="#주요-이벤트">주요 이벤트</a><a class="toc-level-3" href="#onadd">onAdd</a><a class="toc-level-3" href="#onadded">onAdded</a><a class="toc-level-3" href="#onremove">onRemove</a><a class="toc-level-3" href="#onremoved">onRemoved</a><a class="toc-level-3" href="#onclear">onClear</a><a class="toc-level-3" href="#oncleared">onCleared</a></nav><a class="back-top" href="#main">맨 위로 ↑</a></aside>
+  </div><dialog id="search-dialog" class="search-dialog" aria-labelledby="search-label"><div class="search-top"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><label class="sr-only" id="search-label" for="search-input">문서 검색</label><input id="search-input" type="search" placeholder="문서, 메서드, 개념 검색…" autocomplete="off" spellcheck="false" aria-controls="search-results"><button class="dialog-close" aria-label="검색 닫기">ESC</button></div><p id="search-status" class="search-status" role="status">검색어를 입력해 보세요.</p><div id="search-results" class="search-results"></div><div class="search-footer"><span><kbd>↑</kbd><kbd>↓</kbd> 이동 <kbd>↵</kbd> 열기</span><span>BindModel 문서 검색</span></div></dialog><div class="toast" role="status" aria-live="polite"></div></body>
+</html>

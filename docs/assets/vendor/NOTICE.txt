@@ -1,0 +1,24 @@
+Third-party software included in this static website
+
+logic-bind-model 1.1.13 — MIT
+Source: https://www.npmjs.com/package/logic-bind-model/v/1.1.13
+Repository: https://github.com/white-base/bind-model
+Files: bind-model-1.1.13.js, locales/*
+License: bind-model-LICENSE.txt
+The upstream unminified distribution is included without application-code changes.
+
+Mermaid 12.2.0 — MIT
+Source: https://github.com/mermaid-js/mermaid
+Website bundle: ../diagrams.js
+Bundled dependency notices: ../diagrams.js.LEGAL.txt
+Full installed dependency license texts: THIRD-PARTY-LICENSES.txt
+
+Build-time tools, not required to serve this site:
+markdown-it 15.0.3 — MIT
+https://github.com/markdown-it/markdown-it
+highlight.js 11.12.0 — BSD-3-Clause
+https://github.com/highlightjs/highlight.js
+esbuild 0.28.2 — MIT
+https://github.com/evanw/esbuild
+
+Exact dependencies and integrity records are retained in package-lock.json.

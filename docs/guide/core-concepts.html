@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="ko" data-root="../">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>핵심 개념 | BindModel</title>
+  <meta name="description" content="모델, 명령, 테이블과 뷰. BindModel을 구성하는 기본 개념을 살펴봅니다."><meta name="theme-color" content="#f8f8f4">
+  <meta property="og:type" content="website"><meta property="og:title" content="핵심 개념 | BindModel"><meta property="og:description" content="모델, 명령, 테이블과 뷰. BindModel을 구성하는 기본 개념을 살펴봅니다."><meta property="og:url" content="https://white-base.github.io/white-lab-bind-model/guide/core-concepts.html"><meta property="og:image" content="https://white-base.github.io/white-lab-bind-model/assets/social.svg">
+  <link rel="canonical" href="https://white-base.github.io/white-lab-bind-model/guide/core-concepts.html"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('bindmodel-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+  <link rel="stylesheet" href="../assets/site.css"><script src="../assets/site.js" defer></script>
+</head>
+<body class="documentation"><a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html" aria-label="BindModel 홈"><span class="brand-mark" aria-hidden="true">b<span>.</span></span><span class="brand-name">bindmodel<span class="brand-dot">.</span></span></a>
+    <nav class="main-nav" id="main-nav" aria-label="주 메뉴">
+      <a href="../guide/introduction.html" class="is-active" aria-current="true">시작하기</a><a href="../guide/features/model.html">기능 가이드</a><a href="../advanced/column-value-flow.html">고급 기능</a><a href="../examples/crudl.html">예제</a><a href="../api/bind-model.html">API</a>
+    </nav>
+    <div class="header-tools"><button class="search-trigger" data-search aria-label="문서 검색"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span>문서 검색</span><kbd>⌘ K</kbd></button>
+    <button class="icon-button theme-toggle" aria-label="어두운 테마로 전환" title="테마 전환"><svg class="icon theme-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13A8 8 0 0 1 11 4a8 8 0 1 0 9 9Z"/></svg></button>
+    <a class="icon-button github-link" href="https://github.com/white-base/bind-model" aria-label="BindModel GitHub 저장소"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-4a3.5 3.5 0 0 0-1-2.7c3.3-.4 6.7-1.6 6.7-7.3A5.6 5.6 0 0 0 20 4.1 5.2 5.2 0 0 0 19.9.3S18.6-.1 16 1.8a13.5 13.5 0 0 0-7 0C6.4-.1 5.1.3 5.1.3A5.2 5.2 0 0 0 5 4.1 5.6 5.6 0 0 0 3.3 8c0 5.7 3.4 6.9 6.7 7.3A3.5 3.5 0 0 0 9 18v4"/></svg></a>
+    <button class="icon-button menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="주 메뉴 열기"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div>
+  </div></header>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <div class="mobile-docbar"><button class="sidebar-toggle" aria-controls="docs-sidebar" aria-expanded="false"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>문서 메뉴</button><a href="#page-toc">이 페이지의 내용 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div>
+  <div class="docs-layout"><button class="sidebar-backdrop" aria-label="문서 메뉴 닫기" hidden></button><aside class="docs-sidebar" id="docs-sidebar" aria-label="문서 목록"><a class="sidebar-home" href="../index.html"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M12 5C9 3 5 3 2 4v15c3-1 7-1 10 2 3-3 7-3 10-2V4c-3-1-7-1-10 1Z"/></svg>문서 둘러보기</a><section class="sidebar-group"><h2><span>시작하기</span><span>03</span></h2><ul><li><a href="../guide/introduction.html">소개</a></li><li><a href="../guide/quick-start.html">빠른 시작</a></li><li><a href="../guide/core-concepts.html" class="is-current" aria-current="page">핵심 개념</a></li></ul></section><section class="sidebar-group"><h2><span>기능 가이드</span><span>07</span></h2><ul><li><a href="../guide/features/model.html">모델 구성</a></li><li><a href="../guide/features/command.html">명령 구성</a></li><li><a href="../guide/features/columns.html">컬럼 관리</a></li><li><a href="../guide/features/shared-column-properties.html">공통 컬럼 속성</a></li><li><a href="../guide/features/flow-control.html">흐름 제어</a></li><li><a href="../guide/features/service-injection.html">서비스 객체 주입</a></li><li><a href="../guide/features/json-schema.html">JSON 스키마 가이드</a></li></ul></section><section class="sidebar-group"><h2><span>고급 기능</span><span>06</span></h2><ul><li><a href="../advanced/column-value-flow.html">컬럼값 호출 구조</a></li><li><a href="../advanced/tables.html">테이블 관리</a></li><li><a href="../advanced/multiple-outputs.html">명령 복수 출력 구성</a></li><li><a href="../advanced/execution.html">실행 및 동기화</a></li><li><a href="../advanced/events.html">이벤트 설정</a></li><li><a href="../advanced/composition.html">객체 구성 방법</a></li></ul></section><section class="sidebar-group"><h2><span>예제</span><span>01</span></h2><ul><li><a href="../examples/crudl.html">CRUD + List 구현하기</a></li></ul></section><section class="sidebar-group"><h2><span>API 레퍼런스</span><span>06</span></h2><ul><li><a href="../api/bind-model.html">BindModel</a></li><li><a href="../api/bind-command.html">BindCommand</a></li><li><a href="../api/meta-view.html">MetaView</a></li><li><a href="../api/html-column.html">HTMLColumn</a></li><li><a href="../api/property-collection.html">PropertyCollection</a></li><li><a href="../api/meta-object.html">MetaObject</a></li></ul></section><a class="sidebar-bottom" href="https://github.com/white-base/bind-model/issues">문서 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></aside>
+  <main class="doc-main" id="main"><article data-search-content>
+    <div class="doc-breadcrumb"><a href="../index.html">문서</a><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span>시작하기</span></div>
+    <header class="doc-heading"><div class="eyebrow">시작하기<span class="eyebrow-rule"></span>01</div><h1>핵심 개념</h1><p>모델, 명령, 테이블과 뷰. BindModel을 구성하는 기본 개념을 살펴봅니다.</p><div class="doc-meta"><span>한국어 문서</span><span>약 12분</span></div></header>
+    <div class="doc-content"><p>핵심 개념을 숙지하면 <code>BindModel</code>을 보다 자유롭게 제어할 수 있습니다.</p>
+<h2 id="metatable-의-이해">MetaTable 의 이해<a class="heading-anchor" href="#metatable-의-이해" aria-label="MetaTable 의 이해 링크">#</a></h2>
+<p><code>MetaTable</code>은 데이터를 컬럼(column)과 행(row)으로 구성하는 객체입니다.</p>
+<blockquote>
+<p>• 컬럼 : 데이터를 정의하는 <code>columns</code> 컬렉션
+• 행 : 데이터를 저장하는 <code>rows</code> 컬렉션</p>
+</blockquote>
+<p><code>MetaTable</code>은 <code>.NET</code>의 <code>DataTable</code>과 유사한 구조를 가지고 있어, 이에 익숙하다면 쉽게 사용할 수 있습니다.</p>
+<figure class="diagram"><pre class="mermaid">classDiagram
+	MetaTable o--&gt; MetaTableColumnCollection : columns
+	MetaTableColumnCollection ..&gt; HTMLColumn : [column name]
+	MetaTable o--&gt; MetaRowCollection : rows
+	MetaRowCollection  ..&gt; MetaRow : [index]
+
+	class MetaTable {
+		+ columns : MetaTableColumnCollection
+		+ rows : MetaRowCollection
+		+ constructor(name)
+		+ newRow() MetaRow
+		+ getValue() MetaRow
+		+ setValue(row)
+    }
+	class MetaTableColumnCollection {
+		+column name...
+		+add(name)
+		+addValue(name, value)
+    }
+	class MetaRowCollection {
+		+add(row)
+		+insertAt(pos, row)
+    }
+	class MetaRow {
+		+[column name]...
+		+constructor(table)
+	}
+	class HTMLColumn {
+		+required: boolean
+		+value
+		+constraints
+		+constructor(name)
+	}
+</pre><figcaption>구조와 흐름을 설명하는 다이어그램</figcaption></figure>
+<p><strong>MetaTable 클래스 생성자</strong></p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MetaTable</span> {
+	<span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-attr">tableName</span>: <span class="hljs-built_in">string</span></span>);
+}
+</code></pre></div>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">MetaTable</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;logic-bind-model&#x27;</span>;
+
+<span class="hljs-keyword">const</span> table = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaTable</span>(<span class="hljs-string">&#x27;테이블명&#x27;</span>);
+
+table.<span class="hljs-property">columns</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;name&#x27;</span>);     <span class="hljs-comment">// &#x27;name&#x27; 컬럼 추가</span>
+table.<span class="hljs-property">columns</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;age&#x27;</span>);      <span class="hljs-comment">// &#x27;age&#x27; 컬럼 추가</span>
+
+<span class="hljs-keyword">let</span> row = <span class="hljs-keyword">new</span> table.<span class="hljs-title function_">newRow</span>();  <span class="hljs-comment">// 새로운 행 생성</span>
+
+row[<span class="hljs-string">&#x27;name&#x27;</span>] = <span class="hljs-string">&#x27;Neo&#x27;</span>;           <span class="hljs-comment">// &#x27;name&#x27; 컬럼에 값 할당</span>
+row[<span class="hljs-string">&#x27;age&#x27;</span>] = <span class="hljs-number">20</span>;               <span class="hljs-comment">// &#x27;age&#x27; 컬럼에 값 할당</span>
+table.<span class="hljs-property">rows</span>.<span class="hljs-title function_">add</span>(row);           <span class="hljs-comment">// 행을 rows 컬렉션에 추가</span>
+
+<span class="hljs-comment">// table.rows[0][&#x27;name&#x27;]  === &#x27;Neo&#x27;</span>
+<span class="hljs-comment">// table.rows[0][&#x27;age&#x27;]   === 20</span>
+<span class="hljs-comment">// table.rows.count       === 1</span>
+<span class="hljs-comment">// table.columns.count    === 2</span>
+</code></pre></div>
+<ul>
+<li><code>columns.add(columnName)</code> : <code>columns</code> 컬렉션에 컬럼을 추가합니다.</li>
+<li><code>newRow()</code> : 컬럼 스키마에 기반한 새로운 <code>MetaRow</code> 객체를 생성합니다.</li>
+<li><code>rows.add(row)</code> : 생성된 <code>MetaRow</code> 객체를 <code>rows</code> 컬렉션에 추가합니다.</li>
+</ul>
+<blockquote>
+<p><strong>Tip</strong>
+<code>columns</code>의 단축형인 'cols'를 사용할 수 있습니다.</p>
+</blockquote>
+<h3 id="컬럼의-현재값과-데이터-구성">컬럼의 현재값과 데이터 구성<a class="heading-anchor" href="#컬럼의-현재값과-데이터-구성" aria-label="컬럼의 현재값과 데이터 구성 링크">#</a></h3>
+<p><code>MetaTable</code>의 컬럼값은 현재값을 나타내며, <code>rows</code>는 이러한 컬럼값들의 집합으로 구성됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">MetaTable</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;logic-bind-model&#x27;</span>;
+
+<span class="hljs-keyword">const</span> table = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaTable</span>(<span class="hljs-string">&#x27;테이블명&#x27;</span>);
+
+table.<span class="hljs-property">columns</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;age&#x27;</span>);         <span class="hljs-comment">// &#x27;age&#x27; 컬럼 추가</span>
+table.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;age&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-number">10</span>;  <span class="hljs-comment">// &#x27;age&#x27; 컬럼의 값 설정</span>
+
+<span class="hljs-keyword">let</span> row = <span class="hljs-keyword">new</span> table.<span class="hljs-title function_">newRow</span>();     <span class="hljs-comment">// 새로운 행 생성</span>
+row[<span class="hljs-string">&#x27;age&#x27;</span>] = <span class="hljs-number">20</span>;                  <span class="hljs-comment">// 행에 데이터 추가</span>
+table.<span class="hljs-property">rows</span>.<span class="hljs-title function_">add</span>(row);              <span class="hljs-comment">// 행을 rows 컬렉션에 추가</span>
+
+<span class="hljs-comment">// table.columns[&#x27;age&#x27;].value  === 10 (현재 컬럼값)</span>
+<span class="hljs-comment">// table.rows[0][&#x27;age&#x27;]        === 20 (첫번째 행의 값)</span>
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+<code>columns.addValue(컬럼명, 컬럼값)</code>을 사용하여 컬럼 등록과 초기 값을 동시에 설정할 수 있습니다.</p>
+</blockquote>
+<h3 id="초기값-설정-및-데이터-추가">초기값 설정 및 데이터 추가<a class="heading-anchor" href="#초기값-설정-및-데이터-추가" aria-label="초기값 설정 및 데이터 추가 링크">#</a></h3>
+<p>컬럼값은 <code>MetaRow</code> 타입으로 얻을 수 있으며, <code>MetaRow</code> 타입은 컬럼값(value)으로 지정할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">MetaTable</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;logic-bind-model&#x27;</span>;
+
+<span class="hljs-keyword">const</span> table = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaTable</span>(<span class="hljs-string">&#x27;테이블명&#x27;</span>);
+
+table.<span class="hljs-property">columns</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;age&#x27;</span>);         <span class="hljs-comment">// &#x27;age&#x27; 컬럼 추가</span>
+table.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;age&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-number">10</span>;  <span class="hljs-comment">// 현재값 설정</span>
+
+<span class="hljs-keyword">let</span> row = table.<span class="hljs-title function_">getValue</span>();       <span class="hljs-comment">// 현재값 기반 MetaRow 생성</span>
+table.<span class="hljs-property">rows</span>.<span class="hljs-title function_">add</span>(row);              <span class="hljs-comment">// 행 추가</span>
+
+<span class="hljs-comment">// table.columns[&#x27;age&#x27;].value === 10 (현재 컬럼값)</span>
+<span class="hljs-comment">// table.rows[0][&#x27;age&#x27;]       === 10 (첫번째 행의 값)</span>
+
+table.<span class="hljs-property">rows</span>[<span class="hljs-number">0</span>][<span class="hljs-string">&#x27;age&#x27;</span>] = <span class="hljs-number">20</span>;        <span class="hljs-comment">// 첫 번째 행 값 수정</span>
+table.<span class="hljs-title function_">setValue</span>(table.<span class="hljs-property">rows</span>[<span class="hljs-number">0</span>]);       <span class="hljs-comment">// 수정된 행을 컬럼의 현재값으로 설정</span>
+
+<span class="hljs-comment">// table.columns[&#x27;age&#x27;].value === 20 (업데이트된 컬럼값)</span>
+</code></pre></div>
+<ul>
+<li><code>getValue()</code> : 컬럼의 현재값으로 구성된 <code>MetaRow</code> 객체를 반환합니다.</li>
+<li><code>setValue(row)</code> : 주어진 <code>MetaRow</code> 객체를 컬럼의 현재(value)값으로 설정합니다.</li>
+</ul>
+<blockquote>
+<p><em>제약조건</em>
+<code>MetaTable</code>의 <code>rows</code> 컬렉션에 데이터를 추가한 이후에는 <code>columns</code> 컬렉션에 새로운 컬럼을 추가하거나 기존 컬럼을 제거할 수 없습니다. 이는 데이터의 일관성을 유지하기 위한 제약입니다.</p>
+</blockquote>
+<h2 id="metaview-의-이해">MetaView 의 이해<a class="heading-anchor" href="#metaview-의-이해" aria-label="MetaView 의 이해 링크">#</a></h2>
+<p><code>MetaView</code>는 <code>MetaTable</code>과 유사하지만, 중요한 차이점이 있습니다.</p>
+<p><code>MetaView</code>는 <code>columns</code> 컬렉션에 컬럼의 참조값을 등록할 수 있습니다. 이를 통해 원본 컬럼을 공유하거나, 필요에 따라 독립적으로 처리할 수 있습니다.</p>
+<blockquote>
+<p><strong>Tip</strong>
+<code>MetaTable</code>에 컬럼을 추가하면 해당 컬럼은 항상 독립적으로 구성됩니다.
+반면, <code>MetaView</code>는 참조 컬럼을 활용하여 원본 컬럼을 공유할 수도 있습니다.</p>
+</blockquote>
+<h3 id="모든-컬럼을-참조로-등록">모든 컬럼을 참조로 등록<a class="heading-anchor" href="#모든-컬럼을-참조로-등록" aria-label="모든 컬럼을 참조로 등록 링크">#</a></h3>
+<p><code>MetaView</code>를 생성할 때 <code>baseEntity</code>를 지정하면, 해당 객체(<code>MetaTable</code> 또는 <code>MetaView</code>)의 컬럼들이 <code>MetaView</code>에 참조값으로 등록됩니다.</p>
+<p>만약 <code>baseEntity</code>를 지정하지 않으면 <code>MetaTable</code>과 동일한 방식으로 작동합니다.</p>
+<p><strong>MetaView 클래스 정의</strong></p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MetaView</span> {
+	<span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">baseEntity</span>?: <span class="hljs-title class_">MetaView</span> | <span class="hljs-title class_">MetaTable</span></span>);
+}
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+<code>baseEntity</code>는 <code>MetaTable</code> 또는 <code>MetaView</code> 타입만 지정할 수 있습니다. 만약 <code>MetaView</code>를 지정하면 순환 규칙에 따라 원본 컬럼에 참조합니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">MetaTable</span>, <span class="hljs-title class_">MetaView</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;logic-bind-model&#x27;</span>;
+
+<span class="hljs-keyword">const</span> table = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaTabe</span>(<span class="hljs-string">&#x27;t1&#x27;</span>);
+<span class="hljs-keyword">const</span> view = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaView</span>(<span class="hljs-string">&#x27;v1&#x27;</span>, table);  <span class="hljs-comment">// &#x27;baseEntity&#x27; 속성을 &#x27;t1&#x27;으로 설정</span>
+
+view.<span class="hljs-property">columns</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;age&#x27;</span>);       <span class="hljs-comment">// &#x27;age&#x27; 컬럼 추가</span>
+view.<span class="hljs-property">columns</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;gender&#x27;</span>);    <span class="hljs-comment">// &#x27;gender&#x27; 컬럼 추가</span>
+
+<span class="hljs-comment">// table.colmmns.count === 2</span>
+<span class="hljs-comment">// view.colmmns.count  === 2</span>
+
+<span class="hljs-comment">// view.columns[&#x27;age&#x27;]    === table.columns[&#x27;age&#x27;]</span>
+<span class="hljs-comment">// view.columns[&#x27;gender&#x27;] === table.columns[&#x27;gender&#x27;]</span>
+</code></pre></div>
+<ul>
+<li><code>view1.columns['age']</code>는 <code>table1.columns['age']</code>의 참조값입니다.</li>
+</ul>
+<blockquote>
+<p><em>Tip</em>
+MetaView 생성 이후에도 <code>_baseEntity</code>를 설정할 수 있습니다. 이 경우, 이후에 추가되는 컬럼부터 참조가 적용됩니다.</p>
+</blockquote>
+<figure class="diagram"><pre class="mermaid">classDiagram
+	table o--&gt; MetaTableColumnCollection : columns
+	MetaTableColumnCollection o--&gt; age : owner
+	MetaTableColumnCollection o--&gt; gender : owner
+	view o--&gt; MetaViewColumnCollection : columns
+	MetaViewColumnCollection ..&gt; age : [refer]
+	MetaViewColumnCollection ..&gt; gender : [refer]
+
+	class MetaTableColumnCollection {
+		+[age]
+		+[gender]		
+	}
+	class MetaViewColumnCollection {
+		+[age]
+		+[gender]		
+	}	
+</pre><figcaption>구조와 흐름을 설명하는 다이어그램</figcaption></figure>
+<h3 id="특정-컬럼만-참조로-등록">특정 컬럼만 참조로 등록<a class="heading-anchor" href="#특정-컬럼만-참조로-등록" aria-label="특정 컬럼만 참조로 등록 링크">#</a></h3>
+<p>특정 컬럼만 참조로 등록하려면, 컬럼을 추가할 때 대상 컬렉션을 명시적으로 지정해야 합니다.</p>
+<p><strong>함수 정의</strong></p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">
+	<span class="hljs-attr">columnName</span>: <span class="hljs-built_in">string</span>, 
+	<span class="hljs-attr">refCollection</span>?: <span class="hljs-title class_">MetaViewColumnCollection</span>
+</span>): <span class="hljs-built_in">number</span>;
+</code></pre></div>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">MetaTable</span>, <span class="hljs-title class_">MetaView</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;logic-bind-model&#x27;</span>;
+
+<span class="hljs-keyword">const</span> table = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaTabe</span>(<span class="hljs-string">&#x27;t1&#x27;</span>);
+<span class="hljs-keyword">const</span> view = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MetaView</span>(<span class="hljs-string">&#x27;v1&#x27;</span>);
+
+view.<span class="hljs-property">columns</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;age&#x27;</span>);                     <span class="hljs-comment">// &#x27;view&#x27;에 독립 컬럼 추가</span>
+view.<span class="hljs-property">columns</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;gender&#x27;</span>, table1.<span class="hljs-property">columns</span>);  <span class="hljs-comment">// &#x27;t1&#x27;의 컬럼 참조 추가</span>
+
+<span class="hljs-comment">// table.colmmns.count === 1</span>
+<span class="hljs-comment">// view.colmmns.count === 2</span>
+
+<span class="hljs-comment">// view.columns[&#x27;gender&#x27;] === table.columns[&#x27;gender&#x27;]</span>
+</code></pre></div>
+<ul>
+<li>컬럼 추가시 기존에 등록된 컬럼을 지정하여 참조로 등록할 수 있습니다.
+<ul>
+<li><code>views.columns.add(table.columns['memo'])</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><em>Tip</em>
+특정 컬렉션을 지정하여 컬럼을 추가하면, 지정된 컬렉션에 컬럼이 추가되고, 해당 컬럼의 참조값이 <code>MetaView</code>에 등록됩니다.</p>
+</blockquote>
+<figure class="diagram"><pre class="mermaid">classDiagram
+	table1 o--&gt; MetaTableColumnCollection : columns
+	MetaTableColumnCollection o--&gt; gender : owner
+	view1 o--&gt; MetaViewColumnCollection : columns
+	MetaViewColumnCollection o--&gt; age : owner
+	MetaViewColumnCollection ..&gt; gender : [refer]
+
+	class MetaTableColumnCollection {
+		+[gender]		
+	}
+	class MetaViewColumnCollection {
+		+[age]
+		+[gender]		
+	}	
+</pre><figcaption>구조와 흐름을 설명하는 다이어그램</figcaption></figure>
+<p>이렇게 테이블과 뷰의 조합을 통해서 다양한 구조를 구현할 수 있습니다.</p>
+<h2 id="bindmodel-구조의-이해">BindModel 구조의 이해<a class="heading-anchor" href="#bindmodel-구조의-이해" aria-label="BindModel 구조의 이해 링크">#</a></h2>
+<p><code>BindModel</code> 객체는 기본으로 MetaTable(first)을 포함하며, 명령(BindCommand)을 추가할 수 있습니다.
+각각의 명령은 <code>MetaTable</code>(first)을 참조하는 <code>MetaView</code>(valid, bind, output)로 구성됩니다.</p>
+<figure class="diagram"><pre class="mermaid">classDiagram
+	BindModel o--&gt; MetaTable : first
+	BindModel o--&gt; BindCommand : command[&#39;key&#39;]
+	BindCommand o--&gt; MetaView : valid
+	BindCommand o--&gt; MetaView : bind
+	BindCommand o--&gt; MetaView : output
+	
+	class BindModel {
+		+ first: MetaTable
+		+ command : PropertyCollection
+		+ addCommand(cmdName)
+    }
+    class MetaTable {
+		+ columns
+		+ rows
+    }
+    class BindCommand {
+		+ valid : MetaView
+		+ bind : MetaView
+		+ output : MetaView
+    }
+    class MetaView {
+	+ columns
+	+ rows
+    }
+</pre><figcaption>구조와 흐름을 설명하는 다이어그램</figcaption></figure>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">BindModel</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;logic-bind-model&#x27;</span>;
+
+<span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+bm.<span class="hljs-title function_">addCommand</span>(<span class="hljs-string">&#x27;cmd1&#x27;</span>);      <span class="hljs-comment">// &#x27;cmd1&#x27; 명령 추가</span>
+
+<span class="hljs-comment">// bm.first                  : MetaTable</span>
+<span class="hljs-comment">// bm.command[&#x27;cmd1&#x27;]        : BindCommand</span>
+<span class="hljs-comment">// bm.command[&#x27;cmd1&#x27;].valid  : MetaView</span>
+<span class="hljs-comment">// bm.command[&#x27;cmd1&#x27;].bind   : MetaView</span>
+<span class="hljs-comment">// bm.command[&#x27;cmd1&#x27;].output : MetaView</span>
+</code></pre></div>
+<p>모델(BindModel)에 추가된 명령(BindCommand)의 뷰(valid, bind, output)는 <code>_baseEntity</code> 에서 지정한 <code>MetaTable</code>을 참조합니다.</p>
+<p>동일한 이름의 컬럼을 사용하거나 독립된 컬럼을 사용하려면, 테이블을 추가하여 컬럼을 지정할 수 있습니다.</p>
+<blockquote>
+<p><em>Tip</em>
+명령에 따라 별도의 테이블을 생성하고 컬럼을 독립적으로 관리하면 데이터 구조를 더욱 체계적으로 설계할 수 있습니다.</p>
+</blockquote>
+<blockquote>
+<p>참조 : <strong>테이블 관리</strong></p>
+</blockquote>
+</div>
+    <div class="doc-feedback"><span>더 나은 문서를 함께 만들어요.</span><a href="https://github.com/white-base/bind-model/issues">오류 제보 및 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></div>
+    <nav class="page-pagination" aria-label="이전·다음 문서"><a class="page-link prev" href="../guide/quick-start.html"><span>이전 문서</span><strong>빠른 시작</strong></a><a class="page-link next" href="../guide/features/model.html"><span>다음 문서</span><strong>모델 구성<svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></strong></a></nav>
+  </article><footer class="doc-footer">BindModel · White Lab<a href="../index.html">홈으로 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></footer></main>
+  <aside class="page-toc" id="page-toc" aria-label="이 페이지의 내용"><p>이 페이지의 내용</p><nav><a class="toc-level-2" href="#metatable-의-이해">MetaTable 의 이해</a><a class="toc-level-3" href="#컬럼의-현재값과-데이터-구성">컬럼의 현재값과 데이터 구성</a><a class="toc-level-3" href="#초기값-설정-및-데이터-추가">초기값 설정 및 데이터 추가</a><a class="toc-level-2" href="#metaview-의-이해">MetaView 의 이해</a><a class="toc-level-3" href="#모든-컬럼을-참조로-등록">모든 컬럼을 참조로 등록</a><a class="toc-level-3" href="#특정-컬럼만-참조로-등록">특정 컬럼만 참조로 등록</a><a class="toc-level-2" href="#bindmodel-구조의-이해">BindModel 구조의 이해</a></nav><a class="back-top" href="#main">맨 위로 ↑</a></aside>
+  </div><dialog id="search-dialog" class="search-dialog" aria-labelledby="search-label"><div class="search-top"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><label class="sr-only" id="search-label" for="search-input">문서 검색</label><input id="search-input" type="search" placeholder="문서, 메서드, 개념 검색…" autocomplete="off" spellcheck="false" aria-controls="search-results"><button class="dialog-close" aria-label="검색 닫기">ESC</button></div><p id="search-status" class="search-status" role="status">검색어를 입력해 보세요.</p><div id="search-results" class="search-results"></div><div class="search-footer"><span><kbd>↑</kbd><kbd>↓</kbd> 이동 <kbd>↵</kbd> 열기</span><span>BindModel 문서 검색</span></div></dialog><div class="toast" role="status" aria-live="polite"></div></body>
+</html>

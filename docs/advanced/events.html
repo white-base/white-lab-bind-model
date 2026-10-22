@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ko" data-root="../">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>이벤트 설정 | BindModel</title>
+  <meta name="description" content="명령 실행, 데이터 변경, 컬렉션 변경 이벤트에 반응합니다."><meta name="theme-color" content="#f8f8f4">
+  <meta property="og:type" content="website"><meta property="og:title" content="이벤트 설정 | BindModel"><meta property="og:description" content="명령 실행, 데이터 변경, 컬렉션 변경 이벤트에 반응합니다."><meta property="og:url" content="https://white-base.github.io/white-lab-bind-model/advanced/events.html"><meta property="og:image" content="https://white-base.github.io/white-lab-bind-model/assets/social.svg">
+  <link rel="canonical" href="https://white-base.github.io/white-lab-bind-model/advanced/events.html"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('bindmodel-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+  <link rel="stylesheet" href="../assets/site.css"><script src="../assets/site.js" defer></script>
+</head>
+<body class="documentation"><a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html" aria-label="BindModel 홈"><span class="brand-mark" aria-hidden="true">b<span>.</span></span><span class="brand-name">bindmodel<span class="brand-dot">.</span></span></a>
+    <nav class="main-nav" id="main-nav" aria-label="주 메뉴">
+      <a href="../guide/introduction.html">시작하기</a><a href="../guide/features/model.html">기능 가이드</a><a href="../advanced/column-value-flow.html" class="is-active" aria-current="true">고급 기능</a><a href="../examples/crudl.html">예제</a><a href="../api/bind-model.html">API</a>
+    </nav>
+    <div class="header-tools"><button class="search-trigger" data-search aria-label="문서 검색"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span>문서 검색</span><kbd>⌘ K</kbd></button>
+    <button class="icon-button theme-toggle" aria-label="어두운 테마로 전환" title="테마 전환"><svg class="icon theme-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13A8 8 0 0 1 11 4a8 8 0 1 0 9 9Z"/></svg></button>
+    <a class="icon-button github-link" href="https://github.com/white-base/bind-model" aria-label="BindModel GitHub 저장소"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-4a3.5 3.5 0 0 0-1-2.7c3.3-.4 6.7-1.6 6.7-7.3A5.6 5.6 0 0 0 20 4.1 5.2 5.2 0 0 0 19.9.3S18.6-.1 16 1.8a13.5 13.5 0 0 0-7 0C6.4-.1 5.1.3 5.1.3A5.2 5.2 0 0 0 5 4.1 5.6 5.6 0 0 0 3.3 8c0 5.7 3.4 6.9 6.7 7.3A3.5 3.5 0 0 0 9 18v4"/></svg></a>
+    <button class="icon-button menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="주 메뉴 열기"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div>
+  </div></header>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <div class="mobile-docbar"><button class="sidebar-toggle" aria-controls="docs-sidebar" aria-expanded="false"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>문서 메뉴</button><a href="#page-toc">이 페이지의 내용 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div>
+  <div class="docs-layout"><button class="sidebar-backdrop" aria-label="문서 메뉴 닫기" hidden></button><aside class="docs-sidebar" id="docs-sidebar" aria-label="문서 목록"><a class="sidebar-home" href="../index.html"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M12 5C9 3 5 3 2 4v15c3-1 7-1 10 2 3-3 7-3 10-2V4c-3-1-7-1-10 1Z"/></svg>문서 둘러보기</a><section class="sidebar-group"><h2><span>시작하기</span><span>03</span></h2><ul><li><a href="../guide/introduction.html">소개</a></li><li><a href="../guide/quick-start.html">빠른 시작</a></li><li><a href="../guide/core-concepts.html">핵심 개념</a></li></ul></section><section class="sidebar-group"><h2><span>기능 가이드</span><span>07</span></h2><ul><li><a href="../guide/features/model.html">모델 구성</a></li><li><a href="../guide/features/command.html">명령 구성</a></li><li><a href="../guide/features/columns.html">컬럼 관리</a></li><li><a href="../guide/features/shared-column-properties.html">공통 컬럼 속성</a></li><li><a href="../guide/features/flow-control.html">흐름 제어</a></li><li><a href="../guide/features/service-injection.html">서비스 객체 주입</a></li><li><a href="../guide/features/json-schema.html">JSON 스키마 가이드</a></li></ul></section><section class="sidebar-group"><h2><span>고급 기능</span><span>06</span></h2><ul><li><a href="../advanced/column-value-flow.html">컬럼값 호출 구조</a></li><li><a href="../advanced/tables.html">테이블 관리</a></li><li><a href="../advanced/multiple-outputs.html">명령 복수 출력 구성</a></li><li><a href="../advanced/execution.html">실행 및 동기화</a></li><li><a href="../advanced/events.html" class="is-current" aria-current="page">이벤트 설정</a></li><li><a href="../advanced/composition.html">객체 구성 방법</a></li></ul></section><section class="sidebar-group"><h2><span>예제</span><span>01</span></h2><ul><li><a href="../examples/crudl.html">CRUD + List 구현하기</a></li></ul></section><section class="sidebar-group"><h2><span>API 레퍼런스</span><span>06</span></h2><ul><li><a href="../api/bind-model.html">BindModel</a></li><li><a href="../api/bind-command.html">BindCommand</a></li><li><a href="../api/meta-view.html">MetaView</a></li><li><a href="../api/html-column.html">HTMLColumn</a></li><li><a href="../api/property-collection.html">PropertyCollection</a></li><li><a href="../api/meta-object.html">MetaObject</a></li></ul></section><a class="sidebar-bottom" href="https://github.com/white-base/bind-model/issues">문서 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></aside>
+  <main class="doc-main" id="main"><article data-search-content>
+    <div class="doc-breadcrumb"><a href="../index.html">문서</a><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span>고급 기능</span></div>
+    <header class="doc-heading"><div class="eyebrow">고급 기능<span class="eyebrow-rule"></span>03</div><h1>이벤트 설정</h1><p>명령 실행, 데이터 변경, 컬렉션 변경 이벤트에 반응합니다.</p><div class="doc-meta"><span>한국어 문서</span><span>약 8분</span></div></header>
+    <div class="doc-content"><p>모델(BindModel)은 실행 이벤트, 변경 이벤트, 컬렉션 이벤트 등 다양한 상황에서 이벤트를 설정할 수 있습니다.</p>
+<h2 id="실행-이벤트">실행 이벤트<a class="heading-anchor" href="#실행-이벤트" aria-label="실행 이벤트 링크">#</a></h2>
+<p>모델(BindModel)과 명령(BindCommand) 실행 전 후에 이벤트를 설정할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> onExecute = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">bModel</span>: <span class="hljs-title class_">BindModel</span>, <span class="hljs-attr">bCommand</span>: <span class="hljs-title class_">BindCommand</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+<span class="hljs-keyword">type</span> onExecuted = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">bModel</span>: <span class="hljs-title class_">BindModel</span>, <span class="hljs-attr">bCommand</span>: <span class="hljs-title class_">BindCommand</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;</code></pre></div>
+<ul>
+<li><code>bModel</code> : 대상의 모델(BindModel)객체</li>
+<li><code>bCommand</code> : 대상의 명령(BindCommand)객체</li>
+</ul>
+<h3 id="모델-실행-이벤트">모델 실행 이벤트<a class="heading-anchor" href="#모델-실행-이벤트" aria-label="모델 실행 이벤트 링크">#</a></h3>
+<p>모델(BindModel)에서 실행 전(onExecute)과 실행 후(onExecuted) 이벤트를 설정합니다. 이는 모든 명령에 적용됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+bm.<span class="hljs-title function_">addCommand</span>(<span class="hljs-string">&#x27;cmd1&#x27;</span>);
+
+bm.<span class="hljs-property">onExecute</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">bModel, bCommand</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Model: Before execute&#x27;</span>);
+};
+bm.<span class="hljs-property">onExecuted</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">bModel, bCommand</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Model: After execute&#x27;</span>);
+};
+
+bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">execute</span>();
+
+<span class="hljs-comment">// 출력:</span>
+<span class="hljs-comment">// Model: Before execute</span>
+<span class="hljs-comment">// Model: After execute</span>
+</code></pre></div>
+<h3 id="명령-실행-이벤트">명령 실행 이벤트<a class="heading-anchor" href="#명령-실행-이벤트" aria-label="명령 실행 이벤트 링크">#</a></h3>
+<p>특정 명령(BindCommand)에만 실행 전(onExecute)과 실행 후(onExecuted) 이벤트를 설정합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+bm.<span class="hljs-title function_">addCommand</span>(<span class="hljs-string">&#x27;cmd1&#x27;</span>);
+
+bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-property">onExecute</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">bModel, bCommand</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Command: Before execute&#x27;</span>);
+};
+bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-property">onExecuted</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">bModel, bCommand</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Command: After execute&#x27;</span>);
+};
+
+bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-title function_">execute</span>();
+
+<span class="hljs-comment">// 출력:</span>
+<span class="hljs-comment">// Command: Before execute</span>
+<span class="hljs-comment">// Command: After execute</span>
+</code></pre></div>
+<h2 id="변경-이벤트">변경 이벤트<a class="heading-anchor" href="#변경-이벤트" aria-label="변경 이벤트 링크">#</a></h2>
+<h3 id="컬럼-변경-이벤트">컬럼 변경 이벤트<a class="heading-anchor" href="#컬럼-변경-이벤트" aria-label="컬럼 변경 이벤트 링크">#</a></h3>
+<p>컬럼값이 변경된 후 이벤트가 발생합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> onChanged = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">nVal</span>: <span class="hljs-title class_">ValueType</span>, <span class="hljs-attr">oVal</span>: <span class="hljs-title class_">ValueType</span>, <span class="hljs-attr">_this</span>: <span class="hljs-variable language_">this</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>nVal</code> : 새로운 컬럼값</li>
+<li><code>oVal</code> : 이전 컬럼값</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+bm.<span class="hljs-property">columns</span>.<span class="hljs-title function_">addValue</span>(<span class="hljs-string">&#x27;aa&#x27;</span>, <span class="hljs-number">10</span>);
+
+bm.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;aa&#x27;</span>].<span class="hljs-property">onChanged</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">nVal, oVal, _this</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`New Value: <span class="hljs-subst">${nVal}</span>, Old Value: <span class="hljs-subst">${oVal}</span>`</span>);
+};
+
+bm.<span class="hljs-property">columns</span>[<span class="hljs-string">&#x27;aa&#x27;</span>].<span class="hljs-property">value</span> = <span class="hljs-number">20</span>;
+
+<span class="hljs-comment">// 출력:</span>
+<span class="hljs-comment">// New Value: 20, Old Value: 10</span>
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+뷰(MetaView)의 컬럼(HTMLColumn) 속성은 대부분 테이블(MetaTable)을 참조합니다.
+따라서 컬럼 변경 이벤트를 설정할 때 테이블의 컬럼에 정의하는 것이 더욱 직관적이며 관리에 용이합니다.</p>
+</blockquote>
+<h3 id="로우-데이터-변경-이벤트">로우 데이터 변경 이벤트<a class="heading-anchor" href="#로우-데이터-변경-이벤트" aria-label="로우 데이터 변경 이벤트 링크">#</a></h3>
+<p>테이블(MetaTable) 또는 뷰(MetaView)의 <code>MetaRow</code> 데이터 변경 시 발생합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> onChanging = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">idx</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">nVal</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">oVal</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">_this</span>: <span class="hljs-variable language_">this</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+<span class="hljs-keyword">type</span> onChanged = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">idx</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">nVal</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">oVal</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">_this</span>: <span class="hljs-variable language_">this</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>idx</code> : 변경된 데이터의 인덱스</li>
+<li><code>nVal</code> : 새로운 값</li>
+<li><code>oVal</code> : 이전 값</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+bm.<span class="hljs-title function_">addColumnValue</span>(<span class="hljs-string">&#x27;aa&#x27;</span>, <span class="hljs-number">10</span>, <span class="hljs-string">&#x27;cmd1&#x27;</span>, <span class="hljs-string">&#x27;valid&#x27;</span>);
+bm.<span class="hljs-title function_">addColumnValue</span>(<span class="hljs-string">&#x27;bb&#x27;</span>, <span class="hljs-number">20</span>, <span class="hljs-string">&#x27;cmd1&#x27;</span>, <span class="hljs-string">&#x27;valid&#x27;</span>);
+
+<span class="hljs-keyword">const</span> v1 = bm.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;cmd1&#x27;</span>].<span class="hljs-property">valid</span>;
+
+v1.<span class="hljs-property">rows</span>.<span class="hljs-title function_">add</span>(v1.<span class="hljs-title function_">getRow</span>());
+
+v1.<span class="hljs-property">rows</span>[<span class="hljs-number">0</span>].<span class="hljs-property">onChanging</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">idx, nVal, oVal, _this</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Before Change - Index: <span class="hljs-subst">${idx}</span>, New: <span class="hljs-subst">${nVal}</span>, Old: <span class="hljs-subst">${oVal}</span>`</span>);
+};
+v1.<span class="hljs-property">rows</span>[<span class="hljs-number">0</span>].<span class="hljs-property">onChanged</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">idx, nVal, oVal, _this</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`After Change - Index: <span class="hljs-subst">${idx}</span>, New: <span class="hljs-subst">${nVal}</span>, Old: <span class="hljs-subst">${oVal}</span>`</span>);
+};
+
+v1.<span class="hljs-property">rows</span>[<span class="hljs-number">0</span>][<span class="hljs-string">&#x27;aa&#x27;</span>] = <span class="hljs-number">11</span>;
+
+<span class="hljs-comment">// 출력:</span>
+<span class="hljs-comment">// Before Change - Index: 0, New: 11, Old: 10</span>
+<span class="hljs-comment">// After Change - Index: 0, New: 11, Old: 10</span>
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+로우(MetaRow)는 테이블(MetaTable)과 뷰(MetaView)에서 <strong>독립적으로 존재</strong>합니다.
+따라서 <strong>로우 이벤트는 해당 뷰(MetaView)의 row</strong> 에 정의하는 것이 <strong>더 직관적이고 효율적</strong>입니다.</p>
+</blockquote>
+<h2 id="컬렉션-이벤트">컬렉션 이벤트<a class="heading-anchor" href="#컬렉션-이벤트" aria-label="컬렉션 이벤트 링크">#</a></h2>
+<p>컬렉션 관련 작업 시 발생하는 공통 이벤트입니다. 다양한 컬렉션 작업(추가, 삭제, 초기화 등)에 대해 대응할 수 있습니다.</p>
+<blockquote>
+<ul>
+<li><strong>모델(BindModel)의 컬렉션</strong>
+- <code>_tables</code> : 테이블 컬렉션
+- <code>columns</code> : 기본 테이블(<code>_baseTable</code>)의 컬럼 컬렉션<br>
+- <code>items</code> : 공통 컬럼 속성 컬렉션
+- <code>command</code> : 명령(BindCommand) 객체 컬렉션
+- <code>fn</code> : 사용자 함수 컬렉션</li>
+<li><strong>명령(BindCommand)의 컬렉션</strong>
+- <code>_outputs</code> : 출력 뷰(MetaView) 컬렉션
+- <code>valid.columns, valid,rows</code> : 유효성 검사 뷰(MetaView)의 컬럼 및 로우 컬렉션
+- <code>bind.columns, bind.rows</code> : 서버 요청 뷰(MetaView)의 컬럼 및 로우 컬렉션
+- <code>output.columns, output.rows</code> : 서버 응답 기본 뷰(MetaView)의 컬럼 및 로우 컬렉션
+- <code>misc.columns, misc.rows</code> :  기타 뷰(MetaView)의 컬럼 및 로우 컬렉션</li>
+</ul>
+</blockquote>
+<h3 id="컬렉션-추가-이벤트">컬렉션 추가 이벤트<a class="heading-anchor" href="#컬렉션-추가-이벤트" aria-label="컬렉션 추가 이벤트 링크">#</a></h3>
+<p>컬렉션에 요소를 추가할 때 발생하는 이벤트 입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> onAdd = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">idx</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">elem</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">_this</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+<span class="hljs-keyword">type</span> onAdded = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">idx</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">elem</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">_this</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>idx</code> : 추가할 요소의 인덱스</li>
+<li><code>elem</code> : 추가할 요소</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+bm.<span class="hljs-property">columns</span>.<span class="hljs-property">onAdd</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">idx, elem, _this</span>) {
+	<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`before : idx = <span class="hljs-subst">${idx}</span>, elem = <span class="hljs-subst">${elem._name}</span>`</span>);
+};
+bm.<span class="hljs-property">columns</span>.<span class="hljs-property">onAdded</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">idx, elem, _this</span>) {
+	<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`after : idx = <span class="hljs-subst">${idx}</span>, elem = <span class="hljs-subst">${elem._name}</span>`</span>);
+};
+
+bm.<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;aa&#x27;</span>);
+
+<span class="hljs-comment">// before : idx = 0, elem = aa</span>
+<span class="hljs-comment">// after : idx = 0, elem = aa</span>
+</code></pre></div>
+<h3 id="컬렉션-삭제-이벤트">컬렉션 삭제 이벤트<a class="heading-anchor" href="#컬렉션-삭제-이벤트" aria-label="컬렉션 삭제 이벤트 링크">#</a></h3>
+<p>컬렉션에 요소를 삭제할 때 발생하는 이벤트 입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> onRemove = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">idx</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">elem</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">_this</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+<span class="hljs-keyword">type</span> onRemoved = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">idx</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">elem</span>: <span class="hljs-built_in">any</span>, <span class="hljs-attr">_this</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+</code></pre></div>
+<ul>
+<li><code>idx</code> : 삭제할  요소의 인덱스</li>
+<li><code>elem</code> : 삭제할 요소</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+bm.<span class="hljs-property">columns</span>.<span class="hljs-property">onRemove</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">idx, elem, _this</span>) {
+	<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`before : idx = <span class="hljs-subst">${idx}</span>, elem = <span class="hljs-subst">${elem._name}</span>`</span>);
+};
+bm.<span class="hljs-property">columns</span>.<span class="hljs-property">onRemoved</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">idx, elem, _this</span>) {
+	<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`after : idx = <span class="hljs-subst">${idx}</span>, elem = <span class="hljs-subst">${elem._name}</span>`</span>);
+};
+
+bm.<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;aa&#x27;</span>);
+bm.<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;bb&#x27;</span>);
+
+bm.<span class="hljs-property">columns</span>.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;bb&#x27;</span>);
+
+<span class="hljs-comment">// before : idx = 0, elem = bb</span>
+<span class="hljs-comment">// after : idx = 0, elem = bb</span>
+</code></pre></div>
+<h3 id="컬렉션-초기화-이벤트">컬렉션 초기화 이벤트<a class="heading-anchor" href="#컬렉션-초기화-이벤트" aria-label="컬렉션 초기화 이벤트 링크">#</a></h3>
+<p>컬렉션을 초기화 할 때 발생하는 이벤트 입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> onClear = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">_this</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> {};
+<span class="hljs-keyword">type</span> onCleared = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">_this</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> {};
+</code></pre></div>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+bm.<span class="hljs-property">columns</span>.<span class="hljs-property">onClear</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">_this</span>) {
+	<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`before : clear`</span>);
+};
+bm.<span class="hljs-property">columns</span>.<span class="hljs-property">onCleared</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">_this</span>) {
+	<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`after : clear`</span>);
+};
+
+bm.<span class="hljs-title function_">addColumn</span>(<span class="hljs-string">&#x27;aa&#x27;</span>);
+bm.<span class="hljs-property">columns</span>.<span class="hljs-title function_">clear</span>();
+
+<span class="hljs-comment">// before : clear</span>
+<span class="hljs-comment">// after : clear</span>
+</code></pre></div>
+</div>
+    <div class="doc-feedback"><span>더 나은 문서를 함께 만들어요.</span><a href="https://github.com/white-base/bind-model/issues">오류 제보 및 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></div>
+    <nav class="page-pagination" aria-label="이전·다음 문서"><a class="page-link prev" href="../advanced/execution.html"><span>이전 문서</span><strong>실행 및 동기화</strong></a><a class="page-link next" href="../advanced/composition.html"><span>다음 문서</span><strong>객체 구성 방법<svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></strong></a></nav>
+  </article><footer class="doc-footer">BindModel · White Lab<a href="../index.html">홈으로 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></footer></main>
+  <aside class="page-toc" id="page-toc" aria-label="이 페이지의 내용"><p>이 페이지의 내용</p><nav><a class="toc-level-2" href="#실행-이벤트">실행 이벤트</a><a class="toc-level-3" href="#모델-실행-이벤트">모델 실행 이벤트</a><a class="toc-level-3" href="#명령-실행-이벤트">명령 실행 이벤트</a><a class="toc-level-2" href="#변경-이벤트">변경 이벤트</a><a class="toc-level-3" href="#컬럼-변경-이벤트">컬럼 변경 이벤트</a><a class="toc-level-3" href="#로우-데이터-변경-이벤트">로우 데이터 변경 이벤트</a><a class="toc-level-2" href="#컬렉션-이벤트">컬렉션 이벤트</a><a class="toc-level-3" href="#컬렉션-추가-이벤트">컬렉션 추가 이벤트</a><a class="toc-level-3" href="#컬렉션-삭제-이벤트">컬렉션 삭제 이벤트</a><a class="toc-level-3" href="#컬렉션-초기화-이벤트">컬렉션 초기화 이벤트</a></nav><a class="back-top" href="#main">맨 위로 ↑</a></aside>
+  </div><dialog id="search-dialog" class="search-dialog" aria-labelledby="search-label"><div class="search-top"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><label class="sr-only" id="search-label" for="search-input">문서 검색</label><input id="search-input" type="search" placeholder="문서, 메서드, 개념 검색…" autocomplete="off" spellcheck="false" aria-controls="search-results"><button class="dialog-close" aria-label="검색 닫기">ESC</button></div><p id="search-status" class="search-status" role="status">검색어를 입력해 보세요.</p><div id="search-results" class="search-results"></div><div class="search-footer"><span><kbd>↑</kbd><kbd>↓</kbd> 이동 <kbd>↵</kbd> 열기</span><span>BindModel 문서 검색</span></div></dialog><div class="toast" role="status" aria-live="polite"></div></body>
+</html>

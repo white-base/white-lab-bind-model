@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://white-base.github.io/white-lab-bind-model/sitemap.xml

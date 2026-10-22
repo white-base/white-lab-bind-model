@@ -1,0 +1,20 @@
+{
+  "name": "bindmodel-website",
+  "private": true,
+  "version": "1.0.0",
+  "description": "BindModel documentation — static HTML for GitHub Pages",
+  "type": "module",
+  "scripts": {
+    "dev": "python3 scripts/serve.py",
+    "check": "python3 scripts/check_site.py",
+    "check:examples": "node scripts/check_examples.mjs",
+    "import:docs": "node scripts/import-docs.mjs",
+    "index": "python3 scripts/index_site.py"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "highlight.js": "11.12.0",
+    "markdown-it": "15.0.3",
+    "mermaid": "12.2.0"
+  }
+}

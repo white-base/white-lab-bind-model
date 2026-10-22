@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="ko" data-root="../../">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>서비스 객체 주입 | BindModel</title>
+  <meta name="description" content="설정과 비즈니스 로직을 서비스 객체로 모아 재사용합니다."><meta name="theme-color" content="#f8f8f4">
+  <meta property="og:type" content="website"><meta property="og:title" content="서비스 객체 주입 | BindModel"><meta property="og:description" content="설정과 비즈니스 로직을 서비스 객체로 모아 재사용합니다."><meta property="og:url" content="https://white-base.github.io/white-lab-bind-model/guide/features/service-injection.html"><meta property="og:image" content="https://white-base.github.io/white-lab-bind-model/assets/social.svg">
+  <link rel="canonical" href="https://white-base.github.io/white-lab-bind-model/guide/features/service-injection.html"><link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('bindmodel-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+  <link rel="stylesheet" href="../../assets/site.css"><script src="../../assets/site.js" defer></script>
+</head>
+<body class="documentation"><a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../../index.html" aria-label="BindModel 홈"><span class="brand-mark" aria-hidden="true">b<span>.</span></span><span class="brand-name">bindmodel<span class="brand-dot">.</span></span></a>
+    <nav class="main-nav" id="main-nav" aria-label="주 메뉴">
+      <a href="../../guide/introduction.html">시작하기</a><a href="../../guide/features/model.html" class="is-active" aria-current="true">기능 가이드</a><a href="../../advanced/column-value-flow.html">고급 기능</a><a href="../../examples/crudl.html">예제</a><a href="../../api/bind-model.html">API</a>
+    </nav>
+    <div class="header-tools"><button class="search-trigger" data-search aria-label="문서 검색"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span>문서 검색</span><kbd>⌘ K</kbd></button>
+    <button class="icon-button theme-toggle" aria-label="어두운 테마로 전환" title="테마 전환"><svg class="icon theme-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13A8 8 0 0 1 11 4a8 8 0 1 0 9 9Z"/></svg></button>
+    <a class="icon-button github-link" href="https://github.com/white-base/bind-model" aria-label="BindModel GitHub 저장소"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-4a3.5 3.5 0 0 0-1-2.7c3.3-.4 6.7-1.6 6.7-7.3A5.6 5.6 0 0 0 20 4.1 5.2 5.2 0 0 0 19.9.3S18.6-.1 16 1.8a13.5 13.5 0 0 0-7 0C6.4-.1 5.1.3 5.1.3A5.2 5.2 0 0 0 5 4.1 5.6 5.6 0 0 0 3.3 8c0 5.7 3.4 6.9 6.7 7.3A3.5 3.5 0 0 0 9 18v4"/></svg></a>
+    <button class="icon-button menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="주 메뉴 열기"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div>
+  </div></header>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <div class="mobile-docbar"><button class="sidebar-toggle" aria-controls="docs-sidebar" aria-expanded="false"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>문서 메뉴</button><a href="#page-toc">이 페이지의 내용 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div>
+  <div class="docs-layout"><button class="sidebar-backdrop" aria-label="문서 메뉴 닫기" hidden></button><aside class="docs-sidebar" id="docs-sidebar" aria-label="문서 목록"><a class="sidebar-home" href="../../index.html"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M12 5C9 3 5 3 2 4v15c3-1 7-1 10 2 3-3 7-3 10-2V4c-3-1-7-1-10 1Z"/></svg>문서 둘러보기</a><section class="sidebar-group"><h2><span>시작하기</span><span>03</span></h2><ul><li><a href="../../guide/introduction.html">소개</a></li><li><a href="../../guide/quick-start.html">빠른 시작</a></li><li><a href="../../guide/core-concepts.html">핵심 개념</a></li></ul></section><section class="sidebar-group"><h2><span>기능 가이드</span><span>07</span></h2><ul><li><a href="../../guide/features/model.html">모델 구성</a></li><li><a href="../../guide/features/command.html">명령 구성</a></li><li><a href="../../guide/features/columns.html">컬럼 관리</a></li><li><a href="../../guide/features/shared-column-properties.html">공통 컬럼 속성</a></li><li><a href="../../guide/features/flow-control.html">흐름 제어</a></li><li><a href="../../guide/features/service-injection.html" class="is-current" aria-current="page">서비스 객체 주입</a></li><li><a href="../../guide/features/json-schema.html">JSON 스키마 가이드</a></li></ul></section><section class="sidebar-group"><h2><span>고급 기능</span><span>06</span></h2><ul><li><a href="../../advanced/column-value-flow.html">컬럼값 호출 구조</a></li><li><a href="../../advanced/tables.html">테이블 관리</a></li><li><a href="../../advanced/multiple-outputs.html">명령 복수 출력 구성</a></li><li><a href="../../advanced/execution.html">실행 및 동기화</a></li><li><a href="../../advanced/events.html">이벤트 설정</a></li><li><a href="../../advanced/composition.html">객체 구성 방법</a></li></ul></section><section class="sidebar-group"><h2><span>예제</span><span>01</span></h2><ul><li><a href="../../examples/crudl.html">CRUD + List 구현하기</a></li></ul></section><section class="sidebar-group"><h2><span>API 레퍼런스</span><span>06</span></h2><ul><li><a href="../../api/bind-model.html">BindModel</a></li><li><a href="../../api/bind-command.html">BindCommand</a></li><li><a href="../../api/meta-view.html">MetaView</a></li><li><a href="../../api/html-column.html">HTMLColumn</a></li><li><a href="../../api/property-collection.html">PropertyCollection</a></li><li><a href="../../api/meta-object.html">MetaObject</a></li></ul></section><a class="sidebar-bottom" href="https://github.com/white-base/bind-model/issues">문서 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></aside>
+  <main class="doc-main" id="main"><article data-search-content>
+    <div class="doc-breadcrumb"><a href="../../index.html">문서</a><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span>기능 가이드</span></div>
+    <header class="doc-heading"><div class="eyebrow">기능 가이드<span class="eyebrow-rule"></span>02</div><h1>서비스 객체 주입</h1><p>설정과 비즈니스 로직을 서비스 객체로 모아 재사용합니다.</p><div class="doc-meta"><span>한국어 문서</span><span>약 24분</span></div></header>
+    <div class="doc-content"><h2 id="서비스-객체-구성">서비스 객체 구성<a class="heading-anchor" href="#서비스-객체-구성" aria-label="서비스 객체 구성 링크">#</a></h2>
+<p>서비스 객체를 주입하여 모델(BindModel) 객체를 간편하게 생성할 수 있습니다.</p>
+<p>서비스 객체는 다음과 같은 영역으로 구성됩니다:</p>
+<blockquote>
+<ul>
+<li><strong>기본 영역</strong>
+<ul>
+<li>기본 서버 설정, 공통 콜백 함수, 이벤트, 테이블 설정을 정의합니다.</li>
+</ul>
+</li>
+<li><strong>아이템 영역</strong>
+<ul>
+<li>모델(BindModel)에서 공통 컬럼 속성을 관리합니다.</li>
+</ul>
+</li>
+<li><strong>명령 영역</strong>
+<ul>
+<li>명령(BindCommand)을 정의하고, 실행 흐름과 관련된 설정을 구성합니다.</li>
+</ul>
+</li>
+<li><strong>매핑 영역</strong>
+<ul>
+<li>아이템을 테이블이나 명령의 뷰(MetaView)와 매핑하여 데이터 흐름을 제어합니다.</li>
+</ul>
+</li>
+<li><strong>함수 영역</strong>
+<ul>
+<li>사용자 정의 함수로 비즈니스 로직을 캡슐화하여 외부에서 쉽게 호출할 수 있도록 구성합니다.</li>
+</ul>
+</li>
+<li><strong>전처리 영역</strong>
+<ul>
+<li>모델 init() 초기화 시 호출되는 전처리 함수로 초기 설정 및 유효성 검사 등의 작업을 처리합니다.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="기본-영역">기본 영역<a class="heading-anchor" href="#기본-영역" aria-label="기본 영역 링크">#</a></h3>
+<p>기본 영역에는 <em>기본서버설정, 기본 콜백함수, 전역 이벤트, 테이블 확장</em>을 구성합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">ServiceType</span> = {
+    <span class="hljs-comment">// 기본 서버 설정</span>
+    <span class="hljs-attr">url</span>?: <span class="hljs-built_in">string</span>,
+
+    <span class="hljs-comment">// 기본 axios config</span>
+    <span class="hljs-attr">baseConfig</span>?: axiosConfig,
+    
+    <span class="hljs-comment">// 추가할 테이블</span>
+    <span class="hljs-attr">tables</span>?: <span class="hljs-built_in">string</span>[],
+    
+    <span class="hljs-comment">// 기본 콜백 함수</span>
+    <span class="hljs-attr">cbBaseBegin</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">model</span>: <span class="hljs-title class_">BindModel</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+    <span class="hljs-attr">cbBaseValid</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">view</span>: <span class="hljs-title class_">MetaView</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>, <span class="hljs-attr">model</span>: <span class="hljs-title class_">BindModel</span></span>) =&gt;</span> <span class="hljs-built_in">boolean</span>,
+    <span class="hljs-attr">cbBaseBind</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">view</span>: <span class="hljs-title class_">MetaView</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>, <span class="hljs-attr">cfg</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+    <span class="hljs-attr">cbBaseResult</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">data</span>: <span class="hljs-built_in">object</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>, <span class="hljs-attr">res</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">object</span>,
+    <span class="hljs-attr">cbBaseOutput</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">outs</span>: <span class="hljs-title class_">MetaViewCollection</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>, <span class="hljs-attr">res</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+    <span class="hljs-attr">cbBaseEnd</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">status</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>, <span class="hljs-attr">res</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+    
+    <span class="hljs-comment">// 공통 이벤트</span>
+    <span class="hljs-attr">onExecute</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">bm</span>: <span class="hljs-title class_">BindModel</span>, <span class="hljs-attr">bc</span>: <span class="hljs-title class_">BindCommand</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+    <span class="hljs-attr">onExecuted</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">bm</span>: <span class="hljs-title class_">BindModel</span>, <span class="hljs-attr">bc</span>: <span class="hljs-title class_">BindCommand</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+};
+</code></pre></div>
+<h4 id="url-설정">URL 설정<a class="heading-anchor" href="#url-설정" aria-label="URL 설정 링크">#</a></h4>
+<p><code>url</code> 속성은 서버 요청에 사용되는 기본 경로입니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>({
+	<span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;/user&#x27;</span>
+});
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+<code>url</code> 속성은 <code>baseConfig.url</code> 의 참조합니다.</p>
+</blockquote>
+<h4 id="baseconfig-설정">baseConfig 설정<a class="heading-anchor" href="#baseconfig-설정" aria-label="baseConfig 설정 링크">#</a></h4>
+<p><code>axios</code> 모듈의 <code>config</code> 설정을 구성하는 기본 객체를 지정합니다.</p>
+<p>명령(BindCommand)에서 <code>config</code>를 따로 설정하지 않으면, <code>baseConfig</code> 값이 사용됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>({
+	<span class="hljs-attr">baseConfig</span>: {
+		<span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;post&#x27;</span>,
+		<span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;/user&#x27;</span>,
+		<span class="hljs-attr">baseUrl</span>: <span class="hljs-string">&#x27;https://bindmodel.com&#x27;</span>,
+		<span class="hljs-attr">responseType</span>: <span class="hljs-string">&#x27;json&#x27;</span>,
+		<span class="hljs-attr">headers</span>: {<span class="hljs-string">&#x27;X-Requested-With&#x27;</span>: <span class="hljs-string">&#x27;XMLHttpRequest&#x27;</span>},
+		<span class="hljs-attr">timeout</span>: <span class="hljs-number">1000</span>, <span class="hljs-comment">// 기본값은 `0` (타임아웃 없음)</span>
+		<span class="hljs-attr">auth</span>: { <span class="hljs-attr">username</span>: <span class="hljs-string">&#x27;janedoe&#x27;</span>, <span class="hljs-attr">password</span>: <span class="hljs-string">&#x27;s00pers3cret&#x27;</span> },
+		<span class="hljs-comment">// ... 기타 axios 설정 참조</span>
+	}
+});
+</code></pre></div>
+<ul>
+<li><code>baseConfig.url</code> 속성은 <code>url</code> 속성과 동일한 값을 참조합니다.</li>
+</ul>
+<blockquote>
+<p>참조 : <em>axios &gt; 요청 Config</em></p>
+</blockquote>
+<h4 id="기본-콜백함수-설정">기본 콜백함수 설정<a class="heading-anchor" href="#기본-콜백함수-설정" aria-label="기본 콜백함수 설정 링크">#</a></h4>
+<p>기본 콜백 함수는 모든 명령(BindCommand)에 적용됩니다.</p>
+<p>명령에 특정 콜백 함수가 없을 경우, 해당 기본 콜백 함수가 호출됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>({
+    <span class="hljs-attr">cbBaseBegin</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">model, cmd</span>) { 
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;기본 시작 콜백&#x27;</span>); 
+    },
+    <span class="hljs-attr">cbBaseValid</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">view, cmd, model</span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;기본 유효성 검사 콜백&#x27;</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    },
+    <span class="hljs-attr">cbBaseBind</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">view, cmd, cfg</span>) { 
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;기본 서버 요청 콜백&#x27;</span>); 
+    },
+    <span class="hljs-attr">cbBaseResult</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">data, cmd, res</span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;기본 서버 응답 콜백&#x27;</span>);
+        <span class="hljs-keyword">return</span> data;
+    },
+    <span class="hljs-attr">cbBaseOutput</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">view, cmd, res</span>) { 
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;기본 응답 출력 콜백&#x27;</span>); 
+    },
+    <span class="hljs-attr">cbBaseEnd</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">status, cmd, res</span>) { 
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;기본 종료 콜백&#x27;</span>); 
+    }
+});
+</code></pre></div>
+<blockquote>
+<p>참조 : <em>흐름 제어</em></p>
+</blockquote>
+<h4 id="모델-이벤트-설정">모델 이벤트 설정<a class="heading-anchor" href="#모델-이벤트-설정" aria-label="모델 이벤트 설정 링크">#</a></h4>
+<p>모델(BindModel)의 execute() 호출 시 발생하는 이벤트를 처리합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>({
+    <span class="hljs-attr">onExecute</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">bModel, bCommand</span>) { 
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;실행 시작 이벤트&#x27;</span>); 
+    },
+    <span class="hljs-attr">onExecuted</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">bModel, bCommand</span>) { 
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;실행 종료 이벤트&#x27;</span>);
+    }
+});
+</code></pre></div>
+<blockquote>
+<p><em>Tip</em>
+이벤트는 여러 개를 등록할 수 있으며, 콜백 함수는 하나만 설정 가능합니다.</p>
+</blockquote>
+<blockquote>
+<p>참조 : <strong>이벤트 설정 &gt; 모델 실행 이벤트</strong>, <strong>흐름 제어</strong></p>
+</blockquote>
+<h3 id="아이템-영역">아이템 영역<a class="heading-anchor" href="#아이템-영역" aria-label="아이템 영역 링크">#</a></h3>
+<p>아이템 영역은 컬럼의 공통 속성값을 정의하는데 사용됩니다.</p>
+<blockquote>
+<p><em>Tip</em>
+서비스 객체를 주입하면 <code>BindModel</code>의 <code>items</code> 컬렉션에 키-값 형식으로 등록됩니다.
+이후, 이 컬렉션은 컬럼 등록 및 매핑에 활용됩니다.</p>
+</blockquote>
+<p>참조 : <strong>공통 컬럼 속성</strong></p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">KeyType</span> = <span class="hljs-string">&#x27;none&#x27;</span> | <span class="hljs-string">&#x27;value&#x27;</span> | <span class="hljs-string">&#x27;text&#x27;</span> | <span class="hljs-string">&#x27;html&#x27;</span> | <span class="hljs-string">&#x27;prop&#x27;</span> | <span class="hljs-string">&#x27;attr&#x27;</span> | <span class="hljs-string">&#x27;css&#x27;</span>;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">ValType</span> = <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">RegExpType</span> = { <span class="hljs-attr">reg</span>: <span class="hljs-title class_">RegExp</span>, <span class="hljs-attr">msg</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">match</span>?: <span class="hljs-built_in">boolean</span> };
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">FuncType</span> = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">boolean</span>;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">ConstraintType</span> = <span class="hljs-title class_">RegExpType</span> | <span class="hljs-title class_">FuncType</span>;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">ColumnType</span> = {
+    <span class="hljs-attr">columnName</span>?: <span class="hljs-built_in">string</span>,
+    <span class="hljs-attr">selector</span>?: { <span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">type</span>: <span class="hljs-title class_">KeyType</span> },
+    <span class="hljs-attr">getter</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">any</span>,
+    <span class="hljs-attr">setter</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">val</span>: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>,
+    <span class="hljs-attr">getFilter</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">any</span>,
+    <span class="hljs-attr">setFilter</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">val</span>: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>,
+    <span class="hljs-attr">default</span>?: <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span> | <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">value</span>?: <span class="hljs-title class_">ValType</span>,
+    <span class="hljs-attr">alias</span>?: <span class="hljs-built_in">string</span>,
+    <span class="hljs-attr">caption</span>?: <span class="hljs-built_in">string</span>,
+    <span class="hljs-attr">constraints</span>?: <span class="hljs-title class_">ConstraintType</span> | <span class="hljs-title class_">ConstraintType</span>[],
+    <span class="hljs-attr">required</span>?: <span class="hljs-built_in">boolean</span> | <span class="hljs-literal">false</span>,
+};
+
+<span class="hljs-keyword">type</span> serviceType = {
+    <span class="hljs-attr">items</span>?: { [<span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>]: <span class="hljs-title class_">ColumnType</span> | <span class="hljs-title class_">ValType</span> }
+};
+</code></pre></div>
+<ul>
+<li>컬럼 등록 시, <code>items</code>의 속성값이 기본형(string, number, boolean)이면 초기값으로 설정되며, 객체일 경우 해당 객체가 컬럼 설정값으로 사용됩니다.</li>
+</ul>
+<p>이 예제는 아이템 영역을 설정하는 방법과 다양한 속성값을 활용하여 컬럼 속성을 정의하는 데 유용합니다.
+이를 통해 컬럼의 기본값, 제약 조건, 셀렉터, <code>getter/setter</code> 등을 효율적으로 관리할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>({
+    <span class="hljs-comment">// 아이템</span>
+    <span class="hljs-attr">items</span>: {
+        <span class="hljs-attr">aa</span>: <span class="hljs-string">&#x27;Cat&#x27;</span>,    <span class="hljs-comment">// 기본값이 &#x27;Cat&#x27;인 컬럼</span>
+		<span class="hljs-attr">bb</span>: <span class="hljs-number">10</span>,       <span class="hljs-comment">// 기본값이 10 인 컬럼</span>
+        <span class="hljs-attr">cc</span>: <span class="hljs-literal">true</span>,     <span class="hljs-comment">// 기본값이 true 인 컬럼</span>
+        <span class="hljs-attr">dd</span>: {
+            <span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">&#x27;#U_ID&#x27;</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;value&#x27;</span> },  <span class="hljs-comment">// 셀렉터 설정</span>
+            <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">val</span>) =&gt;</span> { <span class="hljs-comment">/*외부에 설정 영역*/</span> },      <span class="hljs-comment">// setter 설정</span>
+            <span class="hljs-attr">getter</span>: <span class="hljs-function">() =&gt;</span> { <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;외부값&#x27;</span>; },           <span class="hljs-comment">// getter 설정</span>
+        },
+        <span class="hljs-attr">ee</span>: {
+            <span class="hljs-attr">required</span>: <span class="hljs-literal">true</span>,                             <span class="hljs-comment">// 필수 값 설정</span>
+            <span class="hljs-attr">setFilter</span>: <span class="hljs-function">(<span class="hljs-params">val</span>) =&gt;</span> { <span class="hljs-comment">/*외부에 설정영역*/</span> },    <span class="hljs-comment">// 값 설정 필터</span>
+            <span class="hljs-attr">getFilter</span>: <span class="hljs-function">() =&gt;</span> { <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;외부값&#x27;</span>; },        <span class="hljs-comment">// 값 가져오기 필터</span>
+        },
+        <span class="hljs-attr">ff</span>: {
+            <span class="hljs-attr">constraints</span>: { <span class="hljs-attr">reg</span>: <span class="hljs-regexp">/abc/</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">&#x27;매칭 실패!&#x27;</span> } <span class="hljs-comment">// 제약조건 설정</span>
+        }
+    }
+});
+</code></pre></div>
+<h3 id="명령-영역">명령 영역<a class="heading-anchor" href="#명령-영역" aria-label="명령 영역 링크">#</a></h3>
+<p>명령(BindCommand) 객체를 구성합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">OptionType</span> = <span class="hljs-string">&#x27;SEND&#x27;</span> | <span class="hljs-string">&#x27;VIEW&#x27;</span> | <span class="hljs-string">&#x27;ALL&#x27;</span> | <span class="hljs-string">&#x27;PICK&#x27;</span>; <span class="hljs-comment">// default &#x27;SEND&#x27;</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">SchemaType</span> = <span class="hljs-string">&#x27;AUTO&#x27;</span> | <span class="hljs-string">&#x27;DATA&#x27;</span> | <span class="hljs-string">&#x27;ENTITY&#x27;</span>;       <span class="hljs-comment">// default &#x27;AUTO&#x27;</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">IndexType</span> = <span class="hljs-built_in">number</span> | <span class="hljs-built_in">number</span>[]; <span class="hljs-comment">// // default 0</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">OutOptType</span> = { <span class="hljs-attr">option</span>: <span class="hljs-title class_">OptionType</span>, <span class="hljs-attr">schema</span>: <span class="hljs-title class_">SchemaType</span>, <span class="hljs-attr">index</span>: <span class="hljs-title class_">IndexType</span> }
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">CmdPropType</span> = {
+    <span class="hljs-attr">outputOption</span>?: <span class="hljs-title class_">OutOptType</span> | <span class="hljs-title class_">OptionType</span> | <span class="hljs-title class_">SchemaType</span> | <span class="hljs-title class_">IndexType</span>,
+	<span class="hljs-attr">views</span>?: <span class="hljs-built_in">string</span>[],              <span class="hljs-comment">// 추가할 뷰(MetaView) 목록</span>
+    <span class="hljs-attr">config</span>?: <span class="hljs-built_in">object</span>,               <span class="hljs-comment">// axios 설정 객체</span>
+    <span class="hljs-attr">url</span>?: <span class="hljs-built_in">string</span>,                  <span class="hljs-comment">// 서버 요청 URL</span>
+    <span class="hljs-comment">// 명령 콜백 함수</span>
+    <span class="hljs-attr">cbBegin</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">model</span>: <span class="hljs-title class_">BindModel</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+    <span class="hljs-attr">cbValid</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">view</span>: <span class="hljs-title class_">MetaView</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>, <span class="hljs-attr">model</span>: <span class="hljs-title class_">BindModel</span></span>) =&gt;</span> <span class="hljs-built_in">boolean</span>,
+    <span class="hljs-attr">cbBind</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">view</span>: <span class="hljs-title class_">MetaView</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>, <span class="hljs-attr">cfg</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+    <span class="hljs-attr">cbResult</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">data</span>: <span class="hljs-built_in">object</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>, <span class="hljs-attr">res</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">object</span>,
+    <span class="hljs-attr">cbOutput</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">views</span>: <span class="hljs-title class_">MetaViewCollection</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>, <span class="hljs-attr">res</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+    <span class="hljs-attr">cbEnd</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">status</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span>, <span class="hljs-attr">res</span>: <span class="hljs-built_in">object</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+    <span class="hljs-comment">// 명령 이벤트</span>
+    <span class="hljs-attr">onExecute</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">model</span>: <span class="hljs-title class_">BindModel</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+    <span class="hljs-attr">onExecuted</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">model</span>: <span class="hljs-title class_">BindModel</span>, <span class="hljs-attr">cmd</span>: <span class="hljs-title class_">BindCommand</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+};
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">CommandType</span> = { [<span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>]: <span class="hljs-title class_">CmdPropType</span> | {} };
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">ServiceType</span> = {
+    <span class="hljs-attr">command</span>?: <span class="hljs-title class_">CommandType</span>;
+};
+</code></pre></div>
+<p>서비스 객체를 주입하면 모델(BindModel)의 <code>command</code> 컬렉션에 키와 명령(BindCommand) 객체가 등록됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>({
+    <span class="hljs-attr">command</span>: {
+        <span class="hljs-attr">create</span>: {},
+        <span class="hljs-attr">read</span>: {
+            <span class="hljs-attr">outputOption</span>: <span class="hljs-string">&#x27;VIEW&#x27;</span>,       <span class="hljs-comment">// 데이터를 컬럼값에 설정 (지정된 컬럼)</span>
+            <span class="hljs-attr">config</span>: { <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;GET&#x27;</span> },  <span class="hljs-comment">// GET 요청 설정</span>
+            <span class="hljs-attr">cbEnd</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {         <span class="hljs-comment">// 처리 완료 후 콜백 함수</span>
+	            <span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;정상처리되었습니다.&#x27;</span>); 
+			} 
+        },
+        <span class="hljs-attr">update</span>: {
+            <span class="hljs-attr">views</span>: [<span class="hljs-string">&#x27;two&#x27;</span>],  <span class="hljs-comment">// &#x27;two&#x27; 뷰를 추가</span>
+            <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;/user&#x27;</span>     <span class="hljs-comment">// 요청할 URL 경로</span>
+        }
+    }
+});
+
+<span class="hljs-comment">// bm.cmd[&#x27;create&#x27;] : BindCommand</span>
+<span class="hljs-comment">// bm.cmd[&#x27;read&#x27;]   : BindCommand</span>
+<span class="hljs-comment">// bm.cmd[&#x27;update&#x27;] : BindCommand</span>
+</code></pre></div>
+<blockquote>
+<p>참조 : <em>명령 구성</em></p>
+</blockquote>
+<h4 id="outputoption-설정">outputOption 설정<a class="heading-anchor" href="#outputoption-설정" aria-label="outputOption 설정 링크">#</a></h4>
+<p>서버 응답 데이터를 처리하는 방식 지정</p>
+<ul>
+<li><code>SEND</code> : 출력하지 않음 (기본값)</li>
+<li><code>VIEW</code> : 정의된 컬럼 데이터 + 특정 인덱스 데이터를 컬럼값으로 설정</li>
+<li><code>ALL</code> : 모든 데이터를 가져옴</li>
+<li><code>PICK</code> : 정의된 컬럼과 매칭되는 데이터만 가져옴</li>
+</ul>
+<p>서버 응답 데이터 형식 지정</p>
+<ul>
+<li><code>AUTO</code> : JSON 데이터 검사 후 엔티티로 변환</li>
+<li><code>DATA</code> : JSON 데이터를  rows 속성에 강제 변환</li>
+<li><code>ENTITY</code> : JSON 데이터를 엔티티 형식의 데이터로 취급</li>
+</ul>
+<p>참조 : <em>명령 구성 &gt; 출력 옵션의 종류</em>, <em>JSON 스키마 가이드</em></p>
+<h4 id="views-설정">views 설정<a class="heading-anchor" href="#views-설정" aria-label="views 설정 링크">#</a></h4>
+<p>명령에 추가로 사용할 출력 뷰(MetaView)를 정의</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-attr">update</span>: {
+    <span class="hljs-attr">views</span>: [<span class="hljs-string">&#x27;customView&#x27;</span>]
+}
+</code></pre></div>
+<h4 id="config-설정">config 설정<a class="heading-anchor" href="#config-설정" aria-label="config 설정 링크">#</a></h4>
+<p>axios 요청 설정:</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">({
+<span class="hljs-attr">read</span>: {
+    <span class="hljs-attr">config</span>: { <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>, <span class="hljs-attr">timeout</span>: <span class="hljs-number">1000</span> }
+}
+});
+</code></pre></div>
+<blockquote>
+<p>참조 : <em>axios &gt; 요청 Config</em></p>
+</blockquote>
+<h4 id="명령-콜백-함수-설정">명령 콜백 함수 설정<a class="heading-anchor" href="#명령-콜백-함수-설정" aria-label="명령 콜백 함수 설정 링크">#</a></h4>
+<p>명령의 특정 단계에서 동작을 정의:</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">({
+<span class="hljs-attr">read</span>: {
+    <span class="hljs-attr">cbEnd</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">cmd</span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`명령 &#x27;<span class="hljs-subst">${cmd.name}</span>&#x27; 실행 완료`</span>);
+    }
+}
+});
+</code></pre></div>
+<blockquote>
+<p>참조 : <em>흐름 제어</em></p>
+</blockquote>
+<h3 id="매핑-영역">매핑 영역<a class="heading-anchor" href="#매핑-영역" aria-label="매핑 영역 링크">#</a></h3>
+<p>아이템에 등록된 컬럼 속성을 지정한 명령(BindCommand)의 선택된 뷰(MetaView)에 매핑합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">CommandName</span> = <span class="hljs-string">&#x27;$all&#x27;</span> | <span class="hljs-built_in">string</span>;  <span class="hljs-comment">// 명령 이름 (&#x27;$all&#x27;은 모든 명령을 의미)</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">ViewName</span> = <span class="hljs-string">&#x27;valid&#x27;</span> | <span class="hljs-string">&#x27;bind&#x27;</span> | <span class="hljs-string">&#x27;output&#x27;</span> | <span class="hljs-string">&#x27;$all&#x27;</span> | <span class="hljs-built_in">string</span>; <span class="hljs-comment">// 뷰 이름</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">MappingType</span> = {
+    [<span class="hljs-attr">key</span>: <span class="hljs-title class_">ColumnName</span>]: {
+        [<span class="hljs-attr">key</span>: <span class="hljs-title class_">CommandName</span>]: <span class="hljs-title class_">ViewName</span> | <span class="hljs-title class_">ViewName</span>[] <span class="hljs-comment">// 명령 이름과 매핑된 뷰 목록</span>
+    }
+};
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">ServiceType</span> = {
+    <span class="hljs-attr">mapping</span>?: <span class="hljs-title class_">MappingType</span>
+};
+</code></pre></div>
+<p><em>Tip</em></p>
+<blockquote>
+<p>아이템 이름 규칙 : <code>[테이블명 . ]컬럼명</code>
+매핑시 아이템명은 <code>[테이블명.]아이템명</code> 형식으로 지정할 수 있습니다.</p>
+</blockquote>
+<p>매핑할 컬럼명과 동일한 이름의 아이템이 존재할 경우 아이템의 속성을 사용하여 컬럼을 등록합니다.</p>
+<p>테이블명이 생략되면 기본 테이블(<code>_baseTable == first</code>)에 컬럼이 추가되며, 지정된 테이블이 존재하지 않으면 자동으로 생성됩니다.</p>
+<p>지정한 명령에 개별적으로 매핑할 수 있습니다. 특정 명령(BindCommand)이 존재하지 않으면 자동으로 생성됩니다.</p>
+<p><em>Tip</em></p>
+<blockquote>
+<p>매핑 가능한 뷰는 기본 제공되는 <code>valid</code>, bind<code>,</code> <code>output</code>, <code>misc</code>에 한정됩니다.
+이 외의 출력 뷰에 매핑하려면, 먼저 해당 뷰를 사전에 추가해야 합니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>({
+    <span class="hljs-attr">mapping</span>: {
+        <span class="hljs-string">&#x27;aa&#x27;</span>: { <span class="hljs-attr">$all</span>: [<span class="hljs-string">&#x27;valid&#x27;</span>] },        <span class="hljs-comment">// 모든 명령의 &#x27;valid&#x27; 뷰에 &#x27;aa&#x27; 등록</span>
+        <span class="hljs-string">&#x27;bb&#x27;</span>: { <span class="hljs-attr">cmd1</span>: [<span class="hljs-string">&#x27;bind&#x27;</span>] },          <span class="hljs-comment">// &#x27;cmd1&#x27; 명령의 &#x27;bind&#x27; 뷰에 &#x27;bb&#x27; 등록</span>
+        <span class="hljs-string">&#x27;second.cc&#x27;</span>: { <span class="hljs-attr">cmd2</span>: [<span class="hljs-string">&#x27;output&#x27;</span>] }  <span class="hljs-comment">// &#x27;cmd2&#x27; 명령의 &#x27;output&#x27; 뷰에 &#x27;cc&#x27; 등록</span>
+    }
+});
+
+<span class="hljs-comment">// bm.items.count == 4 (&#x27;aa&#x27;,&#x27;bb&#x27;,&#x27;cc&#x27;,&#x27;dd&#x27;)</span>
+<span class="hljs-comment">// bm.first.columns.count == 2 (&#x27;aa&#x27;,&#x27;bb&#x27;)</span>
+<span class="hljs-comment">// bm.second.columns.count == 1 (&#x27;cc&#x27;)</span>
+
+<span class="hljs-comment">// bm.cmd[&#x27;cmd1&#x27;].valid.columns.count == 1 (&#x27;aa&#x27;)</span>
+<span class="hljs-comment">// bm.cmd[&#x27;cmd1&#x27;].bind.columns.count == 1 (&#x27;bb&#x27;)</span>
+<span class="hljs-comment">// bm.cmd[&#x27;cmd1&#x27;].output.columns.count == 0</span>
+
+<span class="hljs-comment">// bm.cmd[&#x27;cmd2&#x27;].valid.columns.count == 1 (&#x27;aa&#x27;)</span>
+<span class="hljs-comment">// bm.cmd[&#x27;cmd2&#x27;].bind.columns.count == 0</span>
+<span class="hljs-comment">// bm.cmd[&#x27;cmd2&#x27;].output.columns.count  == 1 (&#x27;cc&#x27;)</span>
+</code></pre></div>
+<p><em>Tip</em></p>
+<blockquote>
+<p>객체 생성 후에는 setMapping() 메서드를 사용하여 매핑을 설정할 수 있습니다.</p>
+</blockquote>
+<h4 id="all-전체-매핑">'$all' : 전체 매핑<a class="heading-anchor" href="#all-전체-매핑" aria-label="&#39;$all&#39; : 전체 매핑 링크">#</a></h4>
+<p>모든 명령(BindCommand)을 대상으로 매핑합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-attr">aa</span>: { <span class="hljs-attr">$all</span>: [<span class="hljs-string">&#x27;valid&#x27;</span>] }
+</code></pre></div>
+<p>모든 뷰(valid, bind, output, misc)를 대상으로 매핑합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-attr">aa</span>: { <span class="hljs-attr">cmd1</span>: <span class="hljs-string">&#x27;$all&#x27;</span> }
+</code></pre></div>
+<blockquote>
+<p>명령에 기본 뷰 외의 추가 뷰가 포함되어 있을 경우, 해당 뷰는 '$all' 옵션의 매핑 대상에 포함됩니다.</p>
+</blockquote>
+<h4 id="명시적-테이블명-지정">명시적 테이블명 지정<a class="heading-anchor" href="#명시적-테이블명-지정" aria-label="명시적 테이블명 지정 링크">#</a></h4>
+<p>특정 테이블 컬럼을 명시적으로 매핑:</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js">({
+<span class="hljs-string">&#x27;second.cc&#x27;</span>: { <span class="hljs-attr">cmd2</span>: [<span class="hljs-string">&#x27;output&#x27;</span>] }
+});
+</code></pre></div>
+<ul>
+<li>'second' 테이블의 'cc' 컬럼이 'cmd2' 명령의 'output' 뷰에 매핑됩니다.</li>
+</ul>
+<h3 id="함수-영역">함수 영역<a class="heading-anchor" href="#함수-영역" aria-label="함수 영역 링크">#</a></h3>
+<p>모델(BindModel)의 <code>fn</code> 속성 컬렉션은 사용자 정의 함수를 등록하고 활용할 수 있는 영역입니다.</p>
+<p>이 영역을 사용하면 반복적인 작업을 캡슐화하거나, 콜백 함수와 연계하여 효과적으로 로직을 실행할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> fnType = { [<span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>]: <span class="hljs-title class_">Function</span> };
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">ServiceType</span> = {
+    <span class="hljs-attr">fn</span>?: fnType
+};
+</code></pre></div>
+<p>fn 속성에 사용자 함수를 정의하고, 모델 내부 및 외부에서 호출할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>({
+    <span class="hljs-comment">// 기본 시작 콜백에서 사용자 함수 호출</span>
+    <span class="hljs-attr">cbBaseBegin</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">model, cmd</span>) {
+		model.<span class="hljs-property">fn</span>.<span class="hljs-title function_">execCreate</span>();        <span class="hljs-comment">// 명령(model)에서 접근</span>
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">bindModel</span>.<span class="hljs-property">fn</span>.<span class="hljs-title function_">sum</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>);  <span class="hljs-comment">// 모델(this.bindModel) 객체에서 접근</span>
+    },
+    <span class="hljs-comment">// 명령 종료 시 사용자 함수 호출</span>
+    <span class="hljs-attr">command</span>: {
+        <span class="hljs-attr">create</span>: {
+            <span class="hljs-attr">cbEnd</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+                <span class="hljs-variable language_">this</span>.<span class="hljs-property">bindModel</span>.<span class="hljs-property">fn</span>.<span class="hljs-title function_">sum</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);
+            }
+        },
+    },
+    <span class="hljs-comment">// 사용자 함수 정의</span>
+    <span class="hljs-attr">fn</span>: {
+        <span class="hljs-attr">sum</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">a, b</span>) {<span class="hljs-keyword">return</span> a + b},
+        <span class="hljs-attr">execCreate</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">bindModel</span>.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;read&#x27;</span>].<span class="hljs-title function_">execute</span>();
+        }
+    }
+});
+</code></pre></div>
+<ul>
+<li>콜백 함수 내에서 <code>this.bindModel</code>은 현재 BindModel 객체를 참조합니다.</li>
+</ul>
+<p>외부에서 사용자 함수를 호출할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">var</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+<span class="hljs-comment">//....</span>
+
+<span class="hljs-comment">// 버튼 클릭 이벤트와 사용자 함수 연결</span>
+$(<span class="hljs-string">&#x27;#btn_create&#x27;</span>).<span class="hljs-title function_">click</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+    bm.<span class="hljs-property">fn</span>.<span class="hljs-title function_">execCreate</span>();
+});
+</code></pre></div>
+<blockquote>
+<p><strong>함수이름 규칙</strong>
+함수 이름을 명확하게 정의하여 내부와 외부에서 쉽게 식별할 수 있도록 관리합니다.</p>
+</blockquote>
+<blockquote>
+<p><strong>Tip</strong>
+서비스 객체에서 <code>this.bindModel</code>은 항상 현재 모델 객체를 참조하므로, 객체 간의 종속성을 효과적으로 관리할 수 있습니다.</p>
+</blockquote>
+<h3 id="전처리-영역">전처리 영역<a class="heading-anchor" href="#전처리-영역" aria-label="전처리 영역 링크">#</a></h3>
+<p>모델(BindModel) 객체에서 init()을 호출하면 아래 전처리 함수들이 순차적으로 실행됩니다.</p>
+<p>이는 주로 서비스 객체의 유효성 검사 및 초기화에 활용됩니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">ServiceType</span> = {
+    <span class="hljs-attr">preRegister</span>?: <span class="hljs-function">(<span class="hljs-params">bindModel</span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+    <span class="hljs-attr">preCheck</span>?: <span class="hljs-function">(<span class="hljs-params">bindModel</span>) =&gt;</span> <span class="hljs-built_in">boolean</span>,
+    <span class="hljs-attr">preReady</span>?: <span class="hljs-function">(<span class="hljs-params">bindModel</span>) =&gt;</span> <span class="hljs-built_in">void</span>
+};
+</code></pre></div>
+<ul>
+<li>preRegister() : 전처리 단계에서 가장 먼저 호출되며, 초기화 또는 등록을 구현합니다.</li>
+<li>preCheck() : 유효성 검사를 수행하며, 검사 성공 시 <code>true</code>를 반환되어야 다음 단계로 진행됩니다.</li>
+<li>preReady() : preCheck()에서 true를 반환한 경우 호출되며, 최종 준비 완료 로직을 구현합니다.</li>
+</ul>
+<blockquote>
+<p><strong>Tip</strong>
+전처리 함수에서 첫 번째 인자로 전달되는 <code>bindModel</code>은 현재 모델(BindModel) 객체를 참조합니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>({
+    <span class="hljs-attr">preRegister</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">bindModel</span>) { 
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;1. 전처리: 초기화 또는 등록&#x27;</span>);
+    },
+    <span class="hljs-attr">preCheck</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">bindModel</span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;2. 전처리: 유효성 검사&#x27;</span>);
+        <span class="hljs-comment">// Selector 검사 후 성공 여부 반환</span>
+        <span class="hljs-keyword">if</span> (bindModel.<span class="hljs-title function_">checkSelector</span>().<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    },
+    <span class="hljs-attr">preReady</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">bindModel</span>) { 
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;3. 전처리: 준비 완료&#x27;</span>);
+        <span class="hljs-comment">// 준비 완료 후 특정 명령 실행</span>
+        bindModel.<span class="hljs-property">command</span>[<span class="hljs-string">&#x27;test&#x27;</span>].<span class="hljs-title function_">execute</span>();
+    },
+});
+
+<span class="hljs-comment">// DOM이 준비되면 초기화 수행</span>
+$(<span class="hljs-variable language_">document</span>).<span class="hljs-title function_">ready</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    bm.<span class="hljs-title function_">init</span>();
+});
+</code></pre></div>
+<ul>
+<li>init() 호출하면 전처리 함수는 preRegister() &gt;&gt; preCheck() &gt;&gt; preReady() 순차적으로 실행합니다.</li>
+</ul>
+<h2 id="서비스-객체-설정">서비스 객체 설정<a class="heading-anchor" href="#서비스-객체-설정" aria-label="서비스 객체 설정 링크">#</a></h2>
+<p>서비스 객체는 <code>BindModel</code> 생성자 또는 setService() 메서드를 사용하여 주입할 수 있습니다.</p>
+<h3 id="생성자로-설정">생성자로 설정<a class="heading-anchor" href="#생성자로-설정" aria-label="생성자로 설정 링크">#</a></h3>
+<p>모델(BindModel) 객체를 생성할 때, 서비스 객체를 인자로 전달합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>ts</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">BindModel</span>(<span class="hljs-params"><span class="hljs-attr">service</span>?: <span class="hljs-title class_">ServiceType</span></span>);
+</code></pre></div>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">let</span> service = {
+	<span class="hljs-attr">tables</span>: [<span class="hljs-string">&#x27;second&#x27;</span>]
+	<span class="hljs-comment">// etc config ...</span>
+};
+
+<span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>(service);
+
+<span class="hljs-comment">// bm.second instanceof MetaTable : true</span>
+</code></pre></div>
+<ul>
+<li>서비스 객체를 통해 <strong>‘second’ 테이블</strong>이 추가되었습니다.</li>
+</ul>
+<h3 id="메소드로-설정">메소드로 설정<a class="heading-anchor" href="#메소드로-설정" aria-label="메소드로 설정 링크">#</a></h3>
+<p>모델(BindModel) 객체를 생성한 후, setService() 메서드를 호출하여 서비스 객체를 주입합니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">let</span> service = {
+	<span class="hljs-attr">tables</span>: [<span class="hljs-string">&#x27;second&#x27;</span>]
+	<span class="hljs-comment">// etc config ...</span>
+};
+<span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>();
+
+bm.<span class="hljs-title function_">setService</span>(service);
+
+<span class="hljs-comment">// bm.second instanceof MetaTable : true</span>
+</code></pre></div>
+<blockquote>
+<p><strong>Tip</strong>
+setService() 메서드를 사용하면 서비스 객체를 여러 번 주입할 수 있습니다. 이를 통해 동적으로 필요한 설정을 추가하거나 변경할 수 있습니다.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">let</span> secondService = {
+    <span class="hljs-attr">tables</span>: [<span class="hljs-string">&#x27;second&#x27;</span>]
+};
+<span class="hljs-keyword">let</span> threeService = {
+    <span class="hljs-attr">tables</span>: [<span class="hljs-string">&#x27;three&#x27;</span>]
+};
+
+bm.<span class="hljs-title function_">setService</span>(secondService);
+bm.<span class="hljs-title function_">setService</span>(threeService);
+
+<span class="hljs-comment">// bm.second instanceof MetaTable : true</span>
+<span class="hljs-comment">// bm.three instanceof MetaTable : true</span>
+</code></pre></div>
+<h2 id="서비스-객체-관리">서비스 객체 관리<a class="heading-anchor" href="#서비스-객체-관리" aria-label="서비스 객체 관리 링크">#</a></h2>
+<p>서비스 객체를 클래스로 정의하면 재사용성을 높이고, 일관된 구조로 관리할 수 있습니다. 사용 목적에 따라 클래스를 다양한 방식으로 구성할 수 있습니다.</p>
+<h3 id="클래스-정의">클래스 정의<a class="heading-anchor" href="#클래스-정의" aria-label="클래스 정의 링크">#</a></h3>
+<p>서비스 객체는 공통 기능을 포함한 클래스로 정의할 수 있으며, 해당 클래스로부터 객체를 생성한 후 사용자 환경에 맞게 수정하여 재사용할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// common-service.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CommonService</span> {
+    cbFail = <span class="hljs-keyword">function</span>(<span class="hljs-params">msg, valid</span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-property">warn</span> (<span class="hljs-string">&quot;user failure handling:&quot;</span> + msg);
+    };
+    cbError = <span class="hljs-keyword">function</span>(<span class="hljs-params">msg, status, response</span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-property">error</span> (<span class="hljs-string">&quot;User error handling&quot;</span> + msg)
+    };
+}
+</code></pre></div>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">BindModel</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;logic-bind-model&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">CommonService</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;common-service.js&#x27;</span>;
+
+<span class="hljs-keyword">const</span> svc = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CommonService</span>();
+<span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>(svc);
+</code></pre></div>
+<h3 id="상속을-통한-재사용성">상속을 통한 재사용성<a class="heading-anchor" href="#상속을-통한-재사용성" aria-label="상속을 통한 재사용성 링크">#</a></h3>
+<p>서비스 객체의 공통 부분을 부모 클래스로 정의하면 재사용성을 높일 수 있습니다. 자식 클래스는 부모 클래스의 기능을 확장하거나 재정의할 수 있습니다.</p>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-comment">// member-service.js</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">CommonService</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;common-service.js&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MemberService</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">CommonService</span> {
+	<span class="hljs-title function_">constructor</span>(<span class="hljs-params">suffix</span>) {
+		<span class="hljs-variable language_">super</span>();
+		
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span> = {
+            <span class="hljs-attr">idx</span>: <span class="hljs-number">10</span>,
+            <span class="hljs-attr">user_no</span>: { <span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">&#x27;#user_no&#x27;</span> + suffix, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;value&#x27;</span> } },
+            <span class="hljs-attr">u_name</span>: { <span class="hljs-attr">selector</span>: { <span class="hljs-attr">key</span>: <span class="hljs-string">&#x27;#u_name&#x27;</span> + suffix, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;value&#x27;</span> } },
+        };
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">command</span> = {
+            <span class="hljs-attr">create</span>: {},   <span class="hljs-comment">// 명시적으로 지정</span>
+            <span class="hljs-attr">read</span>: {
+                <span class="hljs-attr">outputOption</span>: <span class="hljs-number">3</span>,
+                <span class="hljs-attr">cbEnd</span>: <span class="hljs-function">(<span class="hljs-params">status, cmd, res</span>) =&gt;</span> { <span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;Normal Processed&#x27;</span>); }
+            }
+        };
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">mapping</span> = {
+            <span class="hljs-attr">idx</span>: { 
+                <span class="hljs-attr">read</span>: [<span class="hljs-string">&#x27;valid&#x27;</span>, <span class="hljs-string">&#x27;bind&#x27;</span>] 
+            },
+            <span class="hljs-attr">u_name</span>: { 
+                <span class="hljs-attr">create</span>: [<span class="hljs-string">&#x27;valid&#x27;</span>, <span class="hljs-string">&#x27;bind&#x27;</span>],
+                <span class="hljs-attr">read</span>: [<span class="hljs-string">&#x27;output&#x27;</span>]
+            },
+            <span class="hljs-attr">user_no</span>: { 
+                <span class="hljs-attr">create</span>: [<span class="hljs-string">&#x27;bind&#x27;</span>],
+                <span class="hljs-attr">read</span>: [<span class="hljs-string">&#x27;output&#x27;</span>],
+            }
+        };
+	}
+	
+    <span class="hljs-title function_">preCheck</span>(<span class="hljs-params">bindModel</span>) { 
+        <span class="hljs-keyword">if</span> (bm.<span class="hljs-title function_">checkSelector</span>().<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    }
+};
+</code></pre></div>
+<ul>
+<li>객체클래스 정의시 <code>suffix</code> 인자를 지정하여, <code>selector</code> 이름의 중복을 피할 수 있습니다.</li>
+<li><code>create: {}</code> 명시적으로 지정한 경우이며, 지정하지 않아도 매핑 시 자동으로 생성됩니다.</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span>js</span><button class="copy-code" aria-label="코드 복사"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>복사</span></button></div><pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">BindModel</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;logic-bind-model&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">MemberService</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;member-service.js&#x27;</span>;
+
+<span class="hljs-keyword">const</span> svc = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CommonService</span>();
+<span class="hljs-keyword">const</span> bm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BindModel</span>(svc);
+
+bm.<span class="hljs-property">url</span> = <span class="hljs-string">&quot;/user&quot;</span>;
+<span class="hljs-comment">// bm 객체 사용자화</span>
+</code></pre></div>
+<ul>
+<li>클래스에서 생성한 객체를 모델(BindModel)에 주입하고, 모델객체를 추가 설정하여 사용합니다.</li>
+</ul>
+<h3 id="클래스-정의-가이드">클래스 정의 가이드<a class="heading-anchor" href="#클래스-정의-가이드" aria-label="클래스 정의 가이드 링크">#</a></h3>
+<p><code>BindModel</code>에서 자주 사용하는 클래스를 정의하고, 이를 상속하여 확장하는 과정을 단계별로 안내합니다.</p>
+<blockquote>
+<ul>
+<li>1단계 : <em>공통 정의</em>
+- 'cbFail', 'cbError'  및 기본 콜백함수를 정의
+- 중복 코드 제거를 목표로 공통 기능 구현</li>
+<li>2단계 : <em>독립적인 <code>items</code> 구성</em>
+- 공통된 속성을 정의하고, 각 클래스에서 세부적으로 재정의 가능</li>
+<li>3단계 : <em><code>tables</code>, <code>command</code>, <code>mapping</code>의 연계 구성</em>
+- <code>tables</code>, <code>command</code>, <code>mapping</code>은 상호 연관성이 높아 계층적으로 함께 설계하는 것이 효율적</li>
+<li>4단계 : <em>전처리 및 초기값 설정</em>
+- <code>preCheck</code>와 같은 전처리 과정을 정의하여 폼 유효성 검사 및 초기값 설정에 활용</li>
+<li>5단계 : <em>객체 생성 후 사용자화</em>
+- 서버 경로, 환경 설정 등을 객체 생성 후 수정하여 사용자 요구에 맞게 설정</li>
+</ul>
+</blockquote>
+<p>클래스 설계는 사용 목적과요구사항에 맞게 유연하게 변경될 수 있습니다.</p>
+</div>
+    <div class="doc-feedback"><span>더 나은 문서를 함께 만들어요.</span><a href="https://github.com/white-base/bind-model/issues">오류 제보 및 개선 제안 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></div>
+    <nav class="page-pagination" aria-label="이전·다음 문서"><a class="page-link prev" href="../../guide/features/flow-control.html"><span>이전 문서</span><strong>흐름 제어</strong></a><a class="page-link next" href="../../guide/features/json-schema.html"><span>다음 문서</span><strong>JSON 스키마 가이드<svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></strong></a></nav>
+  </article><footer class="doc-footer">BindModel · White Lab<a href="../../index.html">홈으로 <svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></footer></main>
+  <aside class="page-toc" id="page-toc" aria-label="이 페이지의 내용"><p>이 페이지의 내용</p><nav><a class="toc-level-2" href="#서비스-객체-구성">서비스 객체 구성</a><a class="toc-level-3" href="#기본-영역">기본 영역</a><a class="toc-level-3" href="#아이템-영역">아이템 영역</a><a class="toc-level-3" href="#명령-영역">명령 영역</a><a class="toc-level-3" href="#매핑-영역">매핑 영역</a><a class="toc-level-3" href="#함수-영역">함수 영역</a><a class="toc-level-3" href="#전처리-영역">전처리 영역</a><a class="toc-level-2" href="#서비스-객체-설정">서비스 객체 설정</a><a class="toc-level-3" href="#생성자로-설정">생성자로 설정</a><a class="toc-level-3" href="#메소드로-설정">메소드로 설정</a><a class="toc-level-2" href="#서비스-객체-관리">서비스 객체 관리</a><a class="toc-level-3" href="#클래스-정의">클래스 정의</a><a class="toc-level-3" href="#상속을-통한-재사용성">상속을 통한 재사용성</a><a class="toc-level-3" href="#클래스-정의-가이드">클래스 정의 가이드</a></nav><a class="back-top" href="#main">맨 위로 ↑</a></aside>
+  </div><dialog id="search-dialog" class="search-dialog" aria-labelledby="search-label"><div class="search-top"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><label class="sr-only" id="search-label" for="search-input">문서 검색</label><input id="search-input" type="search" placeholder="문서, 메서드, 개념 검색…" autocomplete="off" spellcheck="false" aria-controls="search-results"><button class="dialog-close" aria-label="검색 닫기">ESC</button></div><p id="search-status" class="search-status" role="status">검색어를 입력해 보세요.</p><div id="search-results" class="search-results"></div><div class="search-footer"><span><kbd>↑</kbd><kbd>↓</kbd> 이동 <kbd>↵</kbd> 열기</span><span>BindModel 문서 검색</span></div></dialog><div class="toast" role="status" aria-live="polite"></div></body>
+</html>
