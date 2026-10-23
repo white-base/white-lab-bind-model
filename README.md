@@ -10,6 +10,7 @@
 - `docs/examples/crudl.html`: CRUD + List 튜토리얼
 - `docs/api/`: 클래스 레퍼런스 6개
 - `docs/assets/site.css`, `site.js`: 공통 스타일과 검색·테마·탐색 동작
+- `docs/assets/logo.svg`: 첫 번째 시안의 주황색 심볼·벡터 워드마크. `logo-symbol.svg`는 검은색 축약본이며, 파비콘과 공유 이미지에도 같은 형태를 사용합니다.
 - `docs/assets/search-index.js`: 문서 23개의 검색 자료
 - `plans/`: 계획서, 문서 이전 기록, 검수 결과
 

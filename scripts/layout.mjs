@@ -1,4 +1,5 @@
 import { groups, pages } from './catalog.mjs';
+import { readFileSync } from 'node:fs';
 
 export const escape = value => String(value).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 const paths = {
@@ -23,7 +24,11 @@ const paths = {
   terminal: '<path d="m5 7 5 5-5 5m8 0h6"/>'
 };
 export const icon = (name, extra = '') => `<svg class="icon ${extra}" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.book}</svg>`;
-export const brand = `<span class="brand-mark" aria-hidden="true">b<span>.</span></span><span class="brand-name">bindmodel<span class="brand-dot">.</span></span>`;
+// Inline the shared vector so theme colors and file:// previews work without a fetch.
+export const brand = readFileSync(new URL('../docs/assets/logo.svg', import.meta.url), 'utf8')
+  .replace(/<svg[^>]*>/, '<svg class="brand-logo" width="186" height="46" viewBox="0 0 744 182" aria-hidden="true">')
+  .replace(/\s*<title>[^<]*<\/title>/, '')
+  .trim();
 
 function header(root, group) {
   return `<a class="skip-link" href="#main">본문 바로가기</a>
@@ -48,7 +53,7 @@ function searchDialog() {
 }
 
 export function footer(root) {
-  return `<footer class="site-footer"><div class="footer-inner"><a class="brand footer-brand" href="${root}index.html">${brand}</a><p>화면과 로직 사이, 더 나은 연결.</p><div><a href="https://github.com/white-base/bind-model">GitHub ${icon('external')}</a><span>© ${new Date().getUTCFullYear()} White Lab</span></div></div></footer>`;
+  return `<footer class="site-footer"><div class="footer-inner"><a class="brand footer-brand" href="${root}index.html" aria-label="BindModel 홈">${brand}</a><p>화면과 로직 사이, 더 나은 연결.</p><div><a href="https://github.com/white-base/bind-model">GitHub ${icon('external')}</a><span>© ${new Date().getUTCFullYear()} White Lab</span></div></div></footer>`;
 }
 
 export function shell({ title, description, root = './', group = '', path = 'index.html', content, doc = false, head = '' }) {
