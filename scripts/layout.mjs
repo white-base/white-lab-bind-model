@@ -66,7 +66,7 @@ export function shell({ title, description, root = './', group = '', path = 'ind
   <title>${escape(title)}${title === 'BindModel' ? ' — 화면과 로직 사이, 더 나은 연결' : ' | BindModel'}</title>
   <meta name="description" content="${escape(description)}"><meta name="theme-color" content="#f8f8f4">
   <meta property="og:type" content="website"><meta property="og:title" content="${escape(title)} | BindModel"><meta property="og:description" content="${escape(description)}"><meta property="og:url" content="${url}"><meta property="og:image" content="https://white-base.github.io/white-lab-bind-model/assets/social.svg">
-  <link rel="canonical" href="${url}"><link rel="icon" href="${root}assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="${url}"><link rel="icon" href="${root}assets/favicon.svg?v=2" type="image/svg+xml">
   <script>try{document.documentElement.dataset.theme=localStorage.getItem('bindmodel-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
   <link rel="stylesheet" href="${root}assets/site.css"><script src="${root}assets/site.js" defer></script>
 </head>
